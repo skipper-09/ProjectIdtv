@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
+use App\Http\Controllers\ChanelManagement\Chanelcontroller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', '/dashboard-general-dashboard');
+
+//chanel management route
+Route::prefix('chanel-management')->group(function () {
+    //chanel
+    Route::prefix('chanel')->group(function () {
+        Route::get('/', [Chanelcontroller::class, 'index'])->name('chanel');
+    });
+
+    //Categori route
+    Route::prefix('categori')->group(function () {
+        Route::get('/', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
+    });
+});
+
 
 // Dashboard
 Route::get('/dashboard-general-dashboard', function () {
