@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
 use App\Http\Controllers\ChanelManagement\Chanelcontroller;
+use App\Http\Controllers\Customer\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,9 +27,19 @@ Route::prefix('chanel-management')->group(function () {
 
     //Categori route
     Route::prefix('categori')->group(function () {
-        Route::get('/', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
+        Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
+        Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
+        Route::get('/tambah-categori', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
+        Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
     });
 });
+
+//customer route
+Route::prefix('customer')->group(
+    function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('customer');
+    }
+);
 
 
 // Dashboard

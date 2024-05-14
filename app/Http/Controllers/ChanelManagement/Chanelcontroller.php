@@ -9,12 +9,15 @@ use Illuminate\Http\Request;
 
 class Chanelcontroller extends Controller
 {
-    public function index() : View {
+    public function index(): View
+    {
         $data = [
             'chanel' => Chanel::all(),
             'type_menu' => 'layout',
-            'page_name' => 'Chanel Management'
+            'page_name' => 'Chanel',
+            'route' => 'chanel'
         ];
-          return view('pages.chanel.chanel-management.index',$data);
+        dd($data);
+        return view('pages.chanel.chanel-management.index', $data);
     }
 }
