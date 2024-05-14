@@ -86,21 +86,19 @@
 
 <script>
     $(document).ready(function() {
-        var i = 1;
+        
         $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
             ajax: '{{ route('categori-chanel.getdata') }}',
             columns: [
-                {
-                "render": function() {
-                return i++;
-                }
-                },
+                {data: 'DT_RowIndex', orderable: false, searchable: false},
                 {data: 'name', name: 'name'},
-                {data: 'action', name: 'action'},
+                {data: 'action', name: 'action'}
+           
             ]
         });
+        
     });
 </script>
 
