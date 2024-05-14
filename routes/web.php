@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
 use App\Http\Controllers\ChanelManagement\Chanelcontroller;
 use App\Http\Controllers\Customer\CustomerController;
@@ -16,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/dashboard-general-dashboard');
-
+Route::redirect('/', '/auth');
+Route::get('auth', [AuthController::class, 'index'])->middleware('guest')->name('auth');
+Route::post('auth/signin', [AuthController::class, 'signin'])->name('auth.signin');
+Route::get('auth/signout', [AuthController::class, 'signout'])->name('auth.signout');
 //chanel management route
 Route::prefix('chanel-management')->group(function () {
     //chanel
@@ -29,7 +32,8 @@ Route::prefix('chanel-management')->group(function () {
     Route::prefix('categori')->group(function () {
         Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
         Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
-        Route::get('/tambah-categori', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
+        Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
+        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.edit');
         Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
     });
 });

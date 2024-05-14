@@ -99,6 +99,13 @@
             ]
         });
         
+
+        $('#dataTable').on('click','.action', function(){
+            let data = $(this).data();
+            let id = data.id;
+            let type = data.type;
+           
+        })
     });
 </script>
 

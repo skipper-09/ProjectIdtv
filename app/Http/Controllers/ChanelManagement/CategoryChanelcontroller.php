@@ -28,14 +28,12 @@ class CategoryChanelcontroller extends Controller
     {
         $categori = Categori::query();
         return DataTables::of($categori)->addIndexColumn()->addColumn('action', function ($categori) {
-            return '<div>
-            <button class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                        data-placement="left" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></button>
-                                                    <button class="btn btn-sm btn-danger" data-toggle="tooltip"
-                                                        data-placement="bottom" title="Hapus Data"><i
-                                                            class="fa-solid fa-trash"></i></button>
-            </div>';
+
+            $edit = ' <button class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
+                                                            class="fa-solid fa-pencil"></i></button>';
+            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete"><i
+                                                            class="fa-solid fa-trash"></i></button>';
+            return $edit . $delete;
         })->make(true);
     }
 
@@ -55,6 +53,19 @@ class CategoryChanelcontroller extends Controller
         $data = $request->validated();
         Categori::create($data);
         return redirect()->route('categori-chanel');
+    }
+
+    public function show(Categori $categori)
+    {
+        $data = [
+            'page_name' => 'Edit Tim',
+            'categori' => $categori
+        ];
+        return view('pages.chanel.categori.editcategori', $data);
+    }
+
+    public function update()
+    {
     }
 
     public function destroy()
