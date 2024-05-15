@@ -80,7 +80,7 @@
 <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
 
 <!-- Page Specific JS File -->
-{<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
 <!-- Page Specific JS File -->
 
 
