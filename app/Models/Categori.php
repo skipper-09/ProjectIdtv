@@ -11,4 +11,5 @@ class Categori extends Model
     protected $fillable = [
         'name',
     ];
+    protected $primaryKey = 'id';
 }

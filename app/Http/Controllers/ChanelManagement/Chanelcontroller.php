@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ChanelManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chanel;
+use App\Models\Categori;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -33,6 +34,16 @@ class Chanelcontroller extends Controller
         })->addColumn('logo', function ($chanel) {
             return '<img src="' . $chanel->logo . '" border="0" 
         width="40" class="img-rounded" align="center" />';
-        })->rawColumns(['logo', 'action'])->make(true);
+        })->addColumn('is_active', function ($chanel) {
+            $active = '';
+            $chanel->is_active == true ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            return $active;
+        })->editColumn('type', function ($chanel) {
+            $active = '';
+            $chanel->type == "m3u" ? $active = '<span class="badge badge-success">m3u</span>' : $active = '<span class="badge badge-warning">mpd</span>';
+            return $active;
+        })->editColumn('categori', function (Chanel $chanel) {
+            return $chanel->categori->name;
+        })->rawColumns(['logo', 'action', 'is_active','categori','type'])->make(true);
     }
 }

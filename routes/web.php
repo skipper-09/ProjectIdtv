@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
 use App\Http\Controllers\ChanelManagement\Chanelcontroller;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,9 @@ Route::get('auth', [AuthController::class, 'index'])->middleware('guest')->name(
 Route::post('auth/signin', [AuthController::class, 'signin'])->name('auth.signin');
 Route::get('auth/signout', [AuthController::class, 'signout'])->name('auth.signout');
 //chanel management route
+
+Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 Route::prefix('chanel-management')->group(function () {
     //chanel
     Route::prefix('chanel')->group(function () {

@@ -3,6 +3,6 @@
         Copyright &copy; 2024 <div class="bullet"></div> Design By <a href="https://ahmadnurulmusthopa.my.id/">AHMAD NURUL MUSTHOPA</a>
     </div>
     <div class="footer-right">
-        2.3.0
+        1.1.0
     </div>
 </footer>

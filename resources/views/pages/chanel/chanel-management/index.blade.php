@@ -41,7 +41,7 @@
                                                 <th>Nama</th>
                                                 <th>Kategori</th>
                                                 <th>Logo</th>
-                                                <th>Url</th>
+                                                <th>Extension</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -98,15 +98,15 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
                     },
                     {
                         data: 'name',
                         name: 'name'
                     },
                     {
-                        data: 'name',
-                        name: 'name'
+                        data: 'categori',
+                        name: 'categori'
                     },
                   
                     {
@@ -114,8 +114,8 @@
                         name: 'logo',
                     },
                     {
-                    data: 'url',
-                    name: 'url'
+                    data: 'type',
+                    name: 'type'
                     },
                     {
                         data: 'is_active',

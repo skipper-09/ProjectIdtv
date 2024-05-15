@@ -21,26 +21,29 @@ class AuthController extends Controller
 
     public function signin(Request $request)
     {
+        $login = $request->email;
+        $user = User::where('email', $login)->orWhere('username', $login)->first();
+    
+        
+        // if (!$user) {
+        //     return redirect()->back()->withErrors(['email' => 'Invalid login credentials']);
+        // }
+    
+        $request->validate([
+            'password' => 'required',
+        ]);
 
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $request->session()->regenerate();
-
-            if ($request->remember_me == 'Y') {
-                $time = 60 * 60 * 24 * 365;
-                Cookie::queue('email', $request->email, $time);
-                Cookie::queue('password', $request->password, $time);
-            }
-
-            return response()->json([
-                'message' => 'Login berhasil'
-            ]);
+        
+        if (Auth::attempt(['email' => $user->email, 'password' => $request->password]) ||
+            Auth::attempt(['username' => $user->username, 'password' => $request->password])) {
+            Auth::loginUsingId($user->id);
+            return redirect()->route('dashboard');
         } else {
-            return response()->json([
-                'errors' => ['password' => ['Wrong Password']]
-            ], 422);
+            return redirect()->back()->withErrors(['password' => 'Invalid login credentials']);
         }
     }
+
+    
 
     public function signout()
     {

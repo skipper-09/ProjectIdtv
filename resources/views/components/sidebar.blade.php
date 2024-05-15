@@ -1,24 +1,22 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html">IDTV</a>
+            <a href="{{route('dashboard')}}">  <img src="{{ asset('img/IDTV.png') }}"
+                alt="logo"
+                width="90"
+            ></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">IDTV</a>
+            <a href="{{route('dashboard')}}">  <img src="{{ asset('img/IDTV.png') }}"
+                alt="logo"
+                width="50"
+            ></a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="nav-item dropdown {{ $type_menu === 'dashboard' ? 'active' : '' }}">
-                <a href="{{url('dashboard-general-dashboard')}}" class="nav-link"><i
-                        class="fa-solid fa-desktop"></i><span>Dashboard</span></a>
-                {{-- <ul class="dropdown-menu">
-                    <li class='{{ Request::is(' dashboard-general-dashboard') ? 'active' : '' }}'>
-                        <a class="nav-link" href="{{ url('dashboard-general-dashboard') }}">General Dashboard</a>
-                    </li>
-                    <li class="{{ Request::is('dashboard-ecommerce-dashboard') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('dashboard-ecommerce-dashboard') }}">Ecommerce Dashboard</a>
-                    </li>
-                </ul> --}}
+            <li class="{{ $type_menu === 'dashboard' ? 'active' : '' }}">
+                <a href="{{route('dashboard')}}" class="nav-link"><i
+                        class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
             <li class="menu-header">MANAGEMENT</li>
             <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
@@ -34,26 +32,27 @@
 
                 </ul>
             </li>
-            {{-- <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                    <span>Layout</span></a>
-                <ul class="dropdown-menu">
-                    <li class="{{ Request::is('layout-default-layout') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('layout-default-layout') }}">Default Layout</a>
-                    </li>
-                    <li class="{{ Request::is('transparent-sidebar') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('transparent-sidebar') }}">Transparent Sidebar</a>
-                    </li>
-                    <li class="{{ Request::is('layout-top-navigation') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('layout-top-navigation') }}">Top Navigation</a>
-                    </li>
-                </ul>
-            </li> --}}
             <li class="{{ Request::is('customer') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('customer')}}"><i class="fas fa-pencil-ruler">
+                <a class="nav-link" href="{{ route('customer')}}"><i class="fas fa-people-group">
                     </i> <span>Customers</span>
                 </a>
             </li>
+            <li class="menu-header">SETTINGS</li>
+            <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-gear"></i>
+                    <span>Settings</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('chanel-management/chanel') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('chanel') }}">Role</a>
+                    </li>
+                    <li class="{{ Request::is('chanel-management/categori') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('categori-chanel')}}">Permision</a>
+                    </li>
+
+                </ul>
+            </li>
+
+            
 
             <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('blank-page') }}"><i class="far fa-square"></i> <span>Blank

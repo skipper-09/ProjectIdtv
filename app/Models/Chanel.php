@@ -11,4 +11,11 @@ class Chanel extends Model
     protected $fillable = [
         'name','id_kategori','url','logo','user_agent','type','security_type','is_active'
     ];
+    protected $primaryKey = 'id';
+
+
+    public function categori()
+    {
+        return $this->belongsTo(Categori::class);
+    }
 }

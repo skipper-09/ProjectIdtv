@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
-            CategoriSeeder::class
+            CategoriSeeder::class,
+            ChanelSeeder::class
 
         ]);
         // \App\Models\User::factory()->create([

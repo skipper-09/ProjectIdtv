@@ -1,3 +1,3 @@
   <div class="simple-footer">
-      Copyright &copy; IDTV 2023
+      Copyright &copy; IDTV 2024
   </div>

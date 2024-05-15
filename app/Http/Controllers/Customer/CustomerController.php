@@ -13,7 +13,7 @@ class CustomerController extends Controller
     {
         $data = [
             'customer' => Customer::all(),
-            'type_menu' => 'dashboard',
+            'type_menu' => '',
             'page_name' => 'Customer'
         ];
         return view('pages.customer.index', $data);

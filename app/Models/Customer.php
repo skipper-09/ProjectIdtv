@@ -11,6 +11,7 @@ class Customer extends Model
     protected $fillable = [
         'name','address','phone','username','password'
     ];
+    protected $primaryKey = 'id';
 
     protected $hidden = [
         'password',
