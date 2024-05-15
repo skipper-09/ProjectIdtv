@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Kategori')
+@section('title', $page_name)
 
 @push('style')
 <!-- CSS Libraries -->
@@ -19,15 +19,17 @@
 
 
     <div class="card">
-      <form action="{{ route('categori-chanel.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+      <form action="{{ route('categori-chanel.update',['id'=>$categori->id]) }}" method="POST"
+        enctype="multipart/form-data">
+        {{ csrf_field() }}
+        {{ method_field('PUT') }}
         {{-- <div class="card-header">
           <h4>Default Validation</h4>
         </div> --}}
         <div class="card-body">
           <div class="form-group">
             <label>Nama Kategori</label>
-            <input type="text" name="name" class="form-control">
+            <input type="text" name="name" class="form-control" value="{{$categori->name}}">
           </div>
         </div>
         <div class="card-footer text-left">

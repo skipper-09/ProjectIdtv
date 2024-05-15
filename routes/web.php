@@ -33,8 +33,10 @@ Route::prefix('chanel-management')->group(function () {
         Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
         Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
         Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
-        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.edit');
         Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
+        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit');
+        Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
+        Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete');
     });
 });
 

@@ -5,17 +5,17 @@
 @push('style')
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
-
+<link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
 @endpush
 
 @section('main')
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>{{$page_name}}</h1>
+            <h1>{{ $page_name }}</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">{{$page_name}}</div>
+                <div class="breadcrumb-item">{{ $page_name }}</div>
                 {{-- <div class="breadcrumb-item">Default Layout</div> --}}
             </div>
         </div>
@@ -29,8 +29,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{route('categori-chanel.add')}}" class="btn btn-primary">Tambah
-                                    {{$page_name}}</a>
+                                <a href="{{ route('categori-chanel.add') }}" class="btn btn-primary">Tambah
+                                    {{ $page_name }}</a>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -43,7 +43,7 @@
                                             </tr>
                                         </thead>
                                         {{-- <tbody>
-                                            @foreach ($categori as $key=>$item)
+                                            @foreach ($categori as $key => $item)
                                             <tr>
                                                 <td>{{++$key}}</td>
                                                 <td>{{$item->name}}</td>
@@ -75,38 +75,39 @@
 @push('scripts')
 <!-- JS Libraies -->
 <script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-{{-- <script src="{{ asset() }}"></script> --}}
-{{-- <script src="{{ asset() }}"></script> --}}
+<script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
 <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
 
 <!-- Page Specific JS File -->
-{{-- <script src="{{ asset('js/page/modules-datatables.js') }}"></script> --}}
+{<script src="{{ asset('js/custom.js') }}"></script>
 <!-- Page Specific JS File -->
 
 
 <script>
     $(document).ready(function() {
-        
-        $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: '{{ route('categori-chanel.getdata') }}',
-            columns: [
-                {data: 'DT_RowIndex', orderable: false, searchable: false},
-                {data: 'name', name: 'name'},
-                {data: 'action', name: 'action'}
-           
-            ]
+
+            $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('categori-chanel.getdata') }}',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    }
+
+                ]
+            });
+
         });
-        
-
-        $('#dataTable').on('click','.action', function(){
-            let data = $(this).data();
-            let id = data.id;
-            let type = data.type;
-           
-        })
-    });
 </script>
-
 @endpush

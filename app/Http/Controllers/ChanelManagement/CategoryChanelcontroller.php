@@ -29,9 +29,9 @@ class CategoryChanelcontroller extends Controller
         $categori = Categori::query();
         return DataTables::of($categori)->addIndexColumn()->addColumn('action', function ($categori) {
 
-            $edit = ' <button class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
-                                                            class="fa-solid fa-pencil"></i></button>';
-            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete"><i
+            $edit = ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
+                                                            class="fa-solid fa-pencil"></i></a>';
+            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             return $edit . $delete;
         })->make(true);
@@ -55,20 +55,33 @@ class CategoryChanelcontroller extends Controller
         return redirect()->route('categori-chanel');
     }
 
-    public function show(Categori $categori)
+    public function show(Categori $categori, $id)
     {
         $data = [
-            'page_name' => 'Edit Tim',
-            'categori' => $categori
+            'type_menu' => '',
+            'page_name' => 'Edit Kategori',
+            'categori' => $categori->find($id)
         ];
         return view('pages.chanel.categori.editcategori', $data);
     }
 
-    public function update()
+    public function update(CategoriChanelRequest $request, $id)
     {
+
+        $categori = Categori::find($id);
+        $categori->name = $request->name;
+        $categori->save();
+        return redirect()->route('categori-chanel');
     }
 
-    public function destroy()
+    public function destroy($id)
     {
+        Categori::where('id', $id)->delete();
+
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Kategori Berhasil Dihapus!.',
+        ]);
     }
 }
