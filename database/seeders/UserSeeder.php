@@ -18,8 +18,10 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
+            'name' => 'Developer',
+            'username' => 'developer',
             'email' => 'root@gmail.com',
             'password' => Hash::make('root'),
-        ]);
+        ])->assignRole('Developer');
     }
 }

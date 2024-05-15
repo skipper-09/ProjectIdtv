@@ -26,6 +26,12 @@ Route::prefix('chanel-management')->group(function () {
     //chanel
     Route::prefix('chanel')->group(function () {
         Route::get('/', [Chanelcontroller::class, 'index'])->name('chanel');
+        Route::get('getData', [Chanelcontroller::class, 'getData'])->name('chanel.getdata');
+        Route::get('/tambah', [Chanelcontroller::class, 'create'])->name('chanel.add');
+        Route::post('store', [Chanelcontroller::class, 'store'])->name('chanel.store');
+        Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit');
+        Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
+        Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete');
     });
 
     //Categori route
