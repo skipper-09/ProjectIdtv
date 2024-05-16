@@ -108,26 +108,24 @@
                         data: 'categori',
                         name: 'categori'
                     },
-                  
+
                     {
                         data: 'logo',
                         name: 'logo',
                     },
                     {
-                    data: 'type',
-                    name: 'type'
+                        data: 'type',
+                        name: 'type'
                     },
                     {
                         data: 'is_active',
                         name: 'is_active',
                     },
-                    
+
                     {
                         data: 'action',
                         name: 'action'
                     }
-                    
-
                 ]
             });
 

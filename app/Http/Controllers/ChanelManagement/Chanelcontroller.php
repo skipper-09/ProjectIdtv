@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ChanelManagement;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChanelRequest;
 use App\Models\Chanel;
 use App\Models\Categori;
 use Illuminate\Contracts\View\View;
@@ -44,6 +45,44 @@ class Chanelcontroller extends Controller
             return $active;
         })->editColumn('categori', function (Chanel $chanel) {
             return $chanel->categori->name;
-        })->rawColumns(['logo', 'action', 'is_active','categori','type'])->make(true);
+        })->rawColumns(['logo', 'action', 'is_active', 'categori', 'type'])->make(true);
+    }
+
+
+    public function create()
+    {
+        $data = [
+            'type_menu' => '',
+            'page_name' => 'Tambah Chanel',
+            'categori' => Categori::all(),
+
+        ];
+        return view('pages.chanel.chanel-management.addchanel', $data);
+    }
+
+    public function store(ChanelRequest $request)
+    {
+        $data = $request->validated();
+        Chanel::create($data);
+        return redirect()->route('chanel');
+    }
+
+    public function show(Chanel $chanel, $id)
+    {
+    }
+
+    public function update(Chanel $request, $id)
+    {
+    }
+
+    public function destroy($id)
+    {
+        Chanel::where('id', $id)->delete();
+
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Chanel Berhasil Dihapus!.',
+        ]);
     }
 }

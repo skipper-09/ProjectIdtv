@@ -24,38 +24,47 @@ Route::post('auth/signin', [AuthController::class, 'signin'])->name('auth.signin
 Route::get('auth/signout', [AuthController::class, 'signout'])->name('auth.signout');
 //chanel management route
 
-Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::prefix('chanel-management')->group(function () {
-    //chanel
-    Route::prefix('chanel')->group(function () {
-        Route::get('/', [Chanelcontroller::class, 'index'])->name('chanel');
-        Route::get('getData', [Chanelcontroller::class, 'getData'])->name('chanel.getdata');
-        Route::get('/tambah', [Chanelcontroller::class, 'create'])->name('chanel.add');
-        Route::post('store', [Chanelcontroller::class, 'store'])->name('chanel.store');
-        Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit');
-        Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
-        Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete');
+Route::prefix('admin')->middleware('auth')->group(function () {
+
+    Route::get('', function () {
+        return redirect()->route('dashboard');
+    });
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('can:read-dashboard');
+
+    Route::prefix('chanel-management')->group(function () {
+        //chanel
+        Route::prefix('chanel')->group(function () {
+            Route::get('/', [Chanelcontroller::class, 'index'])->name('chanel')->middleware('can:read-chanel');
+            Route::get('getData', [Chanelcontroller::class, 'getData'])->name('chanel.getdata');
+            Route::get('/tambah', [Chanelcontroller::class, 'create'])->name('chanel.add')->middleware('can:create-chanel');
+            Route::post('store', [Chanelcontroller::class, 'store'])->name('chanel.store');
+            Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit')->middleware('can:edit-chanel');
+            Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
+            Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete')->middleware('can:delete-chanel');
+        });
+
+        //Categori route
+        Route::prefix('categori')->group(function () {
+            Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
+            Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
+            Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
+            Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
+            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit');
+            Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
+            Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete');
+        });
     });
 
-    //Categori route
-    Route::prefix('categori')->group(function () {
-        Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
-        Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
-        Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
-        Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit');
-        Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
-        Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete');
-    });
+    //customer route
+    Route::prefix('customer')->group(
+        function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('customer');
+        }
+    );
 });
 
-//customer route
-Route::prefix('customer')->group(
-    function () {
-        Route::get('/', [CustomerController::class, 'index'])->name('customer');
-    }
-);
+
 
 
 // Dashboard
