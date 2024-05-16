@@ -38,15 +38,15 @@
                 </a>
             </li>
             <li class="menu-header">SETTINGS</li>
-            <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ $type_menu === 'setting' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-gear"></i>
                     <span>Settings</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::is('chanel-management/chanel') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('chanel') }}">Role</a>
+                    <li class="{{ Request::is('admin/settings/role') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('role') }}">Role</a>
                     </li>
                     <li class="{{ Request::is('chanel-management/categori') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('categori-chanel')}}">Permision</a>
+                        <a class="nav-link" href="{{route('categori-chanel')}}">User</a>
                     </li>
 
                 </ul>

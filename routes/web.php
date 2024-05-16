@@ -5,6 +5,7 @@ use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
 use App\Http\Controllers\ChanelManagement\Chanelcontroller;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Settings\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('can:read-dashboard');
 
+    //chanel management route
     Route::prefix('chanel-management')->group(function () {
         //chanel
         Route::prefix('chanel')->group(function () {
@@ -46,13 +48,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
         //Categori route
         Route::prefix('categori')->group(function () {
-            Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel');
+            Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel')->middleware('can:read-categori');
             Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
-            Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add');
+            Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
             Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit');
+            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:edit:chanel');
             Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
-            Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete');
+            Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
         });
     });
 
@@ -62,6 +64,18 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/', [CustomerController::class, 'index'])->name('customer');
         }
     );
+
+    Route::prefix('settings')->group(function(){
+        Route::prefix('role')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('role')->middleware('can:read-role');
+            Route::get('getData', [RoleController::class, 'getData'])->name('role.getdata');
+            Route::get('/tambah', [RoleController::class, 'create'])->name('role.add')->middleware('can:create-role');
+            Route::post('store', [RoleController::class, 'store'])->name('role.store');
+            Route::get('/edit/{id}', [RoleController::class, 'show'])->name('role.edit')->middleware('can:edit-role');
+            Route::put('/update/{id}', [RoleController::class, 'update'])->name('role.update');
+            Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('can:delete-role');
+        });
+    });
 });
 
 

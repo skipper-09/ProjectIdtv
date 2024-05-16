@@ -24,7 +24,6 @@
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
             <div class="section-body">
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -41,11 +40,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Kategori</th>
-                                                <th>Logo</th>
-                                                <th>Extension</th>
-                                                <th>Status</th>
+                                                <th>Role</th>                          
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -97,38 +92,22 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('chanel.getdata') }}',
+                ajax: '{{ route('role.getdata') }}',
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
+                        width : '20px'
                     },
                     {
                         data: 'name',
                         name: 'name'
                     },
                     {
-                        data: 'categori',
-                        name: 'categori'
-                    },
-
-                    {
-                        data: 'logo',
-                        name: 'logo',
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
-                    },
-                    {
-                        data: 'is_active',
-                        name: 'is_active',
-                    },
-
-                    {
                         data: 'action',
                         name: 'action'
                     }
+                  
                 ]
             });
 
