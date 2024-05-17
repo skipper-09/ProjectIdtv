@@ -33,11 +33,11 @@ class CategoryChanelcontroller extends Controller
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-categori')) {
-            $button .= ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
+                $button .= ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-categori')) {
-            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori ->id]) . '"><i
+                $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return $button;
@@ -59,7 +59,7 @@ class CategoryChanelcontroller extends Controller
     {
         $data = $request->validated();
         Categori::create($data);
-        return redirect()->route('categori-chanel')->with(['message' => 'Berhasil Membuat Kategori!']);
+        return redirect()->route('categori-chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Membuat Kategori!']);
     }
 
     public function show(Categori $categori, $id)
@@ -78,7 +78,7 @@ class CategoryChanelcontroller extends Controller
         $categori = Categori::find($id);
         $categori->name = $request->name;
         $categori->save();
-        return redirect()->route('categori-chanel');
+        return redirect()->route('categori-chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Kategori!']);
     }
 
     public function destroy($id)

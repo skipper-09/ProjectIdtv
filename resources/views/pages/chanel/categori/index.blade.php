@@ -20,17 +20,8 @@
                 {{-- <div class="breadcrumb-item">Default Layout</div> --}}
             </div>
         </div>
-        @if (Session::has('message'))    
-        <div class="alert alert-primary alert-dismissible show fade" id="alertDiv">
-        <div class="alert-body" >
-                <button class="close"
-                    data-dismiss="alert">
-                    <span>&times;</span>
-                </button>
-               {{Session::get('message')}}
-            </div>
-        </div> 
-        @endif
+
+
         <div class="section-body">
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
@@ -53,23 +44,6 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        {{-- <tbody>
-                                            @foreach ($categori as $key => $item)
-                                            <tr>
-                                                <td>{{++$key}}</td>
-                                                <td>{{$item->name}}</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                        data-placement="left" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></button>
-                                                    <button class="btn btn-sm btn-danger" data-toggle="tooltip"
-                                                        data-placement="bottom" title="Hapus Data"><i
-                                                            class="fa-solid fa-trash"></i></button>
-                                                </td>
-
-                                            </tr>
-                                            @endforeach
-                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>
@@ -96,8 +70,6 @@
 
 
 <script>
-    const target = document.getElementById("alertDiv");
-window.onload = setInterval(() => target.style.opacity = '0', 3000)
     $(document).ready(function() {
             $('#dataTable').DataTable({
                 processing: true,
@@ -119,6 +91,16 @@ window.onload = setInterval(() => target.style.opacity = '0', 3000)
 
                 ]
             });
+
+
+
+            @if (Session::has('message'))
+            iziToast.success({
+            title: `{{Session::get('status')}}`,
+            message: `{{Session::get('message')}}`,
+            position: 'topRight'
+            });
+            @endif
 
         });
 </script>

@@ -31,9 +31,9 @@
                             @can('create-chanel')
                             <div class="card-header">
                                 <a href="{{ route('chanel.add') }}" class="btn btn-primary">Tambah
-                                    {{ $page_name }}</a>                   
-                                </div>
-                                @endcan
+                                    {{ $page_name }}</a>
+                            </div>
+                            @endcan
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">
@@ -131,6 +131,13 @@
                 ]
             });
 
+            @if (Session::has('message'))
+            iziToast.success({
+            title: `{{Session::get('status')}}`,
+            message: `{{Session::get('message')}}`,
+            position: 'topRight'
+            });
+            @endif
         });
 </script>
 @endpush

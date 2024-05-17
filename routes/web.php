@@ -65,7 +65,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         }
     );
 
-    Route::prefix('settings')->group(function(){
+    Route::prefix('settings')->group(function () {
         Route::prefix('role')->group(function () {
             Route::get('/', [RoleController::class, 'index'])->name('role')->middleware('can:read-role');
             Route::get('getData', [RoleController::class, 'getData'])->name('role.getdata');

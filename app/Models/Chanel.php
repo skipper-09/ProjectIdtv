@@ -9,7 +9,7 @@ class Chanel extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','id_kategori','url','logo','user_agent','type','security_type','is_active'
+        'name', 'categori_id', 'url', 'logo', 'user_agent', 'type', 'security_type', 'is_active', 'security'
     ];
     protected $primaryKey = 'id';
 

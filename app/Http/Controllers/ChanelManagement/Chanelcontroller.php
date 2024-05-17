@@ -32,11 +32,11 @@ class Chanelcontroller extends Controller
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-chanel')) {
-            $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action" data-id=' . $chanel->id . ' data-type="edit"><i
+                $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action" data-id=' . $chanel->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-chanel')) {
-            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
+                $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return $button;
@@ -70,9 +70,24 @@ class Chanelcontroller extends Controller
 
     public function store(ChanelRequest $request)
     {
-        $data = $request->validated();
-        Chanel::create($data);
-        return redirect()->route('chanel');
+        $filename = '';
+        if ($request->hasFile('logo')) {
+            $file  = $request->file('logo');
+            $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/images/chanel/'), $filename);
+        }
+
+        Chanel::create([
+            'name' => $request->name,
+            'url' => $request->url,
+            'categori_id' => $request->input('categori_id'),
+            'logo' => $filename,
+            'type' => $request->type,
+            'user_agent' => $request->user_agent,
+            'security_type' => $request->input('security_type'),
+            'security' => $request->security,
+        ]);
+        return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Chanel!']);
     }
 
     public function show(Chanel $chanel, $id)
