@@ -31,6 +31,7 @@ class RoleSeeder extends Seeder
             'read-users', 'create-users', 'update-users', 'delete-users',
             'read-chanel', 
             'read-categori',
+            'read-role',
         ]);
     }
 }

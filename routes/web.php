@@ -41,7 +41,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('getData', [Chanelcontroller::class, 'getData'])->name('chanel.getdata');
             Route::get('/tambah', [Chanelcontroller::class, 'create'])->name('chanel.add')->middleware('can:create-chanel');
             Route::post('store', [Chanelcontroller::class, 'store'])->name('chanel.store');
-            Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit')->middleware('can:edit-chanel');
+            Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit')->middleware('can:update-chanel');
             Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
             Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete')->middleware('can:delete-chanel');
         });
@@ -52,7 +52,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
             Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
             Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:edit:chanel');
+            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-chanel');
             Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
             Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
         });
@@ -71,7 +71,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('getData', [RoleController::class, 'getData'])->name('role.getdata');
             Route::get('/tambah', [RoleController::class, 'create'])->name('role.add')->middleware('can:create-role');
             Route::post('store', [RoleController::class, 'store'])->name('role.store');
-            Route::get('/edit/{id}', [RoleController::class, 'show'])->name('role.edit')->middleware('can:edit-role');
+            Route::get('/edit/{id}', [RoleController::class, 'show'])->name('role.edit')->middleware('can:update-role');
             Route::put('/update/{id}', [RoleController::class, 'update'])->name('role.update');
             Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('can:delete-role');
         });

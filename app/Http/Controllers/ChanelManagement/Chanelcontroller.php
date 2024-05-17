@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ChanelRequest;
 use App\Models\Chanel;
 use App\Models\Categori;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class Chanelcontroller extends Controller
@@ -27,11 +29,17 @@ class Chanelcontroller extends Controller
     {
         $chanel = Chanel::query();
         return DataTables::of($chanel)->addIndexColumn()->addColumn('action', function ($chanel) {
-            $edit = ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action" data-id=' . $chanel->id . ' data-type="edit"><i
+            $userauth = User::with('roles')->where('id', Auth::id())->first();
+            $button = '';
+            if ($userauth->can('update-chanel')) {
+            $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action" data-id=' . $chanel->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
-            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
+            }
+            if ($userauth->can('delete-chanel')) {
+            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
-            return $edit . $delete;
+            }
+            return $button;
         })->addColumn('logo', function ($chanel) {
             return '<img src="' . $chanel->logo . '" border="0" 
         width="40" class="img-rounded" align="center" />';

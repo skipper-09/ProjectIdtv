@@ -28,13 +28,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+                            @can('create-chanel')
                             <div class="card-header">
-                                @can('create-chanel')
                                 <a href="{{ route('chanel.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>                   
+                                </div>
                                 @endcan
-                 
-                            </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">

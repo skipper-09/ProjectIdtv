@@ -5,8 +5,10 @@ namespace App\Http\Controllers\ChanelManagement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoriChanelRequest;
 use App\Models\Categori;
+use App\Models\User;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
@@ -28,12 +30,17 @@ class CategoryChanelcontroller extends Controller
     {
         $categori = Categori::query();
         return DataTables::of($categori)->addIndexColumn()->addColumn('action', function ($categori) {
-
-            $edit = ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
+            $userauth = User::with('roles')->where('id', Auth::id())->first();
+            $button = '';
+            if ($userauth->can('update-categori')) {
+            $button .= ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
-            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori->id]) . '"><i
+            }
+            if ($userauth->can('delete-categori')) {
+            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori ->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
-            return $edit . $delete;
+            }
+            return $button;
         })->make(true);
     }
 
@@ -52,7 +59,7 @@ class CategoryChanelcontroller extends Controller
     {
         $data = $request->validated();
         Categori::create($data);
-        return redirect()->route('categori-chanel');
+        return redirect()->route('categori-chanel')->with(['message' => 'Berhasil Membuat Kategori!']);
     }
 
     public function show(Categori $categori, $id)

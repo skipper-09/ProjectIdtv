@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
 
 class RoleController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $data = [
             'role' => Role::all(),
             'type_menu' => 'setting',
@@ -20,15 +22,20 @@ class RoleController extends Controller
 
     public function getData()
     {
-        $role = Role::all()->where('name','!=','Developer');
+
+        $role = Role::all()->where('name', '!=', 'Developer');
         return DataTables::of($role)->addIndexColumn()->addColumn('action', function ($role) {
-            $edit = ' <a href="' . route('role.edit', ['id' => $role->id]) . '" class="btn btn-sm btn-success action" data-id=' . $role->id . ' data-type="edit"><i
-                                                            class="fa-solid fa-pencil"></i></a>';
-            $delete = ' <button class="btn btn-sm btn-danger action" data-id=' . $role->id . ' data-type="delete" data-route="' . route('role.delete', ['id' => $role->id]) . '"><i
+            $userauth = User::with('roles')->where('id', Auth::id())->first();
+            $button = '';
+            if ($userauth->can('update-role')) {
+                $button .= ' <a href="' . route('role.edit', ['id' => $role->id]) . '" class="btn btn-sm btn-success action" data-id=' . $role->id . ' data-type="edit"><i
+                                                             class="fa-solid fa-pencil"></i></a>';
+            }
+            if ($userauth->can('delete-role')) {
+            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $role->id . ' data-type="delete" data-route="' . route('role.delete', ['id' => $role->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
-            return $edit . $delete;
+            }
+            return $button;
         })->make(true);
     }
-   
-
 }

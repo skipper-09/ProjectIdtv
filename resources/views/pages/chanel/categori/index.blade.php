@@ -9,6 +9,7 @@
 @endpush
 
 @section('main')
+
 <div class="main-content">
     <section class="section">
         <div class="section-header">
@@ -19,7 +20,17 @@
                 {{-- <div class="breadcrumb-item">Default Layout</div> --}}
             </div>
         </div>
-
+        @if (Session::has('message'))    
+        <div class="alert alert-primary alert-dismissible show fade" id="alertDiv">
+        <div class="alert-body" >
+                <button class="close"
+                    data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+               {{Session::get('message')}}
+            </div>
+        </div> 
+        @endif
         <div class="section-body">
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
@@ -85,8 +96,9 @@
 
 
 <script>
+    const target = document.getElementById("alertDiv");
+window.onload = setInterval(() => target.style.opacity = '0', 3000)
     $(document).ready(function() {
-
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
