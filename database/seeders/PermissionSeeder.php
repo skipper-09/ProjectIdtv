@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
             'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel',
             'read-categori', 'create-categori', 'update-categori', 'delete-categori',
             'read-role', 'create-role', 'update-role', 'delete-role',
+            'read-customer', 'create-customer', 'update-customer', 'delete-customer',
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];

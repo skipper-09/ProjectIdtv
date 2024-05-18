@@ -5,6 +5,7 @@
 @push('style')
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
 @endpush
 
 @section('main')

@@ -48,23 +48,6 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        {{-- <tbody>
-                                            @foreach ($categori as $key => $item)
-                                            <tr>
-                                                <td>{{++$key}}</td>
-                                                <td>{{$item->name}}</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                        data-placement="left" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></button>
-                                                    <button class="btn btn-sm btn-danger" data-toggle="tooltip"
-                                                        data-placement="bottom" title="Hapus Data"><i
-                                                            class="fa-solid fa-trash"></i></button>
-                                                </td>
-
-                                            </tr>
-                                            @endforeach
-                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>

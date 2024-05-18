@@ -21,8 +21,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserSeeder::class,
             CategoriSeeder::class,
-            ChanelSeeder::class
-
+            ChanelSeeder::class,
+            StbSeeder::class,
+            ComapanySeeder::class,
+            RegionSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -41,7 +41,8 @@ class Chanelcontroller extends Controller
             }
             return $button;
         })->addColumn('logo', function ($chanel) {
-            return '<img src="' . $chanel->logo . '" border="0" 
+            $urlimage = asset("storage/images/chanel/$chanel->logo");
+            return '<img src="' . $urlimage . '" border="0" 
         width="40" class="img-rounded" align="center" />';
         })->addColumn('is_active', function ($chanel) {
             $active = '';

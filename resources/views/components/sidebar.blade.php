@@ -23,10 +23,10 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
                     <span>Chanel Management</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::is('chanel-management/chanel') ? 'active' : '' }}">
+                    <li class="{{ Request::is('admin/chanel-management/chanel') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('chanel') }}">Chanel</a>
                     </li>
-                    <li class="{{ Request::is('chanel-management/categori') ? 'active' : '' }}">
+                    <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
                         <a class="nav-link" href="{{route('categori-chanel')}}">Kategori</a>
                     </li>
 

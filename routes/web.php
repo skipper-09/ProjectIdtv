@@ -52,7 +52,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
             Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
             Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-chanel');
+            Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-categori');
             Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
             Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
         });
@@ -61,10 +61,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     //customer route
     Route::prefix('customer')->group(
         function () {
-            Route::get('/', [CustomerController::class, 'index'])->name('customer');
+            Route::get('', [CustomerController::class, 'index'])->name('customer')->middleware('can:read-customer');
+            Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
+            Route::get('/tambah', [CustomerController::class, 'create'])->name('customer.add')->middleware('can:create-customer');
+            Route::post('store', [CustomerController::class, 'store'])->name('customer.store');
+            Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');
+            Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
+            Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
         }
     );
 
+    //setting route
     Route::prefix('settings')->group(function () {
         Route::prefix('role')->group(function () {
             Route::get('/', [RoleController::class, 'index'])->name('role')->middleware('can:read-role');

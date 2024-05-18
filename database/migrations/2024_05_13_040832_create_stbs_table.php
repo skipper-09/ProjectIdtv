@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('maxdevices', function (Blueprint $table) {
+        Schema::create('stbs', function (Blueprint $table) {
             $table->id();
-            $table->integer('amount')->default(2);
+            $table->string('name');
+            $table->integer('ram');
+            $table->integer('internal');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('maxdevices');
+        Schema::dropIfExists('stbs');
     }
 };
