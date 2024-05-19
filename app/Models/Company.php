@@ -12,4 +12,8 @@ class Company extends Model
         'name','address','phone','email','is_active'
     ];
     protected $primaryKey = 'id';
+
+    public function customer() {
+        return $this->hasMany(Customer::class);
+    }
 }

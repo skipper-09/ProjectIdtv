@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Region;
 use App\Models\Stb;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,17 +65,33 @@ class CustomerController extends Controller
     {
         $data = [
             'type_menu' => '',
-            'page_name' => 'Tambah Kategori',
+            'page_name' => 'Tambah Customer',
+            'stb' => Stb::all(),
+            'region' => Region::all(),
+            'company'=>Company::all(),
 
         ];
-        return view('pages.customer.index', $data);
+        return view('pages.customer.addcustomer', $data);
     }
 
     public function store(CustomerRequest $request)
     {
         $data = $request->validated();
-        Customer::create($data);
-        return redirect()->route('categori-chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Membuat Kategori!']);
+       
+        Customer::create([
+            'name' => $request->name,
+            'mac' => $request->mac,
+            'ppoe' => $request->ppoe,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'region_id' => $request->region_id,
+            'stb_id' => $request->stb_id,
+            'company_id' => $request->company_id,
+            'username' => $request->username,
+            'password' => $request->password,
+            'is_avtive' => $request->is_active,
+        ]);
+        return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Membuat Kategori!']);
     }
 
     public function detail($id)

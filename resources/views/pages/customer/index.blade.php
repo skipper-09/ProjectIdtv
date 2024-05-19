@@ -27,9 +27,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            @can('create-chanel')
+                            @can('create-customer')
                             <div class="card-header">
-                                <a href="{{ route('chanel.add') }}" class="btn btn-primary">Tambah
+                                <a href="{{ route('customer.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
@@ -61,13 +61,9 @@
     </section>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="showmodal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
 
-        </div>
-    </div>
-</div>
+{{-- //modal call --}}
+@include('components.modal')
 @endsection
 
 @push('scripts')

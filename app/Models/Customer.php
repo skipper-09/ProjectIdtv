@@ -9,7 +9,7 @@ class Customer extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'address', 'phone', 'username', 'password'
+        'name', 'address', 'phone','mac' ,'username', 'password','ppoe','company_id','stb_id','region_id','is_active'
     ];
     protected $primaryKey = 'id';
 
@@ -19,14 +19,14 @@ class Customer extends Model
 
     public function stb()
     {
-        return $this->belongsTo(Stb::class, 'stb_id', 'id');
+        return $this->belongsTo(Stb::class);
     }
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsTo(Company::class);
     }
     public function region()
     {
-        return $this->belongsTo(Region::class, 'region_id', 'id');
+        return $this->belongsTo(Region::class);
     }
 }

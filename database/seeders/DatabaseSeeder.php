@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             StbSeeder::class,
             ComapanySeeder::class,
             RegionSeeder::class,
+            CustomerSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -21,10 +21,11 @@ return new class extends Migration
             $table->string('mac');
             $table->string('ppoe');
             $table->string('name',length: 100);
-            $table->integer('phone');
+            $table->string('phone',length:13);
             $table->text('address');
             $table->string('username');
             $table->string('password');
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
