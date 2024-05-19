@@ -78,7 +78,9 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        width: '10px',
+                        class:'text-center'
                     },
                     {
                         data: 'name',

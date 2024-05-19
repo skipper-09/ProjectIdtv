@@ -45,7 +45,9 @@
                                                 <th>Logo</th>
                                                 <th>Extension</th>
                                                 <th>Status</th>
+                                                @can(['update-chanel','delete-chanel'])
                                                 <th>Action</th>
+                                                @endcan
                                             </tr>
                                         </thead>
                                     </table>
@@ -84,6 +86,8 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
+                        width: '10px',
+                        class:'text-center'
                     },
                     {
                         data: 'name',
@@ -93,7 +97,6 @@
                         data: 'categori',
                         name: 'categori'
                     },
-
                     {
                         data: 'logo',
                         name: 'logo',
@@ -106,11 +109,12 @@
                         data: 'is_active',
                         name: 'is_active',
                     },
-
+                    @can(['update-chanel','delete-chanel'])
                     {
                         data: 'action',
                         name: 'action'
                     }
+                    @endcan
                 ]
             });
 

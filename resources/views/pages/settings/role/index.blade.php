@@ -27,36 +27,20 @@
                             @can('create-role')
                             <div class="card-header">
                                 <a href="{{ route('role.add') }}" class="btn btn-primary">Tambah
-                                    {{ $page_name }}</a>                   
-                                </div>
-                                @endcan
+                                    {{ $page_name }}</a>
+                            </div>
+                            @endcan
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Role</th>                          
+                                                <th>Role</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        {{-- <tbody>
-                                            @foreach ($categori as $key => $item)
-                                            <tr>
-                                                <td>{{++$key}}</td>
-                                                <td>{{$item->name}}</td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-success" data-toggle="tooltip"
-                                                        data-placement="left" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></button>
-                                                    <button class="btn btn-sm btn-danger" data-toggle="tooltip"
-                                                        data-placement="bottom" title="Hapus Data"><i
-                                                            class="fa-solid fa-trash"></i></button>
-                                                </td>
 
-                                            </tr>
-                                            @endforeach
-                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>
@@ -93,7 +77,8 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
-                        width : '20px'
+                        width: '10px',
+                        class:'text-center'
                     },
                     {
                         data: 'name',

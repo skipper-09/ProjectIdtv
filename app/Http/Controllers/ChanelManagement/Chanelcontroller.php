@@ -27,19 +27,19 @@ class Chanelcontroller extends Controller
 
     public function getData()
     {
-        $chanel = Chanel::query();
+        $chanel = Chanel::query()->with('categori')->get();
         return DataTables::of($chanel)->addIndexColumn()->addColumn('action', function ($chanel) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-chanel')) {
-                $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action" data-id=' . $chanel->id . ' data-type="edit"><i
+                $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $chanel->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-chanel')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
-            return $button;
+            return '<div class="d-flex">' . $button . '</div>';
         })->addColumn('logo', function ($chanel) {
             $urlimage = asset("storage/images/chanel/$chanel->logo");
             return '<img src="' . $urlimage . '" border="0" 

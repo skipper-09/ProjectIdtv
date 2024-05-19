@@ -33,14 +33,14 @@ class CategoryChanelcontroller extends Controller
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-categori')) {
-                $button .= ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action" data-id=' . $categori->id . ' data-type="edit"><i
+                $button .= ' <a href="' . route('categori-chanel.edit', ['id' => $categori->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $categori->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-categori')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $categori->id . ' data-type="delete" data-route="' . route('categori-chanel.delete', ['id' => $categori->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
-            return $button;
+            return '<div class="d-flex">' . $button . '</div>';
         })->make(true);
     }
 

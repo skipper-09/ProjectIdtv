@@ -24,7 +24,6 @@
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
             <div class="section-body">
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -41,12 +40,12 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama</th>
-                                                <th>Username</th>
                                                 <th>Mac</th>
                                                 <th>Stb</th>
                                                 <th>Status</th>
                                                 <th>Area</th>
                                                 <th>Perusahaan</th>
+                                                <th>Tgl Aktif</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -60,6 +59,14 @@
             </div>
         </div>
     </section>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="showmodal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -86,34 +93,41 @@
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
+                        width: '10px',
+                        class:'text-center'
                     },
                     {
                         data: 'name',
-                        name: 'name'
+                        name: 'name',
                     },
+                    
                     {
                         data: 'mac',
                         name: 'mac'
                     },
                     {
-                        data: 'username',
-                        name: 'username'
+                        data: 'stb',
+                        name: 'stb'
                     },
                     {
-                        data: 'username',
-                        name: 'username'
+                        data: 'is_active',
+                        name: 'is_active'
                     },
                     {
-                        data: 'username',
-                        name: 'username'
+                        data: 'region',
+                        name: 'region',
+                        orderable: false,
+                        searchable: true,
                     },
                     {
-                        data: 'username',
-                        name: 'username'
+                        data: 'company',
+                        name: 'company',
+                        orderable: false,
+                        searchable: true,
                     },
                     {
-                        data: 'username',
-                        name: 'username'
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'action',

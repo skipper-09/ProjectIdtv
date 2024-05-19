@@ -13,8 +13,6 @@ $("#dataTable").on("click", ".action", function () {
     let id = data.id;
     let type = data.type;
     var route = data.route;
-    var url = "{{ route('categori-chanel.delete', ':id') }}";
-    url = url.replace(":id", id);
     if (type == "delete") {
         swal({
             title: "Apakah Kamu Yakin?",
@@ -43,6 +41,16 @@ $("#dataTable").on("click", ".action", function () {
                     },
                 });
             }
+        });
+    }
+    if (type == "show") {
+        $.ajax({
+            method: "GET",
+            url: route,
+            success: function (res) {
+                $("#showmodal").find(".modal-content").html(res);
+                $("#showmodal").modal("show");
+            },
         });
     }
 });

@@ -22,20 +22,18 @@ class RoleController extends Controller
 
     public function getData()
     {
-
         $role = Role::all()->where('name', '!=', 'Developer');
         return DataTables::of($role)->addIndexColumn()->addColumn('action', function ($role) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-role')) {
-                $button .= ' <a href="' . route('role.edit', ['id' => $role->id]) . '" class="btn btn-sm btn-success action" data-id=' . $role->id . ' data-type="edit"><i
-                                                             class="fa-solid fa-pencil"></i></a>';
+                $button .= ' <a href="' . route('role.edit', ['id' => $role->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $role->id . ' data-type="edit"><i class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-role')) {
-            $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $role->id . ' data-type="delete" data-route="' . route('role.delete', ['id' => $role->id]) . '"><i
+                $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $role->id . ' data-type="delete" data-route="' . route('role.delete', ['id' => $role->id]) . '"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
-            return $button;
+            return '<div class="d-flex">' . $button . '</div>';
         })->make(true);
     }
 }
