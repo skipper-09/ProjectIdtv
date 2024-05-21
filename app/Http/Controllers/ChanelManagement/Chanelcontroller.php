@@ -10,7 +10,9 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\File; 
 
 class Chanelcontroller extends Controller
 {
@@ -93,6 +95,14 @@ class Chanelcontroller extends Controller
 
     public function show(Chanel $chanel, $id)
     {
+        $data = [
+            'chanel' => Chanel::find($id)->with('categori'),
+            'type_menu' => 'layout',
+            'page_name' => 'Chanel',
+            'categori' => Categori::all()
+            
+        ];
+        return view('pages.chanel.chanel-management.editchanel',$data);
     }
 
     public function update(Chanel $request, $id)
@@ -101,8 +111,20 @@ class Chanelcontroller extends Controller
 
     public function destroy($id)
     {
+        $chanel = Chanel::where('id', $id)->first();
+        if (!$chanel) {
+            return response()->json([
+                'status' => '500',
+                'error' => 'Chanel Kosong!'
+            ]);
+        }
+        if ($chanel->logo !== 'default.png') {
+            if (file_exists(public_path('storage/images/chanel/' . $chanel->logo))) {
+                File::delete(public_path('storage/images/chanel/' . $chanel->logo));
+            }
+        }
+       
         Chanel::where('id', $id)->delete();
-
         //return response
         return response()->json([
             'success' => true,

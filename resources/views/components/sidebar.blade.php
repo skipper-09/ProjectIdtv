@@ -48,7 +48,7 @@
 
 
 
-            {{-- <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
+            <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ url('blank-page') }}"><i class="far fa-square"></i> <span>Blank
                         Page</span></a>
             </li>
@@ -176,8 +176,8 @@
                         <a class="nav-link" href="{{ url('forms-validation') }}">Validation</a>
                     </li>
                 </ul>
-            </li> --}}
-            {{-- <li class="nav-item dropdown">
+            </li> 
+            <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-map-marker-alt"></i> <span>Google
                         Maps</span></a>
                 <ul class="dropdown-menu">
@@ -190,8 +190,8 @@
                     <li><a href="gmaps-route.html">Route</a></li>
                     <li><a href="gmaps-simple.html">Simple</a></li>
                 </ul>
-            </li> --}}
-            {{-- <li class="nav-item dropdown {{ $type_menu === 'modules' ? 'active' : '' }}">
+            </li>
+            <li class="nav-item dropdown {{ $type_menu === 'modules' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-plug"></i> <span>Modules</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::is('modules-calendar') ? 'active' : '' }}">
@@ -316,13 +316,13 @@
                 <a class="nav-link" href="{{ url('credits') }}"><i class="fas fa-pencil-ruler">
                     </i> <span>Credits</span>
                 </a>
-            </li> --}}
+            </li>
         </ul>
 
-        {{-- <div class="hide-sidebar-mini mt-4 mb-4 p-3">
+        <div class="hide-sidebar-mini mt-4 mb-4 p-3">
             <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
                 <i class="fas fa-rocket"></i> Documentation
             </a>
-        </div> --}}
+        </div>
     </aside>
 </div>
