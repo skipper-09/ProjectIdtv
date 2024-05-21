@@ -15,10 +15,19 @@ class ComapanySeeder extends Seeder
      */
     public function run()
     {
-        Company::create([
-            'name' => 'PT. CAHAYA SOLUSINDO',
-            'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
-            'phone' => '6282111777179',
-        ]);
+        Company::insert(
+            [
+                [
+                    'name' => 'PT. CAHAYA SOLUSINDO',
+                    'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
+                    'phone' => '6282111777179',
+                ],
+                [
+                    'name' => 'ID NET',
+                    'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
+                    'phone' => '6282111777179',
+                ]
+            ]
+        );
     }
 }

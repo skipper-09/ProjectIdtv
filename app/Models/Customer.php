@@ -3,18 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Customer extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
+    protected $guard = 'customer';
     protected $fillable = [
-        'name', 'address', 'phone','mac' ,'username', 'password','ppoe','company_id','stb_id','region_id','is_active'
+        'name', 'address', 'phone', 'mac', 'username', 'password', 'ppoe', 'company_id', 'stb_id', 'region_id', 'is_active'
     ];
     protected $primaryKey = 'id';
 
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     public function stb()

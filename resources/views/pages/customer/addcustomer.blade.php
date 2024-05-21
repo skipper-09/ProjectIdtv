@@ -46,9 +46,13 @@
                             <label>Ppoe</label>
                             <input type="text" name="ppoe" class="form-control" placeholder="PPOE">
                         </div>
-                        <div class="form-group col-12">
+                        <div class="form-group col-12 col-md-6">
                             <label>No Telepon</label>
                             <input type="text" name="phone" class="form-control" placeholder="No Telepon">
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Username</label>
+                            <input type="text" name="username" class="form-control" placeholder="Username">
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Password</label>
@@ -56,7 +60,8 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Re Password</label>
-                            <input type="text" name="password_confirmation" class="form-control" placeholder="Re Password">
+                            <input type="text" name="password_confirmation" class="form-control"
+                                placeholder="Re Password">
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Type STB</label>
@@ -93,10 +98,10 @@
                                 <option value="false">Tidak Aktif</option>
                             </select>
                         </div>
-                </div>
-                <div class="card-footer text-left">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+                    </div>
+                    <div class="card-footer text-left">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
             </form>
         </div>
     </section>

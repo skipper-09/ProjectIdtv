@@ -16,7 +16,7 @@ $("#dataTable").on("click", ".action", function () {
     if (type == "delete") {
         swal({
             title: "Apakah Kamu Yakin?",
-            text: "Menghapus data ini bersifat permanet ",
+            text: "Menghapus data ini bersifat permanen",
             icon: "warning",
             buttons: true,
             dangerMode: true,

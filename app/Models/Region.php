@@ -9,12 +9,7 @@ class Region extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'company_id'
+        'name'
     ];
     protected $primaryKey = 'id';
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
 }

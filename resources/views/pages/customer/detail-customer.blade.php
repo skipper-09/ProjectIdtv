@@ -40,7 +40,7 @@
     </div>
     <label class="col-sm-3 ">Perusahaan</label>
     <div class="col-sm-9">
-      <label for="">{{$customer[0]->region->company->name}}</label>
+      <label for="">{{$customer[0]->company->name}}</label>
     </div>
     <label class="col-sm-3 ">Tanggal Aktif</label>
     <div class="col-sm-9">

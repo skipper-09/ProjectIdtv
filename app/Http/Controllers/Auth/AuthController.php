@@ -23,19 +23,21 @@ class AuthController extends Controller
     {
         $login = $request->email;
         $user = User::where('email', $login)->orWhere('username', $login)->first();
-    
-        
+
+
         // if (!$user) {
         //     return redirect()->back()->withErrors(['email' => 'Invalid login credentials']);
         // }
-    
+
         $request->validate([
             'password' => 'required',
         ]);
 
-        
-        if (Auth::attempt(['email' => $user->email, 'password' => $request->password]) ||
-            Auth::attempt(['username' => $user->username, 'password' => $request->password])) {
+
+        if (
+            Auth::guard('web')->attempt(['email' => $user->email, 'password' => $request->password]) ||
+            Auth::guard('web')->attempt(['username' => $user->username, 'password' => $request->password])
+        ) {
             Auth::loginUsingId($user->id);
             return redirect()->route('dashboard');
         } else {
@@ -43,7 +45,7 @@ class AuthController extends Controller
         }
     }
 
-    
+
 
     public function signout()
     {

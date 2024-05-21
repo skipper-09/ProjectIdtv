@@ -24,6 +24,15 @@ class CustomerController extends Controller
         ];
         return view('pages.customer.index', $data);
     }
+
+
+    public function getcompany(Request $request)
+    {
+        $data['company_id'] = Region::where('company_id', $request->company_id)->get();
+        return response()->json($data);
+    }
+
+
     public function getData()
     {
         $customer = Customer::query()->with(['region', 'stb', 'company'])->get();
@@ -47,12 +56,12 @@ class CustomerController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->addColumn('is_active', function ($chanel) {
             $active = '';
-            $chanel->is_active == true ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
             return $active;
         })->editColumn('stb', function (Customer $stb) {
             return $stb->stb->name;
         })->editColumn('company', function (Customer $company) {
-            return $company->region->company->name;
+            return $company->company->name;
         })->editColumn('region', function (Customer $region) {
             return $region->region->name;
         })->editColumn('created_at', function (Customer $date) {
@@ -68,7 +77,7 @@ class CustomerController extends Controller
             'page_name' => 'Tambah Customer',
             'stb' => Stb::all(),
             'region' => Region::all(),
-            'company'=>Company::all(),
+            'company' => Company::all(),
 
         ];
         return view('pages.customer.addcustomer', $data);
@@ -76,8 +85,7 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request)
     {
-        $data = $request->validated();
-       
+
         Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -91,7 +99,7 @@ class CustomerController extends Controller
             'password' => $request->password,
             'is_avtive' => $request->is_active,
         ]);
-        return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Membuat Kategori!']);
+        return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 
     public function detail($id)
@@ -106,13 +114,37 @@ class CustomerController extends Controller
         return view('pages.customer.detail-customer', $data);
     }
 
-    public function update()
-    {
 
-        // $categori = Categori::find($id);
-        // $categori->name = $request->name;
-        // $categori->save();
-        // return redirect()->route('categori-chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Kategori!']);
+    public function show($id)
+    {
+        $data = [
+            'type_menu' => '',
+            'page_name' => 'Customer',
+            'customer' => Customer::find($id),
+            'stb' => Stb::all(),
+            'region' => Region::all(),
+            'company' => Company::all(),
+        ];
+
+        return view('pages.customer.editcustomer', $data);
+    }
+
+    public function update(CustomerRequest $request, $id)
+    {
+        $customer = Customer::find($id);
+        $customer->name = $request->name;
+        $customer->address = $request->address;
+        $customer->phone = $request->phone;
+        $customer->stb_id = $request->stb_id;
+        $customer->region_id = $request->region_id;
+        $customer->company_id = $request->company_id;
+        $customer->mac = $request->mac;
+        $customer->ppoe = $request->ppoe;
+        $customer->password = $request->password;
+        $customer->is_active = $request->is_active == true ? 1 : 0;
+        $customer->save();
+
+        return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Customer!']);
     }
 
     public function destroy($id)
@@ -122,7 +154,7 @@ class CustomerController extends Controller
         //return response
         return response()->json([
             'success' => true,
-            'message' => 'Data Kategori Berhasil Dihapus!.',
+            'message' => 'Data Customer Berhasil Dihapus!.',
         ]);
     }
 }

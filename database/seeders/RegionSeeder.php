@@ -15,9 +15,34 @@ class RegionSeeder extends Seeder
      */
     public function run()
     {
-        Region::create([
-            'name'=>'Banyuwangi',
-            'company_id'=>1,
-        ]);
+        Region::insert(
+            [
+                [
+                    'name' => 'BANYUWANGI',
+                ],
+                [
+                    'name' => 'NDARU',
+                ],
+                [
+                    'name' => 'GLAGAH',
+                ],
+                [
+                    'name' => 'KERTOSARI',
+                ],
+                [
+                    'name' => 'ROGOJAMPI',
+                ],
+                [
+                    'name' => 'SRONO',
+                ],
+                [
+                    'name' => 'JAJAG',
+                ],
+                [
+                    'name' => 'JEMBER',
+                ],
+            ]
+
+        );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ApichanelController;
+use App\Http\Controllers\Api\ApiLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/login', [ApiLoginController::class, 'login'])->middleware('api');
+Route::get('/chanel', [ApichanelController::class, 'index'])->middleware('auth:sanctum');
