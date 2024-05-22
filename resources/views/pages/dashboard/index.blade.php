@@ -133,7 +133,7 @@
                                 <div class="media-body">
                                     <div class="text-primary float-right">Now</div>
                                     <div class="media-title">{{$item->causer->name}}</div>
-                                    <span class="text-small text-muted">{{$item->subject->name}}</span>
+                                    <span class="text-small text-muted"> {{$item->subject->name}}</span>
                                 </div>
                             </li>
                             @endforeach
