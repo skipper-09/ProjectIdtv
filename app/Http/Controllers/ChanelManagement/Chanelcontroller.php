@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\File; 
+use Illuminate\Support\Facades\File;
 
 class Chanelcontroller extends Controller
 {
@@ -79,7 +79,7 @@ class Chanelcontroller extends Controller
             $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/images/chanel/'), $filename);
         }
-
+        activity()->log('Menambah chanel');
         Chanel::create([
             'name' => $request->name,
             'url' => $request->url,
@@ -100,9 +100,9 @@ class Chanelcontroller extends Controller
             'type_menu' => 'layout',
             'page_name' => 'Chanel',
             'categori' => Categori::all()
-            
+
         ];
-        return view('pages.chanel.chanel-management.editchanel',$data);
+        return view('pages.chanel.chanel-management.editchanel', $data);
     }
 
     public function update(Chanel $request, $id)
@@ -123,7 +123,7 @@ class Chanelcontroller extends Controller
                 File::delete(public_path('storage/images/chanel/' . $chanel->logo));
             }
         }
-       
+
         Chanel::where('id', $id)->delete();
         //return response
         return response()->json([

@@ -39,8 +39,8 @@
                     <li class="{{ Request::is('admin/settings/role') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('role') }}">Role</a>
                     </li>
-                    <li class="{{ Request::is('chanel-management/categori') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('categori-chanel')}}">User</a>
+                    <li class="{{ Request::is('admin/settings/user') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('user')}}">User</a>
                     </li>
 
                 </ul>
@@ -176,7 +176,7 @@
                         <a class="nav-link" href="{{ url('forms-validation') }}">Validation</a>
                     </li>
                 </ul>
-            </li> 
+            </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-map-marker-alt"></i> <span>Google
                         Maps</span></a>

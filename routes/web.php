@@ -6,6 +6,7 @@ use App\Http\Controllers\ChanelManagement\Chanelcontroller;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Settings\RoleController;
+use App\Http\Controllers\Settings\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -83,6 +84,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [RoleController::class, 'show'])->name('role.edit')->middleware('can:update-role');
             Route::put('/update/{id}', [RoleController::class, 'update'])->name('role.update');
             Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('role.delete')->middleware('can:delete-role');
+        });
+        Route::prefix('user')->group(function () {
+            Route::get('', [UserController::class, 'index'])->name('user')->middleware('can:read-users');
+            Route::get('getData', [UserController::class, 'getData'])->name('user.getdata');
+            Route::get('/tambah', [UserController::class, 'create'])->name('user.add')->middleware('can:create-users');
+            Route::post('store', [UserController::class, 'store'])->name('user.store');
+            Route::get('/edit/{id}', [UserController::class, 'show'])->name('user.edit')->middleware('can:update-users');
+            Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('user.delete')->middleware('can:delete-users');
         });
     });
 });
