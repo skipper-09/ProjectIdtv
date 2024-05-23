@@ -126,7 +126,7 @@
                     </div>
                     <div class="card-body">
                         <ul class="list-unstyled list-unstyled-border">
-                            @foreach ($log as $item)
+                            {{-- @foreach ($log as $item)
                             <li class="media">
                                 <img class="rounded-circle mr-3" width="50" src="{{ asset('img/avatar/avatar-1.png') }}"
                                     alt="avatar">
@@ -136,7 +136,7 @@
                                     <span class="text-small text-muted"> {{$item->subject->name}}</span>
                                 </div>
                             </li>
-                            @endforeach
+                            @endforeach --}}
                             <li class="media">
                                 <img class="rounded-circle mr-3" width="50" src="{{ asset('img/avatar/avatar-1.png') }}"
                                     alt="avatar">
