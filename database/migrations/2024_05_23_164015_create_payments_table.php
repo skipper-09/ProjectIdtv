@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customer_id');
+            $table->foreignId('packet_id');
+            $table->enum('type', ['manual','transfer']);
+            $table->enum('status', ['paid', 'unpaid','pending']);
+            $table->date('start_date');
+            $table->date('end_date');
             $table->timestamps();
         });
     }
