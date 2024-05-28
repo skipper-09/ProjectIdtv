@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name', length: 100);
             $table->string('phone', length: 14);
             $table->longText('address');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('password');
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->timestamps();

@@ -26,6 +26,19 @@
 
                 </ul>
             </li>
+            <li class="nav-item dropdown {{ $type_menu === 'company' ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
+                    <span>Perusahaan</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
+                    </li>
+                    <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('categori-chanel')}}">Perusahaan</a>
+                    </li>
+
+                </ul>
+            </li>
             <li class="{{ Request::is('customer') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('customer')}}"><i class="fas fa-people-group">
                     </i> <span>Customers</span>

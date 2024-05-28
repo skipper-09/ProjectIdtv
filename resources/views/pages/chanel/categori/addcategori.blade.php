@@ -27,7 +27,12 @@
         <div class="card-body">
           <div class="form-group">
             <label>Nama Kategori</label>
-            <input type="text" name="name" class="form-control">
+            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror">
+            @error('name') 
+            <div class="invalid-feedback">
+                {{$message}}
+            </div>
+            @enderror
           </div>
         </div>
         <div class="card-footer text-left">
