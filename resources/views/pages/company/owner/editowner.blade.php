@@ -21,7 +21,7 @@
 
 
         <div class="card">
-            <form action="{{ route('owner.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('owner.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="card-body">
@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Email</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{old('email')}}">
+                            <input type="email" name="email" class="form-control @error('password') is-invalid @enderror" placeholder="Email" value="{{old('email')}}">
                             @error('email') 
                             <div class="invalid-feedback">
                                 {{$message}}
@@ -70,15 +70,6 @@
                         <div class="form-group col-12 col-md-6">
                             <label>Password</label>
                             <input type="text" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
-                            @error('password') 
-                            <div class="invalid-feedback">
-                                {{$message}}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-12 col-md-6">
-                            <label>Konfirmasi Password</label>
-                            <input type="text" name="password_confirmation" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required autocomplete="current-password">
                             @error('password') 
                             <div class="invalid-feedback">
                                 {{$message}}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OwnerRequest;
 use App\Models\Company;
 use App\Models\owner;
 use App\Models\User;
@@ -52,17 +53,9 @@ class OwnerController extends Controller
         return view('pages.company.owner.addowner', $data);
     }
 
-    public function store(Request $request)
+    public function store(OwnerRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'phone' => 'required||numeric',
-            'email' => 'required||unique:owners,email|email',
-            'address' => 'required',
-            'company_id' => 'required',
-            'password' => 'required',
-        ]);
-
+        $request->validated();
         owner::create([
             'name' => $request->name,
             'phone' => $request->phone,
@@ -73,6 +66,20 @@ class OwnerController extends Controller
         ]);
 
         return redirect()->route('owner')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Pemilik Prusahaan!']);
+    }
+
+    public function show(){
+        
+        $data = [
+            'type_menu' => 'company',
+            'page_name' => 'Pemilik',
+        ];
+        return view('pages.company.owner.editowner', $data);
+        
+    }
+
+    public function update(){
+
     }
 
     public function destroy($id)
