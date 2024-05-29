@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\owner;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OwnerRequest extends FormRequest
@@ -23,14 +24,15 @@ class OwnerRequest extends FormRequest
      */
     public function rules()
     {
+        $owner = $this->route('id');
         return [
             'name' => 'required',
             'phone' => 'required||numeric',
-            'email' => 'required||unique:owners,email|email',
+            'email' => 'required||email|unique:owners,email,' . $owner,
             'address' => 'required',
             'company_id' => 'required',
-            'password' => 'required|min:6|',
-            'password_confirmation' => 'required|same:password|confirmed',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:6'
         ];
     }
     public function messages()
@@ -42,11 +44,10 @@ class OwnerRequest extends FormRequest
             'email.required' => 'The email field is required.',
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'The email address is already in use.',
-            'address.required'=>'The address field is required.',
-            'company_id.required'=>'The Company field is required.',
+            'address.required' => 'The address field is required.',
+            'company_id.required' => 'The Company field is required.',
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters long.',
-            'password.confirmed' => 'The password confirmation does not match.',
         ];
     }
 }

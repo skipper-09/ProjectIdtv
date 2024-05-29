@@ -21,15 +21,16 @@
 
 
         <div class="card">
-            <form action="{{ route('owner.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-
+            <form action="{{ route('owner.update',['id'=>$owner->id]) }}" method="POST" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                {{ method_field('PUT') }}
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label>Nama </label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Nama Pemilik" value="{{old('name')}}">
-                            @error('name') 
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                placeholder="Nama Pemilik" value="{{$owner->name}}">
+                            @error('name')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -37,8 +38,9 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>No HP</label>
-                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="No HP" value="{{old('phone')}}">
-                            @error('phone') 
+                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
+                                placeholder="No HP" value="{{$owner->phone}}">
+                            @error('phone')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -46,13 +48,16 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Perusahaan</label>
-                            <select class="form-control select2 @error('company_id') is-invalid @enderror" name="company_id" >
+                            <select class="form-control select2 @error('company_id') is-invalid @enderror"
+                                name="company_id">
                                 <option value="">Pilih Perusahaan</option>
                                 @foreach ($company as $k)
-                                <option value="{{ $k->id }}">{{ $k->name }}  </option>
-                                @endforeach
+                                {{-- <option value="{{ $k->id }}">{{ $k->name }} </option> --}}
+                                <option value="{{ $k->id }}" {{$k->id == $owner->company_id ? 'selected' : '' }}>{{
+                                    $k->name }}
+                                    @endforeach
                             </select>
-                            @error('company_id') 
+                            @error('company_id')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -60,8 +65,9 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Email</label>
-                            <input type="email" name="email" class="form-control @error('password') is-invalid @enderror" placeholder="Email" value="{{old('email')}}">
-                            @error('email') 
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                placeholder="Email" value="{{$owner->email}}">
+                            @error('email')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -69,8 +75,21 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Password</label>
-                            <input type="text" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
-                            @error('password') 
+                            <input type="text" name="password"
+                                class="form-control @error('password') is-invalid @enderror" placeholder="Password"
+                                value="{{$owner->password}}">
+                            @error('password')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Konfirmasi Password</label>
+                            <input type="text" name="password_confirmation"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                placeholder="Konfirmasi Password" value="{{$owner->password}}">
+                            @error('password_confirmation')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -78,14 +97,16 @@
                         </div>
                         <div class="form-group col-12 ">
                             <label>Alamat </label>
-                            <textarea name="address" id="" cols="30" rows="10" class="form-control @error('address') is-invalid @enderror"   data-height="80">{{old('address')}}</textarea>
-                            @error('address') 
+                            <textarea name="address" id="" cols="30" rows="10"
+                                class="form-control @error('address') is-invalid @enderror"
+                                data-height="80">{{$owner->address}}</textarea>
+                            @error('address')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
                             @enderror
                         </div>
-                       
+
                     </div>
                 </div>
                 <div class="card-footer text-left">

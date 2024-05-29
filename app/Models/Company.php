@@ -19,6 +19,6 @@ class Company extends Model
     }
     public function owner()
     {
-        return $this->hasMany(owner::class);
+        return $this->hasOne(owner::class);
     }
 }

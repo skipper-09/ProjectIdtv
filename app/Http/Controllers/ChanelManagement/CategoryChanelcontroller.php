@@ -74,7 +74,7 @@ class CategoryChanelcontroller extends Controller
 
     public function update(CategoriChanelRequest $request, $id)
     {
-
+        $request->validated();
         $categori = Categori::find($id);
         $categori->name = $request->name;
         $categori->save();

@@ -47,7 +47,7 @@ class OwnerController extends Controller
     {
         $data = [
             'type_menu' => 'company',
-            'page_name' => 'Pemilik',
+            'page_name' => 'Tannbah Pemilik',
             'company' => Company::all()
         ];
         return view('pages.company.owner.addowner', $data);
@@ -68,18 +68,32 @@ class OwnerController extends Controller
         return redirect()->route('owner')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Pemilik Prusahaan!']);
     }
 
-    public function show(){
-        
+    public function show(owner $owner, $id)
+    {
+
         $data = [
             'type_menu' => 'company',
-            'page_name' => 'Pemilik',
+            'page_name' => 'Edit Pemilik',
+            'owner' => $owner->find($id),
+            'company' => Company::all()
         ];
         return view('pages.company.owner.editowner', $data);
-        
     }
 
-    public function update(){
+    public function update(OwnerRequest $request, $id)
+    {
 
+
+        $owner = owner::findOrFail($id);
+        $owner->update($request->validated());
+        // $owner->name = $request->name;
+        // $owner->address = $request->address;
+        // $owner->phone = $request->phone;
+        // $owner->company_id = $request->company_id;
+        // $owner->email = $request->email;
+        // $owner->password = $request->password;
+        // $owner->save();
+        return redirect()->route('owner')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Data Pemilik!']);
     }
 
     public function destroy($id)

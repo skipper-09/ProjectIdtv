@@ -28,8 +28,8 @@
           <div class="row">
             <div class="form-group col-12 col-md-6">
               <label>Nama Client<span class="text-danger">*</span></label>
-              <input type="text" name="name" class="form-control" placeholder="Nama Customer"
-                value="{{$customer->name}}">
+              <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                placeholder="Nama Customer" value="{{$customer->name}}">
               @error('name')
               <div class="invalid-feedback">
                 {{$message}}
@@ -38,7 +38,13 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Mac<span class="text-danger">*</span></label>
-              <input type="text" name="mac" class="form-control" placeholder="Mac STB" value="{{$customer->mac}}">
+              <input type="text" name="mac" class="form-control @error('mac') is-invalid @enderror"
+                placeholder="Mac STB" value="{{$customer->mac}}">
+              @error('mac')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Alamat<span class="text-danger">*</span></label>
@@ -47,7 +53,13 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Ppoe<span class="text-danger">*</span></label>
-              <input type="text" name="ppoe" class="form-control" placeholder="PPOE" value="{{$customer->ppoe}}">
+              <input type="text" name="ppoe" class="form-control @error('ppoe') is-invalid @enderror" placeholder="PPOE"
+                value="{{$customer->ppoe}}">
+              @error('ppoe')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
             </div>
             <div class="form-group col-12 col-md-6">
               <label>No Telepon <span class="text-info">(optional)</span></label>
@@ -56,17 +68,29 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Username<span class="text-danger">*</span></label>
-              <input type="text" name="username" class="form-control" placeholder="Username"
-                value="{{$customer->username}}">
+              <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                placeholder="Username" value="{{$customer->username}}">
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Password<span class="text-danger">*</span></label>
-              <input type="text" name="password" value='{{$customer->password}}'' class="form-control" placeholder="Password">
+              <input type="text" name="password" value='{{$customer->password}}'' class="form-control @error('
+                password') is-invalid @enderror" placeholder="Password">
+              @error('password')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
             </div>
             <div class="form-group col-12 col-md-6">
-              <label>Re Password<span class="text-danger">*</span></label>
-              <input type="text" name="password_confirmation" value="{{$customer->password}}" class="form-control"
-              placeholder="Re Password">
+              <label>Konfirmasi Password<span class="text-danger">*</span></label>
+              <input type="text" name="password_confirmation" value="{{$customer->password}}"
+                class="form-control @error('password_confirmation') is-invalid @enderror"
+                placeholder="Konfirmasi Password">
+              @error('password_confirmation')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Type STB<span class="text-danger">*</span></label>
@@ -74,8 +98,8 @@
                 <option value="">Pilih Type STB</option>
                 @foreach ($stb as $s)
                 <option value="{{ $s->id }}" {{$s->id == $customer->stb_id ? ' selected' : '' }}>{{ $s->name }}
-              </option>
-              @endforeach
+                </option>
+                @endforeach
               </select>
             </div>
             <div class="form-group col-12 col-md-6">

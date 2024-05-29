@@ -85,7 +85,7 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request)
     {
-
+        $request->validate();
         Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -131,6 +131,7 @@ class CustomerController extends Controller
 
     public function update(CustomerRequest $request, $id)
     {
+        $request->validated();
         $customer = Customer::find($id);
         $customer->name = $request->name;
         $customer->address = $request->address;
