@@ -36,4 +36,14 @@ class UserController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->make(true);
     }
+
+    public function create()
+    {
+        $data = [
+            'type_menu' => 'setting',
+            'page_name' => 'Tambah User',
+            'role'=> Role::where('name','!=','Developer')->get()
+        ];
+        return view('pages.settings.user.adduser', $data);
+    }
 }

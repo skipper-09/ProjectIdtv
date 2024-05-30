@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChanelManagement\CategoryChanelcontroller;
 use App\Http\Controllers\ChanelManagement\Chanelcontroller;
+use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\OwnerController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Master\StbController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +36,34 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return redirect()->route('dashboard');
     });
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('can:read-dashboard');
+
+
+
+//master
+Route::prefix('master')->group(function () {
+    //chanel
+    Route::prefix('stb')->group(function () {
+        Route::get('/', [StbController::class, 'index'])->name('stb');
+        Route::get('getData', [StbController::class, 'getData'])->name('stb.getdata');
+        Route::get('/tambah', [StbController::class, 'create'])->name('stb.add');
+        Route::post('store', [StbController::class, 'store'])->name('stb.store');
+        Route::get('/edit/{id}', [StbController::class, 'show'])->name('stb.edit');
+        Route::put('/update/{id}', [StbController::class, 'update'])->name('stb.update');
+        Route::delete('/delete/{id}', [StbController::class, 'destroy'])->name('stb.delete');
+    });
+
+    //Categori route
+    Route::prefix('categori')->group(function () {
+        Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel')->middleware('can:read-categori');
+        Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
+        Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
+        Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
+        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-categori');
+        Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
+        Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
+    });
+});
+
 
     //chanel management route
     Route::prefix('chanel-management')->group(function () {
@@ -75,18 +105,28 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         }
     );
 
-//route company
-    Route::prefix('company')->group(
-        function () {
-            Route::get('', [OwnerController::class, 'index'])->name('owner')->middleware('can:read-owner');
-            Route::get('getData', [OwnerController::class, 'getData'])->name('owner.getdata');
-            Route::get('/tambah', [OwnerController::class, 'create'])->name('owner.add')->middleware('can:create-owner');
-            Route::post('store', [OwnerController::class, 'store'])->name('owner.store');
-            Route::get('/edit/{id}', [OwnerController::class, 'show'])->name('owner.edit')->middleware('can:update-owner');
-            Route::put('/update/{id}', [OwnerController::class, 'update'])->name('owner.update');
-            Route::delete('/delete/{id}', [OwnerController::class, 'destroy'])->name('owner.delete')->middleware('can:delete-owner');
-        }
-    );
+    //route company
+    Route::prefix('company')->group(function () {
+        Route::prefix('owner')->group(
+            function () {
+                Route::get('', [OwnerController::class, 'index'])->name('owner')->middleware('can:read-owner');
+                Route::get('getData', [OwnerController::class, 'getData'])->name('owner.getdata');
+                Route::get('/tambah', [OwnerController::class, 'create'])->name('owner.add')->middleware('can:create-owner');
+                Route::post('store', [OwnerController::class, 'store'])->name('owner.store');
+                Route::get('/edit/{id}', [OwnerController::class, 'show'])->name('owner.edit')->middleware('can:update-owner');
+                Route::put('/update/{id}', [OwnerController::class, 'update'])->name('owner.update');
+                Route::delete('/delete/{id}', [OwnerController::class, 'destroy'])->name('owner.delete')->middleware('can:delete-owner');
+            }
+        );
+
+        Route::get('', [CompanyController::class, 'index'])->name('company');
+        Route::get('getData', [CompanyController::class, 'getData'])->name('company.getdata');
+        Route::get('/tambah', [CompanyController::class, 'create'])->name('company.add');
+        Route::post('store', [CompanyController::class, 'store'])->name('company.store');
+        Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit');
+        Route::put('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
+        Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+    });
 
     //setting route
     Route::prefix('settings')->group(function () {

@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label>Nama Chanel</label>
-                            <input type="text" name="name" class="form-control" placeholder="Nama Chanel">
+                            <input type="text" name="name" class="form-control" placeholder="Nama Chanel" value="">
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Url</label>

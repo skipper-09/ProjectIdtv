@@ -47,7 +47,7 @@ class OwnerController extends Controller
     {
         $data = [
             'type_menu' => 'company',
-            'page_name' => 'Tannbah Pemilik',
+            'page_name' => 'Tambah Pemilik',
             'company' => Company::all()
         ];
         return view('pages.company.owner.addowner', $data);

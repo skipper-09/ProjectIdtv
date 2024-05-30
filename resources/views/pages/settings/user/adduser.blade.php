@@ -14,14 +14,14 @@
         <div class="section-header">
             <h1>{{ $page_name }}</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('owner') }}">Pemilik</a></div>
+                <div class="breadcrumb-item active"><a href="{{ route('company') }}">Perusahaan</a></div>
                 <div class="breadcrumb-item">{{ $page_name }}</div>
             </div>
         </div>
 
 
         <div class="card">
-            <form action="{{ route('owner.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="card-body">
@@ -29,33 +29,8 @@
                         <div class="form-group col-12 col-md-6">
                             <label>Nama<span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                placeholder="Nama Pemilik" value="{{old('name')}}">
+                                placeholder="Nama" value="{{old('name')}}">
                             @error('name')
-                            <div class="invalid-feedback">
-                                {{$message}}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-12 col-md-6">
-                            <label>No HP<span class="text-danger">*</span></label>
-                            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror"
-                                placeholder="No HP" value="{{old('phone')}}">
-                            @error('phone')
-                            <div class="invalid-feedback">
-                                {{$message}}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-12 col-md-6">
-                            <label>Perusahaan<span class="text-danger">*</span></label>
-                            <select class="form-control select2 @error('company_id') is-invalid @enderror"
-                                name="company_id">
-                                <option value="">Pilih Perusahaan</option>
-                                @foreach ($company as $k)
-                                <option value="{{ $k->id }}">{{ $k->name }} </option>
-                                @endforeach
-                            </select>
-                            @error('company_id')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
@@ -70,9 +45,19 @@
                                 {{$message}}
                             </div>
                             @enderror
+                        </div> 
+                        <div class="form-group col-12">
+                            <label>Username<span class="text-danger">*</span></label>
+                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                                placeholder="Username" value="{{old('username')}}">
+                            @error('username')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Password<span class="text-danger">*</span></label>
+                            <label>Password <span class="text-danger">*</span></label>
                             <input type="text" name="password"
                                 class="form-control @error('password') is-invalid @enderror" placeholder="Password">
                             @error('password')
@@ -82,7 +67,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Konfirmasi Password<span class="text-danger">*</span></label>
+                            <label>Konfirmasi Password <span class="text-danger">*</span></label>
                             <input type="text" name="password_confirmation"
                                 class="form-control @error('password_confirmation') is-invalid @enderror"
                                 placeholder="Konfirmasi Password">
@@ -92,18 +77,15 @@
                             </div>
                             @enderror
                         </div>
-                        <div class="form-group col-12 ">
-                            <label>Alamat<span class="text-danger">*</span></label>
-                            <textarea name="address" id="" cols="30" rows="10"
-                                class="form-control @error('address') is-invalid @enderror"
-                                data-height="80">{{old('address')}}</textarea>
-                            @error('address')
-                            <div class="invalid-feedback">
-                                {{$message}}
-                            </div>
-                            @enderror
+                        <div class="form-group col-12 col-md-6">
+                            <label>Role <span class="text-danger">*</span></label>
+                            <select class="form-control select2" name="stb_id">
+                                <option value="">Pilih Role</option>
+                                @foreach ($role as $s)
+                                <option value="{{ $s->id }}">{{ $s->name }} </option>
+                                @endforeach
+                            </select>
                         </div>
-
                     </div>
                 </div>
                 <div class="card-footer text-left">
@@ -120,11 +102,5 @@
 <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
 <!-- Page Specific JS File -->
-
-
-
-
-
-
 
 @endpush

@@ -62,7 +62,7 @@
               @enderror
             </div>
             <div class="form-group col-12 col-md-6">
-              <label>No Telepon <span class="text-info">(optional)</span></label>
+              <label>No Telepon<span class="text-danger">*</span></label>
               <input type="text" name="phone" class="form-control" placeholder="No Telepon"
                 value="{{$customer->phone}}">
             </div>

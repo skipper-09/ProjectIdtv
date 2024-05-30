@@ -19,7 +19,6 @@ return new class extends Migration
             $table->longText('address');
             $table->string('phone');
             $table->string('email')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

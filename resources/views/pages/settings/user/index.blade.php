@@ -24,9 +24,9 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              @can('create-role')
+              @can('create-users')
               <div class="card-header">
-                <a href="{{ route('role.add') }}" class="btn btn-primary">Tambah
+                <a href="{{ route('user.add') }}" class="btn btn-primary">Tambah
                   {{ $page_name }}</a>
               </div>
               @endcan

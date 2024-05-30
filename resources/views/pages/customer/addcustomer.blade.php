@@ -26,7 +26,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
-                            <label>Nama Client<span class="text-danger">*</span></label>
+                            <label>Nama Client <span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
                                 placeholder="Nama Customer">
                             @error('name')
@@ -36,7 +36,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Mac<span class="text-danger">*</span></label>
+                            <label>Mac <span class="text-danger">*</span></label>
                             <input type="text" name="mac" class="form-control @error('mac') is-invalid @enderror"
                                 placeholder="Mac STB">
                             @error('mac')
@@ -46,7 +46,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Alamat</label>
+                            <label>Alamat <span class="text-danger">*</span></label>
                             <input type="text" name="address" class="form-control" placeholder="Alamat">
                         </div>
                         <div class="form-group col-12 col-md-6">
@@ -60,7 +60,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>No Telepon</label>
+                            <label>No Telepon<span class="text-danger">*</span></label>
                             <input type="text" name="phone" class="form-control" placeholder="No Telepon">
                         </div>
                         <div class="form-group col-12 col-md-6">
@@ -74,7 +74,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Password<span class="text-danger">*</span></label>
+                            <label>Password <span class="text-danger">*</span></label>
                             <input type="text" name="password"
                                 class="form-control @error('password') is-invalid @enderror" placeholder="Password">
                             @error('password')
@@ -84,7 +84,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Konfirmasi Password<span class="text-danger">*</span></label>
+                            <label>Konfirmasi Password <span class="text-danger">*</span></label>
                             <input type="text" name="password_confirmation"
                                 class="form-control @error('password_confirmation') is-invalid @enderror"
                                 placeholder="Konfirmasi Password">
@@ -95,7 +95,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Type STB<span class="text-danger">*</span></label>
+                            <label>Type STB <span class="text-danger">*</span></label>
                             <select class="form-control select2" name="stb_id">
                                 <option value="">Pilih Type STB</option>
                                 @foreach ($stb as $s)
@@ -104,7 +104,7 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Area<span class="text-danger">*</span></label>
+                            <label>Area <span class="text-danger">*</span></label>
                             <select class="form-control select2" name="region_id">
                                 <option value="">Pilih Area</option>
                                 @foreach ($region as $s)
@@ -113,7 +113,7 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12">
-                            <label>Perusahaan<span class="text-danger">*</span></label>
+                            <label>Perusahaan <span class="text-danger">*</span></label>
                             <select class="form-control select2" name="company_id">
                                 <option value="">Pilih Perusahaan</option>
                                 @foreach ($company as $item)
@@ -122,7 +122,7 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12">
-                            <label>Status<span class="text-danger">*</span></label>
+                            <label>Status <span class="text-danger">*</span></label>
                             <select class="form-control select2" id="extension" name="is_active">
                                 <option value="">Pilih Status</option>
                                 <option value="1">Aktif</option>

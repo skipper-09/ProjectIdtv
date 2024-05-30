@@ -27,9 +27,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            @can('create-customer')
+                            @can('create-owner')
                             <div class="card-header">
-                                <a href="{{ route('customer.add') }}" class="btn btn-primary">Tambah
+                                <a href="{{ route('company.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
@@ -38,14 +38,10 @@
                                     <table class="table-striped table" id="dataTable">
                                         <thead>
                                             <tr>
-                                                {{-- <th>No</th> --}}
                                                 <th>Nama</th>
-                                                <th>Mac</th>
-                                                <th>Stb</th>
-                                                <th>Status</th>
-                                                <th>Area</th>
-                                                <th>Perusahaan</th>
-                                                <th>Tgl Aktif</th>
+                                                <th>No Hp</th>
+                                                <th>Alamat</th>
+                                                <th>Email</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -62,8 +58,6 @@
 </div>
 
 
-{{-- //modal call --}}
-@include('components.modal')
 @endsection
 
 @push('scripts')
@@ -84,48 +78,25 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('customer.getdata') }}',
+                ajax: '{{ route('company.getdata') }}',
                 columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     width: '10px',
-                    //     class:'text-center'
-                    // },
                     {
                         data: 'name',
                         name: 'name',
                     },
-                    
                     {
-                        data: 'mac',
-                        name: 'mac'
+                        data: 'phone',
+                        name: 'phone',
                     },
                     {
-                        data: 'stb',
-                        name: 'stb'
+                        data: 'address',
+                        name: 'address',
                     },
                     {
-                        data: 'is_active',
-                        name: 'is_active'
+                        data: 'email',
+                        name: 'eamil',
                     },
-                    {
-                        data: 'region',
-                        name: 'region',
-                        orderable: false,
-                        searchable: true,
-                    },
-                    {
-                        data: 'company',
-                        name: 'company',
-                        orderable: false,
-                        searchable: true,
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
+                  
                     {
                         data: 'action',
                         name: 'action'

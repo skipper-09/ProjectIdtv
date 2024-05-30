@@ -25,12 +25,12 @@ return new class extends Migration
             $table->text('address');
             $table->string('username');
             $table->string('password');
-            $table->boolean('is_active')->default(1);
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
-            $table->foreign('stb_id')->references('id')->on('stbs')->onDelete('cascade');
+            $table->foreign('stb_id')->references('id')->on('stbs')->onDelete('restrict');
         });
     }
 

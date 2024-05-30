@@ -12,6 +12,20 @@
                 <a href="{{route('dashboard')}}" class="nav-link"><i
                         class="fas fa-desktop"></i><span>Dashboard</span></a>
             </li>
+            <li class="menu-header">DATA MASTER</li>
+            <li class="nav-item dropdown {{ $type_menu === 'master' ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
+                    <span>Data Master</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('admin/master/stb') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('stb') }}">Stb</a>
+                    </li>
+                    <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('categori-chanel')}}">area</a>
+                    </li>
+
+                </ul>
+            </li>
             <li class="menu-header">MANAGEMENT</li>
             <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
@@ -30,11 +44,11 @@
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
                     <span>Perusahaan</span></a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                    <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
                     </li>
-                    <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('categori-chanel')}}">Perusahaan</a>
+                    <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{route('company')}}">Perusahaan</a>
                     </li>
 
                 </ul>

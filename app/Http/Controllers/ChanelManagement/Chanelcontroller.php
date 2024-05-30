@@ -96,9 +96,9 @@ class Chanelcontroller extends Controller
     public function show(Chanel $chanel, $id)
     {
         $data = [
-            'chanel' => Chanel::find($id)->with('categori'),
+            'chanel' => $chanel->find($id)->with('categori'),
             'type_menu' => 'layout',
-            'page_name' => 'Chanel',
+            'page_name' => 'Edit Chanel',
             'categori' => Categori::all()
 
         ];

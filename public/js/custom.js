@@ -39,6 +39,9 @@ $("#dataTable").on("click", ".action", function () {
                             icon: "success",
                         });
                     },
+                    error: function(error){
+                    console.log(error);
+                    }
                 });
             }
         });
