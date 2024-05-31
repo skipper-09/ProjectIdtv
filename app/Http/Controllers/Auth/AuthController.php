@@ -29,19 +29,17 @@ class AuthController extends Controller
         //     return redirect()->back()->withErrors(['email' => 'Invalid login credentials']);
         // }
 
-        $request->validate([
-            'password' => 'required',
-        ]);
-
+        // $request->validate([
+        //     'password' => 'required',
+        // ]);
 
         if (
-            Auth::guard('web')->attempt(['email' => $user->email, 'password' => $request->password]) ||
-            Auth::guard('web')->attempt(['username' => $user->username, 'password' => $request->password])
+            Auth::guard('web')->attempt(['email' => $user->email, 'password' => $request->password]) 
         ) {
-            Auth::loginUsingId($user->id);
+            dd(Auth::loginUsingId($user->id));
             return redirect()->route('dashboard');
         } else {
-            return redirect()->back()->withErrors(['password' => 'Invalid login credentials']);
+            return redirect()->back()->with(['password' => 'Invalid login credentials']);
         }
     }
 

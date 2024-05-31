@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kategori')
+@section('title', $page_name)
 
 @push('style')
 <!-- CSS Libraries -->
@@ -30,10 +30,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+                            @can('create-categori')
                             <div class="card-header">
                                 <a href="{{ route('categori-chanel.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
+                            @endcan
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">

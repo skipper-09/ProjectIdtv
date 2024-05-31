@@ -29,11 +29,11 @@ class CompanyController extends Controller
         return DataTables::of($company)->addIndexColumn()->addColumn('action', function ($company) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
-            if ($userauth->can('update-owner')) {
+            if ($userauth->can('update-company')) {
                 $button .= ' <a href="' . route('company.edit', ['id' => $company->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $company->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
-            if ($userauth->can('delete-owner')) {
+            if ($userauth->can('delete-company')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $company->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $company->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }

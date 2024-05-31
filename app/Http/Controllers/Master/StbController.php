@@ -30,11 +30,11 @@ class StbController extends Controller
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
-            if ($userauth->can('update-owner')) {
+            if ($userauth->can('update-stb')) {
                 $button .= ' <a href="' . route('stb.edit', ['id' => $data->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $data->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
-            if ($userauth->can('delete-owner')) {
+            if ($userauth->can('delete-stb')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $data->id . ' data-type="delete" data-route="' . route('stb.delete', ['id' => $data->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }

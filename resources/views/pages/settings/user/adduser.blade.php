@@ -79,10 +79,10 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Role <span class="text-danger">*</span></label>
-                            <select class="form-control select2" name="stb_id">
+                            <select class="form-control select2" name="role">
                                 <option value="">Pilih Role</option>
                                 @foreach ($role as $s)
-                                <option value="{{ $s->id }}">{{ $s->name }} </option>
+                                <option value="{{ $s->name }}">{{ $s->name }} </option>
                                 @endforeach
                             </select>
                         </div>
