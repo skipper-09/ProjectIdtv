@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Stb;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -42,12 +43,18 @@ class StbController extends Controller
 
     public function destroy($id)
     {
-      
-        $stb = Stb::where('id', $id)->delete();
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Stb Berhasil Dihapus!.',
-        ]);
+        try {
+            $stb = Stb::where('id', $id)->delete();
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Stb Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Stb Tidak Bisa Dihapus Karena Masih digunakan oleh Customer!',
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }

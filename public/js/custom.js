@@ -35,13 +35,16 @@ $("#dataTable").on("click", ".action", function () {
                         //reload table
                         $("#dataTable").DataTable().ajax.reload();
                         // Do something with the result
-                        swal("Deleted!", res.message, {
-                            icon: "success",
-                        });
+                        if (res.status === "success") {
+                            swal("Deleted!", res.message, {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("Error!", res.message, {
+                                icon: "error",
+                            });
+                        }
                     },
-                    error: function(error){
-                    console.log(error);
-                    }
                 });
             }
         });

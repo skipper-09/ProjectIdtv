@@ -57,8 +57,9 @@
                         </div>
                         <div class="form-group col-12 col-md-12">
                             <label>Logo</label>
-                            <input type="file" accept="image/*" name="logo" class="form-control" onchange="previewFile(this);" required>
-                            <img id="img" src="#" alt="your image" class="image-preview mt-1"/>
+                            <input type="file" accept="image/*" name="logo" class="form-control"
+                                onchange="previewFile(this);" required>
+                            <img id="img" src="#" alt="your image" class="image-preview mt-1 d-none" />
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Status</label>
@@ -119,8 +120,8 @@
         var file = $("input[type=file]").get(0).files[0];
  
         if(file){
+            $('#img').removeClass('d-none');
             var reader = new FileReader();
- 
             reader.onload = function(){
                 $("#img").attr("src", reader.result);
             }

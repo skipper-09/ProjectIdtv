@@ -7,6 +7,7 @@ use App\Http\Requests\OwnerRequest;
 use App\Models\Company;
 use App\Models\owner;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -98,12 +99,19 @@ class OwnerController extends Controller
 
     public function destroy($id)
     {
-        owner::where('id', $id)->delete();
-
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Pemilik Perusahaan Berhasil Dihapus!.',
-        ]);
+        try {
+            owner::where('id', $id)->delete();
+            //return response
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Pemilik Perusahaan Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Pemilik Perusahaan Gagal dihapus!',
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }

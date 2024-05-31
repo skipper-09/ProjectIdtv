@@ -7,12 +7,14 @@ use App\Http\Requests\ChanelRequest;
 use App\Models\Chanel;
 use App\Models\Categori;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\File;
+use PhpParser\Node\Stmt\TryCatch;
 
 class Chanelcontroller extends Controller
 {
@@ -48,7 +50,7 @@ class Chanelcontroller extends Controller
         width="40" class="img-rounded" align="center" />';
         })->addColumn('is_active', function ($chanel) {
             $active = '';
-            $chanel->is_active == true ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
             return $active;
         })->editColumn('type', function ($chanel) {
             $active = '';
@@ -79,7 +81,6 @@ class Chanelcontroller extends Controller
             $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/images/chanel/'), $filename);
         }
-        activity()->log('Menambah chanel');
         Chanel::create([
             'name' => $request->name,
             'url' => $request->url,
@@ -96,7 +97,7 @@ class Chanelcontroller extends Controller
     public function show(Chanel $chanel, $id)
     {
         $data = [
-            'chanel' => $chanel->find($id)->with('categori'),
+            'chanel' => $chanel->find($id),
             'type_menu' => 'layout',
             'page_name' => 'Edit Chanel',
             'categori' => Categori::all()
@@ -105,30 +106,69 @@ class Chanelcontroller extends Controller
         return view('pages.chanel.chanel-management.editchanel', $data);
     }
 
-    public function update(Chanel $request, $id)
+    public function update(Chanel $chanel, ChanelRequest $request)
     {
+        try {
+            $filename = '';
+            if ($request->hasFile('logo')) {
+                $file  = $request->file('logo');
+                $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('storage/images/chanel/'), $filename);
+                if ($chanel->logo !== 'default.png') {
+                    if (file_exists(public_path('storage/images/chanel/' . $chanel->logo))) {
+                        File::delete(public_path('storage/images/chanel/' . $chanel->logo));
+                    }
+                }
+            } else {
+                $filename = $chanel->logo;
+            }
+            $chanel->update([
+                'name' => $request->name,
+                'url' => $request->url,
+                'categori_id' => $request->input('categori_id'),
+                'logo' => $filename,
+                'type' => $request->type,
+                'user_agent' => $request->user_agent,
+                'security_type' => $request->input('security_type'),
+                'security' => $request->security,
+            ]);
+            return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Chanel!']);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 
     public function destroy($id)
     {
-        $chanel = Chanel::where('id', $id)->first();
-        if (!$chanel) {
+        try {
+            $chanel = Chanel::where('id', $id)->first();
+            if (!$chanel) {
+                return response()->json([
+                    'status' => '500',
+                    'error' => 'Chanel Kosong!'
+                ]);
+            }
+            if ($chanel->logo !== 'default.png') {
+                if (file_exists(public_path('storage/images/chanel/' . $chanel->logo))) {
+                    File::delete(public_path('storage/images/chanel/' . $chanel->logo));
+                }
+            }
+
+            Chanel::where('id', $id)->delete();
+            //return response
             return response()->json([
-                'status' => '500',
-                'error' => 'Chanel Kosong!'
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Chanel Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
             ]);
         }
-        if ($chanel->logo !== 'default.png') {
-            if (file_exists(public_path('storage/images/chanel/' . $chanel->logo))) {
-                File::delete(public_path('storage/images/chanel/' . $chanel->logo));
-            }
-        }
-
-        Chanel::where('id', $id)->delete();
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Chanel Berhasil Dihapus!.',
-        ]);
     }
 }

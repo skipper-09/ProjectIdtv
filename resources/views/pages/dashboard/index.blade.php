@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>Total Pelanggan</h4>
+                            <h4>Pelanggan</h4>
                         </div>
                         <div class="card-body">
                             {{$customer->count()}}
@@ -37,7 +37,7 @@
                     </div>
                     <div class="card-wrap">
                         <div class="card-header">
-                            <h4>Total Perusahaan</h4>
+                            <h4>Perusahaan</h4>
                         </div>
                         <div class="card-body">
                             {{$company->count()}}
@@ -70,7 +70,7 @@
                             <h4>Pendapatan</h4>
                         </div>
                         <div class="card-body">
-                            Rp. 500.000
+                            500.000
                         </div>
                     </div>
                 </div>

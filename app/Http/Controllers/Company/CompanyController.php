@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -68,7 +69,7 @@ class CompanyController extends Controller
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Edit Perusahaan',
-            'company'=>$company->find($id)
+            'company' => $company->find($id)
         ];
         return view('pages.company.company.editcomapny', $data);
     }
@@ -83,13 +84,19 @@ class CompanyController extends Controller
 
     public function destroy($id)
     {
-        Company::where('id', $id)->delete();
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Perusahaan Berhasil Dihapus!.',
-        ]);
+        try {
+            Company::where('id', $id)->delete();
+            //return response
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Perusahaan Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Data Perusahaan Tidak Bisa Dihapus Karena Masih digunakan oleh Customer!',
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
-
-    
 }

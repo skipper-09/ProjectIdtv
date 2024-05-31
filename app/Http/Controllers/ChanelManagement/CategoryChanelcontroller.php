@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoriChanelRequest;
 use App\Models\Categori;
 use App\Models\User;
+use Exception;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,12 +84,19 @@ class CategoryChanelcontroller extends Controller
 
     public function destroy($id)
     {
-        Categori::where('id', $id)->delete();
-
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Kategori Berhasil Dihapus!.',
-        ]);
+        try {
+            Categori::where('id', $id)->delete();
+            //return response
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Kategori Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }

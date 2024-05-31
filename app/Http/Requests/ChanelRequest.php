@@ -23,11 +23,12 @@ class ChanelRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => 'required',
             'categori_id' => 'required',
             'url' => 'required',
-            'logo' => 'required||mimes:jpeg,jpg,png|required|max:8192',
+            'logo' => 'mimes:jpeg,jpg,png|required|max:8192',
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Region;
 use App\Models\Stb;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -150,12 +151,19 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
-        Customer::where('id', $id)->delete();
-
-        //return response
-        return response()->json([
-            'success' => true,
-            'message' => 'Data Customer Berhasil Dihapus!.',
-        ]);
+        try {
+            Customer::where('id', $id)->delete();
+            //return response
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Customer Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Gagal Menghapus Data Customer!',
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }

@@ -28,18 +28,22 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
                             <label>Nama Chanel</label>
-                            <input type="text" name="name" class="form-control" placeholder="Nama Chanel" value="">
+                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                placeholder="Nama Chanel" value="{{$chanel->name}}">
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Url</label>
-                            <input type="text" name="url" class="form-control" placeholder="Url Chanel">
+                            <input type="text" name="url" class="form-control" placeholder="Url Chanel"
+                                value="{{$chanel->url}}">
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Kategori</label>
                             <select class="form-control select2" name="categori_id">
                                 <option value="">Pilih Kategori</option>
                                 @foreach ($categori as $k)
-                                <option value="{{ $k->id }}">{{ $k->name }} </option>
+                                <option value="{{ $k->id }}" {{$k->id == $chanel->categori_id ? 'selected' : ''}}>{{
+                                    $k->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -47,38 +51,53 @@
                             <label>Extension</label>
                             <select class="form-control select2" id="extension" name="type">
                                 <option value="">Pilih Extension</option>
-                                <option value="m3u">M3U</option>
-                                <option value="mpd">MPD</option>
+
+                                <option value="m3u" {{ $chanel->type == 'm3u' ? 'selected' : '' }}>M3U</option>
+                                <option value="mpd" {{ $chanel->type == 'mpd' ? 'selected' : '' }}>MPD</option>
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12">
                             <label>User Agent</label>
-                            <input type="text" name="user_agent" class="form-control" placeholder="User Agent">
+                            <input type="text" name="user_agent" class="form-control" placeholder="User Agent"
+                                value="{{$chanel->user_agent}}">
                         </div>
                         <div class="form-group col-12 col-md-12">
                             <label>Logo</label>
-                            <input type="file" accept="image/*" name="logo" class="form-control" onchange="previewFile(this);" required>
-                            <img id="img" src="#" alt="your image" class="image-preview mt-1"/>
+                            <input type="file" id="logo" accept="image/*" name="logo" class="form-control"
+                                onchange="previewFile(this);">
+                            <div class="row">
+                                <div class="col-12">
+                                    @if(isset($chanel))
+                                    <i class="text-muted small mx-3">*Kosongi jika tidak ingin mengubah logo.</i>
+                                    @endif
+                                </div>
+                                <div class="col-12">
+                                    <img id="img" src="#" alt="your image" class="image-preview mt-1 d-none" />
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Status</label>
                             <select class="form-control select2" name="status">
                                 <option value="">Pilih Status</option>
-                                <option value="1">Aktif</option>
-                                <option value="0">Tidak Aktif</option>
+                                <option value="1" {{ $chanel->is_active == 1 ? 'selected' : '' }}>Aktif</option>
+                                <option value="0" {{ $chanel->is_active == 0 ? 'selected' : '' }}>Tidak Aktif</option>
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6 d-none" id="security-type">
                             <label>Security Type</label>
                             <select class="form-control select2" name="security_type">
                                 <option value="">Pilih Security Type</option>
-                                <option value="widevine">Widevine</option>
-                                <option value="clearkey">Clearkey</option>
+                                <option value="widevine" {{ $chanel->security_type == 'widevine' ? 'selected' : ''
+                                    }}>Widevine</option>
+                                <option value="clearkey" {{ $chanel->security_type == 'clearkey' ? 'selected' : ''
+                                    }}>Clearkey</option>
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12 d-none" id="security">
                             <label>Security</label>
-                            <input type="text" name="security" class="form-control" placeholder="Security">
+                            <input type="text" name="security" class="form-control" placeholder="Security"
+                                value="{{$chanel->security}}">
                         </div>
                     </div>
                 </div>
@@ -117,14 +136,14 @@
 <script>
     function previewFile(input){
         var file = $("input[type=file]").get(0).files[0];
- 
+
+
         if(file){
+          $('#img').removeClass('d-none');  
             var reader = new FileReader();
- 
             reader.onload = function(){
                 $("#img").attr("src", reader.result);
             }
- 
             reader.readAsDataURL(file);
         }
     }
