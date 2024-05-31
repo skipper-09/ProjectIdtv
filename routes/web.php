@@ -7,6 +7,7 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\OwnerController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
@@ -43,24 +44,24 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 Route::prefix('master')->group(function () {
     //chanel
     Route::prefix('stb')->group(function () {
-        Route::get('/', [StbController::class, 'index'])->name('stb');
+        Route::get('/', [StbController::class, 'index'])->name('stb')->middleware('can:read-stb');
         Route::get('getData', [StbController::class, 'getData'])->name('stb.getdata');
-        Route::get('/tambah', [StbController::class, 'create'])->name('stb.add');
+        Route::get('/tambah', [StbController::class, 'create'])->name('stb.add')->middleware('can:read-stb');
         Route::post('store', [StbController::class, 'store'])->name('stb.store');
-        Route::get('/edit/{id}', [StbController::class, 'show'])->name('stb.edit');
+        Route::get('/edit/{id}', [StbController::class, 'show'])->name('stb.edit')->middleware('can:read-stb');
         Route::put('/update/{id}', [StbController::class, 'update'])->name('stb.update');
-        Route::delete('/delete/{id}', [StbController::class, 'destroy'])->name('stb.delete');
+        Route::delete('/delete/{id}', [StbController::class, 'destroy'])->name('stb.delete')->middleware('can:read-stb');
     });
 
-    //Categori route
-    Route::prefix('categori')->group(function () {
-        Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel')->middleware('can:read-categori');
-        Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
-        Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
-        Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-        Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-categori');
-        Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
-        Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
+    //region route
+    Route::prefix('region')->group(function () {
+        Route::get('', [RegionController::class, 'index'])->name('region')->middleware('can:read-region');
+        Route::get('getData', [RegionController::class, 'getData'])->name('region.getdata');
+        Route::get('/tambah', [RegionController::class, 'create'])->name('region.add')->middleware('can:create-region');
+        Route::post('store', [RegionController::class, 'store'])->name('region.store');
+        Route::get('/edit/{id}', [RegionController::class, 'show'])->name('region.edit')->middleware('can:update-region');
+        Route::put('/update/{id}', [RegionController::class, 'update'])->name('region.update');
+        Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('region.delete')->middleware('can:delete-region');
     });
 });
 
@@ -119,13 +120,13 @@ Route::prefix('master')->group(function () {
             }
         );
 
-        Route::get('', [CompanyController::class, 'index'])->name('company');
+        Route::get('', [CompanyController::class, 'index'])->name('company')->middleware('can:read-company');
         Route::get('getData', [CompanyController::class, 'getData'])->name('company.getdata');
-        Route::get('/tambah', [CompanyController::class, 'create'])->name('company.add');
+        Route::get('/tambah', [CompanyController::class, 'create'])->name('company.add')->middleware('can:read-company');
         Route::post('store', [CompanyController::class, 'store'])->name('company.store');
-        Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit');
+        Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit')->middleware('can:read-company');
         Route::put('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
-        Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete');
+        Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete')->middleware('can:read-company');
     });
 
     //setting route

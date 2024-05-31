@@ -26,15 +26,20 @@ class RoleSeeder extends Seeder
             'read-owner', 'create-owner', 'update-owner', 'delete-owner',
             'read-role', 'create-role', 'update-role', 'delete-role',
             'read-customer', 'create-customer', 'update-customer', 'delete-customer',
-
+            'read-company', 'create-company', 'update-company', 'delete-company',
+            'read-region', 'create-region', 'update-region', 'delete-region',
+            'read-stb', 'create-stb', 'update-stb', 'delete-stb',
         ]);
 
         $staff->givePermissionTo([
             'read-dashboard',
             'read-users', 'create-users', 'update-users', 'delete-users',
-            'read-chanel', 
-            'read-categori',
-            'read-role',
+            'read-customer'
+            // 'read-chanel', 
+            // 'read-categori',
+            // 'read-role',
+            // 'read-region',
+           
         ]);
     }
 }

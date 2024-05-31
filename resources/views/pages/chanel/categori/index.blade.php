@@ -41,7 +41,9 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama</th>
+                                                @canany(['update-categori','delete-categori'])
                                                 <th>Action</th>
+                                                @endcanany
                                             </tr>
                                         </thead>
                                     </table>
@@ -86,11 +88,12 @@
                         data: 'name',
                         name: 'name'
                     },
+                    @canany(['update-categori','delete-categori'])
                     {
                         data: 'action',
                         name: 'action'
                     }
-
+                    @endcanany
                 ]
             });
 

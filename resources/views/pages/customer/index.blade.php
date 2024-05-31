@@ -46,7 +46,9 @@
                                                 <th>Area</th>
                                                 <th>Perusahaan</th>
                                                 <th>Tgl Aktif</th>
+                                                @canany(['read-customer','update-customer','delete-customer'])
                                                 <th>Action</th>
+                                                @endcanany
                                             </tr>
                                         </thead>
                                     </table>
@@ -126,10 +128,12 @@
                         data: 'created_at',
                         name: 'created_at'
                     },
+                    @canany(['read-customer','update-customer','delete-customer'])
                     {
                         data: 'action',
                         name: 'action'
                     }
+                    @endcanany
                 ]
             });
 

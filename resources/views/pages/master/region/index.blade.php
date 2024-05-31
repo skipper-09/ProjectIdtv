@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $page_name)
+@section('title', 'Kategori')
 
 @push('style')
 <!-- CSS Libraries -->
@@ -9,6 +9,7 @@
 @endpush
 
 @section('main')
+
 <div class="main-content">
     <section class="section">
         <div class="section-header">
@@ -20,16 +21,18 @@
             </div>
         </div>
 
+
         <div class="section-body">
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
             <div class="section-body">
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            @can('create-owner')
+                            @can('read-region')
                             <div class="card-header">
-                                <a href="{{ route('company.add') }}" class="btn btn-primary">Tambah
+                                <a href="{{ route('region.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
@@ -38,11 +41,9 @@
                                     <table class="table-striped table" id="dataTable">
                                         <thead>
                                             <tr>
+                                                <th>No</th>
                                                 <th>Nama</th>
-                                                <th>No Hp</th>
-                                                <th>Alamat</th>
-                                                <th>Email</th>
-                                                @canany(['update-company','delete-company'])
+                                                @canany(['update-region','delete-region'])
                                                 <th>Action</th>
                                                 @endcanany
                                             </tr>
@@ -58,8 +59,6 @@
         </div>
     </section>
 </div>
-
-
 @endsection
 
 @push('scripts')
@@ -76,36 +75,32 @@
 
 <script>
     $(document).ready(function() {
-
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('company.getdata') }}',
-                columns: [
+                ajax: '{{ route('region.getdata') }}',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '10px',
+                        class:'text-center'
+                    },
                     {
                         data: 'name',
-                        name: 'name',
+                        name: 'name'
                     },
-                    {
-                        data: 'phone',
-                        name: 'phone',
-                    },
-                    {
-                        data: 'address',
-                        name: 'address',
-                    },
-                    {
-                        data: 'email',
-                        name: 'eamil',
-                    },
-                    @canany(['update-company','delete-company'])
+                    @can(['update-region','delete-region'])
                     {
                         data: 'action',
                         name: 'action'
                     }
-                    @endcanany
+                    @endcan
+
                 ]
             });
+
+
 
             @if (Session::has('message'))
             iziToast.success({
@@ -114,6 +109,7 @@
             position: 'topRight'
             });
             @endif
+
         });
 </script>
 @endpush

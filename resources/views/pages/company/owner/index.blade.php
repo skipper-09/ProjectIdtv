@@ -43,7 +43,9 @@
                                                 <th>Alamat</th>
                                                 <th>Email</th>
                                                 <th>Perusahaan</th>
+                                                @canany(['update-owner','delete-owner'])
                                                 <th>Action</th>
+                                                @endcanany
                                             </tr>
                                         </thead>
                                     </table>
@@ -101,10 +103,12 @@
                         data: 'company',
                         name: 'company',
                     },
+                    @canany(['update-owner','delete-owner'])
                     {
                         data: 'action',
                         name: 'action'
                     }
+                    @endcanany
                 ]
             });
 

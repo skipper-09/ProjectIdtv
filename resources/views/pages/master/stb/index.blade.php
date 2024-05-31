@@ -39,7 +39,9 @@
                                                 <th>Nama</th>
                                                 <th>Ram</th>
                                                 <th>Internal</th>
+                                                @canany(['update-stb','delete-stb'])
                                                 <th>Action</th>
+                                                @endcanany
                                             </tr>
                                         </thead>
                                     </table>
@@ -89,11 +91,12 @@
                         data: 'internal',
                         name: 'internal',
                     },
-                   
+                    @canany(['update-stb','delete-stb'])
                     {
                         data: 'action',
                         name: 'action'
                     }
+                    @endcanany
                 ]
             });
 
