@@ -94,7 +94,7 @@ class CategoryChanelcontroller extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => $e->getMessage(),
+                'message' => 'Data Kategori Tidak Bisa Dihapus Karena Masih digunakan oleh Chanel!',
                 'trace' => $e->getTrace()
             ]);
         }

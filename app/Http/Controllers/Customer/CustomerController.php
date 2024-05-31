@@ -86,7 +86,7 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request)
     {
-        $request->validate();
+        $request->validated();
         Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,

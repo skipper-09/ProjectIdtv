@@ -28,7 +28,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="{{ route('company.add') }}" class="btn btn-primary">Tambah
+                                <a href="{{ route('stb.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
                             <div class="card-body">
@@ -37,6 +37,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
+                                                <th>Ram</th>
+                                                <th>Internal</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -78,6 +80,14 @@
                     {
                         data: 'name',
                         name: 'name',
+                    },
+                    {
+                        data: 'ram',
+                        name: 'ram',
+                    },
+                    {
+                        data: 'internal',
+                        name: 'internal',
                     },
                    
                     {

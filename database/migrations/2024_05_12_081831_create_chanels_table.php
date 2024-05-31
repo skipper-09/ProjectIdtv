@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('security')->nullable();
             $table->boolean('is_active')->default(1);
             $table->timestamps();
-            $table->foreign('categori_id')->references('id')->on('categoris')->onDelete('cascade');
+            $table->foreign('categori_id')->references('id')->on('categoris')->onDelete('restrict')->onUpdate('cascade');
         });
     }
 
