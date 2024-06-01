@@ -14,14 +14,22 @@
   </div>
 
   <div class="card-body">
-    <form method="POST" action="{{route('auth.signin')}}" class="needs-validation" novalidate="">
+
+    <form method="POST" action="{{route('auth.signin')}}" enctype="multipart/form-data">
       @csrf
+      @if ($errors->any())
+      @foreach ($errors->all() as $error)
+      <label class="text-danger">{{ $error }}</label>
+      @endforeach
+      @endif
       <div class="form-group">
         <label for="email">Email</label>
         <input id="email" type="text" class="form-control" name="email" tabindex="1">
+        @error('email')
         <div class="invalid-feedback">
-          Please fill in your email
+          {{$message}}
         </div>
+        @enderror
       </div>
 
       <div class="form-group">
@@ -33,10 +41,12 @@
             </a>
           </div> --}}
         </div>
-        <input id="password" type="password" class="form-control" name="password" tabindex="2" >
+        <input id="password" type="password" class="form-control" name="password" tabindex="2">
+        @error('password')
         <div class="invalid-feedback">
-          please fill in your password
+          {{$message}}
         </div>
+        @enderror
       </div>
 
       {{-- <div class="form-group">

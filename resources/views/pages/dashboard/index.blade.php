@@ -6,6 +6,7 @@
 <!-- CSS Libraries -->
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
 @endpush
 
 @section('main')
@@ -200,7 +201,17 @@
 <script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
 <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
 <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+<script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
 
 <!-- Page Specific JS File -->
 <script src="{{ asset('js/page/index-0.js') }}"></script>
+<script>
+    @if (Session::has('message'))
+    iziToast.success({
+    title: `{{Session::get('status')}}`,
+    message: `{{Session::get('message')}}`,
+    position: 'topRight'
+    });
+    @endif
+</script>
 @endpush

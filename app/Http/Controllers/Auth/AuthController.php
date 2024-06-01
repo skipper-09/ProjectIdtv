@@ -21,25 +21,38 @@ class AuthController extends Controller
 
     public function signin(Request $request)
     {
-        $login = $request->email;
-        $user = User::where('email', $login)->orWhere('username', $login)->first();
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        $user = User::where(['email' => $request->email]);
+        if ($user->count() > 0) {
+            $user = $user->first();
 
-
-        // if (!$user) {
-        //     return redirect()->back()->withErrors(['email' => 'Invalid login credentials']);
-        // }
-
-        // $request->validate([
-        //     'password' => 'required',
-        // ]);
-
-        if (
-            Auth::guard('web')->attempt(['email' => $user->email, 'password' => $request->password]) 
-        ) {
-            dd(Auth::loginUsingId($user->id));
-            return redirect()->route('dashboard');
+            if ($user->is_block == 1) {
+                return response()->json([
+                    'message' => 'Akun ini telah di kunci, silahkan hubungi admin untuk membuka akun.'
+                ], 500);
+            } else {
+                if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+                    $request->session()->regenerate();
+                    // if ($request->remember_me == 'Y') {
+                    //     $time = 60 * 60 * 24 * 365;
+                    //     Cookie::queue('email', $request->email, $time);
+                    //     Cookie::queue('password', $request->password, $time);
+                    // }
+                    return redirect()->route('dashboard')->with(['status' => 'Success!', 'message' => 'Berhasil Login!']);
+                } else {
+                    return
+                        redirect()->back()->withErrors([
+                            'message' => 'Wrong username or password'
+                        ]);
+                }
+            }
         } else {
-            return redirect()->back()->with(['password' => 'Invalid login credentials']);
+            return redirect()->back()->withErrors([
+                'message' => 'Email dan password tidak terdaftar'
+            ]);
         }
     }
 

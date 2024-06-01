@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -23,7 +25,7 @@ class UserController extends Controller
     }
     public function getData()
     {
-        $user = User::with('roles')->whereNotIn('name',['Developer']);
+        $user = User::with('roles')->whereNotIn('name', ['Developer']);
         return DataTables::of($user)->addIndexColumn()->addColumn('action', function ($user) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -43,14 +45,33 @@ class UserController extends Controller
         $data = [
             'type_menu' => 'setting',
             'page_name' => 'Tambah User',
-            'role'=> Role::where('name','!=','Developer')->get()
+            'role' => Role::where('name', '!=', 'Developer')->get()
         ];
         return view('pages.settings.user.adduser', $data);
     }
 
     public function store(UserRequest $request)
     {
-        User::create($request->only(['name','email','username','password']))->assignRole($request->role);
+        $request->merge(['password' => Hash::make($request->password),]);
+
+        User::create($request->only(['name', 'email', 'username', 'password']))->assignRole($request->role);
         return redirect()->route('user')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan User!']);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            User::where('id', $id)->delete();
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'User Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }
