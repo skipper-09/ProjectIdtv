@@ -21,9 +21,9 @@
 
 
         <div class="card">
-            <form action="{{ route('chanel.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('chanel.update',['id'=>$chanel->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
+                {{ method_field('PUT') }}
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-12 col-md-6">

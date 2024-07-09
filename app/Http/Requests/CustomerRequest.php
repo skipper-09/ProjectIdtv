@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerRequest extends FormRequest
@@ -23,14 +24,25 @@ class CustomerRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'ppoe' => 'required',
-            'mac' => 'required',
-            'username' => 'required',
-            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
-            'password_confirmation' => 'min:6'
-        ];
+        if ($this->isMethod('PUT')) {
+            return [
+                'name' => 'required',
+                'ppoe' => 'required',
+                'mac' => 'required',
+                'username' => 'required',
+                'password' => '',
+                'password_confirmation' => 'same:password'
+            ];
+        } else {
+            return [
+                'name' => 'required',
+                'ppoe' => 'required',
+                'mac' => 'required',
+                'username' => 'required',
+                'password' => 'required||min:6',
+                'password_confirmation' => 'same:password|required'
+            ];
+        }
     }
     public function messages()
     {

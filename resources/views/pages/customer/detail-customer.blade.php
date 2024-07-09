@@ -26,10 +26,6 @@
     <div class="col-sm-9">
       <label for="">{{$customer[0]->username}}</label>
     </div>
-    <label class="col-sm-3 font-weight-bolder">Password</label>
-    <div class="col-sm-9">
-      <label for="">{{$customer[0]->password}}</label>
-    </div>
     <label class="col-sm-3 font-weight-bolder">Ppoe</label>
     <div class="col-sm-9">
       <label for="">{{$customer[0]->ppoe}}</label>

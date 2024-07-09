@@ -14,7 +14,6 @@ class ApiLoginController extends Controller
     public function login(Request $request)
     {
 
-
         $request->validate([
             'username' => 'required',
             'password' => 'required',
@@ -33,7 +32,8 @@ class ApiLoginController extends Controller
             ]);
         } else {
             return response()->json([
-                'message' => 'Login failed Usernama dan Password Salah'
+                'message' => 'Login failed Usernama dan Password Salah',
+
             ]);
         }
     }

@@ -73,7 +73,7 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Password<span class="text-danger">*</span></label>
-              <input type="text" name="password" value='{{$customer->password}}'' class="form-control @error('
+              <input type="text" name="password" class="form-control @error('
                 password') is-invalid @enderror" placeholder="Password">
               @error('password')
               <div class="invalid-feedback">
@@ -83,7 +83,7 @@
             </div>
             <div class="form-group col-12 col-md-6">
               <label>Konfirmasi Password<span class="text-danger">*</span></label>
-              <input type="text" name="password_confirmation" value="{{$customer->password}}"
+              <input type="text" name="password_confirmation"
                 class="form-control @error('password_confirmation') is-invalid @enderror"
                 placeholder="Konfirmasi Password">
               @error('password_confirmation')

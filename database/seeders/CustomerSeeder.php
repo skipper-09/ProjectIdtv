@@ -26,7 +26,7 @@ class CustomerSeeder extends Seeder
             'phone' => '0876544646',
             'address' => 'RT5 RW2 KAMPUNG BARU JL JUANDA NO 61',
             'username' => 'ahmad',
-            'password' => 'ahmad',
+            'password' => Hash::make('ahmad'),
         ]);
     }
 }

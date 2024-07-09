@@ -23,12 +23,32 @@ class ChanelRequest extends FormRequest
      */
     public function rules()
     {
-
-        return [
-            'name' => 'required',
-            'categori_id' => 'required',
-            'url' => 'required',
-            'logo' => 'mimes:jpeg,jpg,png|required|max:8192',
-        ];
+        if ($this->isMethod('PUT')) {
+            return [
+                'name' => 'required',
+                'categori_id' => 'required',
+                'url' => 'required',
+                'logo' => 'mimes:jpeg,jpg,png|max:8192',
+            ];
+        } else {
+            return [
+                'name' => 'required',
+                'categori_id' => 'required',
+                'url' => 'required|active_url',
+                'logo' => 'mimes:jpeg,jpg,png|max:8192|required',
+            ];
+        }
     }
+
+    // public function messages()
+    // {
+    //     return [
+    //         'name.required' => 'The nama field is required.',
+    //         'categori_id.required' => 'The nama field is required.',
+    //         'url.required' => 'The nama field is required.',
+    //         'url' => 'The nama field is required.',
+    //         'name.required' => 'The nama field is required.',
+
+    //     ];
+    // }
 }

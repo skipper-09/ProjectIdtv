@@ -106,7 +106,7 @@ class Chanelcontroller extends Controller
         return view('pages.chanel.chanel-management.editchanel', $data);
     }
 
-    public function update(Chanel $chanel, ChanelRequest $request)
+    public function update(Chanel $chanel, ChanelRequest $request, $id)
     {
         try {
             $filename = '';
@@ -122,11 +122,12 @@ class Chanelcontroller extends Controller
             } else {
                 $filename = $chanel->logo;
             }
+            $datachanel = $chanel->find($id);
             $chanel->update([
                 'name' => $request->name,
                 'url' => $request->url,
                 'categori_id' => $request->input('categori_id'),
-                'logo' => $filename,
+                'logo' => $filename === null ? $datachanel->logo : $filename,
                 'type' => $request->type,
                 'user_agent' => $request->user_agent,
                 'security_type' => $request->input('security_type'),

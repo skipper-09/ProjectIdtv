@@ -12,6 +12,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
@@ -97,7 +98,7 @@ class CustomerController extends Controller
             'stb_id' => $request->stb_id,
             'company_id' => $request->company_id,
             'username' => $request->username,
-            'password' => $request->password,
+            'password' => Hash::make($request->password),
             'is_avtive' => $request->is_active,
         ]);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
@@ -142,7 +143,11 @@ class CustomerController extends Controller
         $customer->company_id = $request->company_id;
         $customer->mac = $request->mac;
         $customer->ppoe = $request->ppoe;
-        $customer->password = $request->password;
+        if ($request->password === null) {
+            $customer->password;
+        } else {
+            $customer->password = Hash::make($request->password);
+        }
         $customer->is_active = $request->is_active == true ? 1 : 0;
         $customer->save();
 

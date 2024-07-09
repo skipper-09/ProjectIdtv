@@ -20,5 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', [ApiLoginController::class, 'login']);
+Route::post('/login', [ApiLoginController::class, 'login'])->middleware('guest');
 Route::get('/chanel', [ApichanelController::class, 'index'])->middleware('auth:sanctum');
