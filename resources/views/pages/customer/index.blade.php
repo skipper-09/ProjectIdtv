@@ -42,10 +42,8 @@
                                                 <th>Nama</th>
                                                 <th>Mac</th>
                                                 <th>Stb</th>
-                                                <th>Status</th>
                                                 <th>Area</th>
                                                 <th>Perusahaan</th>
-                                                <th>Tgl Aktif</th>
                                                 @canany(['read-customer','update-customer','delete-customer'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -98,6 +96,7 @@
                     {
                         data: 'name',
                         name: 'name',
+                        width:'200px'
                     },
                     
                     {
@@ -108,10 +107,7 @@
                         data: 'stb',
                         name: 'stb'
                     },
-                    {
-                        data: 'is_active',
-                        name: 'is_active'
-                    },
+                    
                     {
                         data: 'region',
                         name: 'region',
@@ -124,10 +120,7 @@
                         orderable: false,
                         searchable: true,
                     },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
+                    
                     @canany(['read-customer','update-customer','delete-customer'])
                     {
                         data: 'action',

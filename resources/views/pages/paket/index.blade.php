@@ -29,7 +29,7 @@
                         <div class="card">
                             @can('create-stb')
                             <div class="card-header">
-                                <a href="{{ route('stb.add') }}" class="btn btn-primary">Tambah
+                                <a href="{{ route('paket.add') }}" class="btn btn-primary">Tambah
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
@@ -40,8 +40,7 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Harga</th>
-                                                <th>Perusahaan</th>
-                                                @canany(['update-stb','delete-stb'])
+                                                @canany(['update-paket','delete-paket'])
                                                 <th>Action</th>
                                                 @endcanany
                                             </tr>
@@ -89,12 +88,7 @@
                         data: 'price',
                         name: 'price',
                     },
-                    {
-                        data: 'price',
-                        name: 'price',
-                    },
-                    
-                    @canany(['update-stb','delete-stb'])
+                    @canany(['update-paket','delete-paket'])
                     {
                         data: 'action',
                         name: 'action'

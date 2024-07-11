@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaketRequest;
 use App\Models\Package;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -52,7 +53,11 @@ class PacketController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'type_menu' => '',
+            'page_name' => 'Tambah Paket',
+        ];
+        return view('pages.paket.add', $data);
     }
 
     /**
@@ -61,9 +66,11 @@ class PacketController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PaketRequest $request)
     {
-        //
+        $data = $request->validated();
+        Package::create($data);
+        return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Paket!']);
     }
 
     /**
