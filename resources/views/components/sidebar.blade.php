@@ -1,109 +1,116 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{route('dashboard')}}"> <img src="{{ asset('img/IDTV.png') }}" alt="logo" width="90"></a>
+            <a href="{{ route('dashboard') }}"> <img src="{{ asset('img/IDTV.png') }}" alt="logo" width="90"></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{route('dashboard')}}"> <img src="{{ asset('img/IDTV.png') }}" alt="logo" width="50"></a>
+            <a href="{{ route('dashboard') }}"> <img src="{{ asset('img/IDTV.png') }}" alt="logo" width="50"></a>
         </div>
         <ul class="sidebar-menu">
-                
-        @can('read-dashboard')    
-        <li class="menu-header">Dashboard</li>
-        <li class="{{ $type_menu === 'dashboard' ? 'active' : '' }}">
-            <a href="{{route('dashboard')}}" class="nav-link"><i
-                    class="fas fa-desktop"></i><span>Dashboard</span></a>
-        </li>
-        @endcan
 
-        @canany([ 'read-stb','read-region'])
-        <li class="menu-header">DATA MASTER</li>
-        <li class="nav-item dropdown {{ $type_menu === 'master' ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                <span>Data Master</span></a>
-            <ul class="dropdown-menu">
-                @can('read-stb')
-                <li class="{{ Request::is('admin/master/stb') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('stb') }}">Stb</a>
+            @can('read-dashboard')
+                <li class="menu-header">Dashboard</li>
+                <li class="{{ $type_menu === 'dashboard' ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="nav-link"><i
+                            class="fas fa-desktop"></i><span>Dashboard</span></a>
                 </li>
-                @endcan
-                @can('read-region')
-                <li class="{{ Request::is('admin/master/region') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{route('region')}}">Area</a>
-                </li>
-                @endcan
+            @endcan
 
-            </ul>
-        </li>
-        @endcanany
+            @canany(['read-stb', 'read-region'])
+                <li class="menu-header">DATA MASTER</li>
+                <li class="nav-item dropdown {{ $type_menu === 'master' ? 'active' : '' }}">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
+                        <span>Data Master</span></a>
+                    <ul class="dropdown-menu">
+                        @can('read-stb')
+                            <li class="{{ Request::is('admin/master/stb') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('stb') }}">Stb</a>
+                            </li>
+                        @endcan
+                        @can('read-region')
+                            <li class="{{ Request::is('admin/master/region') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('region') }}">Area</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+                <li class="{{ Request::is('admin/master/paket') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('paket') }}"><i class="fas fa-box">
+                        </i> <span>Management Paket</span>
+                    </a>
+                </li>
+            @endcanany
 
-        @canany(['read-chanel','read-categori','read-company','read-owner','read-customer'])    
-        <li class="menu-header">MANAGEMENT</li>
-        @canany(['read-chanel','read-categori',])
-        <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                <span>Chanel Management</span></a>
-            <ul class="dropdown-menu">
-                @can('read-chanel')
-                <li class="{{ Request::is('admin/chanel-management/chanel') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('chanel') }}">Chanel</a>
-                </li>
+            @canany(['read-chanel', 'read-categori', 'read-company', 'read-owner', 'read-customer'])
+                <li class="menu-header">MANAGEMENT</li>
+                @canany(['read-chanel', 'read-categori'])
+                    <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
+                            <span>Chanel Management</span></a>
+                        <ul class="dropdown-menu">
+                            @can('read-chanel')
+                                <li class="{{ Request::is('admin/chanel-management/chanel') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('chanel') }}">Chanel</a>
+                                </li>
+                            @endcan
+                            @can('read-categori')
+                                <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('categori-chanel') }}">Kategori</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
+                @canany(['read-company', 'read-owner'])
+                    <li class="nav-item dropdown {{ $type_menu === 'company' ? 'active' : '' }}">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-building"></i>
+                            <span>Perusahaan</span></a>
+                        <ul class="dropdown-menu">
+                            @can('read-owner')
+                                <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
+                                </li>
+                            @endcan
+                            @can('read-company')
+                                <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('company') }}">Perusahaan</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
+                @can('read-customer')
+                    <li class="{{ Request::is('customer') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('customer') }}"><i class="fas fa-people-group">
+                            </i> <span>Customers</span>
+                        </a>
+                    </li>
                 @endcan
-                @can('read-categori')
-                <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{route('categori-chanel')}}">Kategori</a>
-                </li>
-                @endcan
-            </ul>
-        </li>
-        @endcanany
-        @canany(['read-company','read-owner'])
-        <li class="nav-item dropdown {{ $type_menu === 'company' ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
-                <span>Perusahaan</span></a>
-            <ul class="dropdown-menu">
-                @can('read-owner')
-                <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
-                </li>
-                @endcan
-                @can('read-company')
-                <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{route('company')}}">Perusahaan</a>
-                </li>
-                @endcan
+            @endcanany
 
-            </ul>
-        </li>
-        @endcanany
-        @can('read-customer')
-        <li class="{{ Request::is('customer') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('customer')}}"><i class="fas fa-people-group">
-                </i> <span>Customers</span>
-            </a>
-        </li>
-        @endcan
-        @endcanany
-        @canany(['read-users','read-role'])
-        <li class="menu-header">SETTINGS</li>
-        <li class="nav-item dropdown {{ $type_menu === 'setting' ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-gear"></i>
-                <span>Settings</span></a>
-            <ul class="dropdown-menu">
-                @can('read-role')
-                <li class="{{ Request::is('admin/settings/role') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('role') }}">Role</a>
-                </li>
-                @endcan
-                @can('read-users')
-                <li class="{{ Request::is('admin/settings/user') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{route('user')}}">User</a>
-                </li>
-                @endcan
 
-            </ul>
-        </li>
-        @endcanany
+            <li class="menu-header">KEUNGAN</li>
+
+            @canany(['read-users', 'read-role'])
+                <li class="menu-header">SETTINGS</li>
+                <li class="nav-item dropdown {{ $type_menu === 'setting' ? 'active' : '' }}">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-gear"></i>
+                        <span>Settings</span></a>
+                    <ul class="dropdown-menu">
+                        @can('read-role')
+                            <li class="{{ Request::is('admin/settings/role') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('role') }}">Role</a>
+                            </li>
+                        @endcan
+                        @can('read-users')
+                            <li class="{{ Request::is('admin/settings/user') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('user') }}">User</a>
+                            </li>
+                        @endcan
+
+                    </ul>
+                </li>
+            @endcanany
 
 
 
