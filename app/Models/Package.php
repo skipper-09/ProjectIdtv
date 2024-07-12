@@ -9,7 +9,7 @@ class Package extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'price'
+        'name', 'price','duration'
     ];
     protected $primaryKey = 'id';
 }

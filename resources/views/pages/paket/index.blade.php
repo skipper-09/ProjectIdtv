@@ -40,6 +40,7 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Harga</th>
+                                                <th>Bulan</th>
                                                 @canany(['update-paket','delete-paket'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -87,6 +88,10 @@
                     {
                         data: 'price',
                         name: 'price',
+                    },
+                    {
+                        data: 'duration',
+                        name: 'duration',
                     },
                     @canany(['update-paket','delete-paket'])
                     {

@@ -19,15 +19,15 @@
 
 
     <div class="card">
-      <form action="{{ route('paket.store') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('paket.update',['id'=>$paket->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
-
+        {{ method_field('PUT') }}
         <div class="card-body">
           <div class="row">
             <div class="form-group col-12 col-md-6">
               <label>Nama Paket <span class="text-danger">*</span></label>
               <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                value="{{old('name')}}">
+                value="{{$paket->name}}">
               @error('name')
               <div class="invalid-feedback">
                 {{$message}}
@@ -37,7 +37,7 @@
             <div class="form-group col-12 col-md-6">
               <label>Harga Paket <span class="text-danger">*</span></label>
               <input type="number" name="price" class="form-control @error('price') is-invalid @enderror"
-                value="{{old('price')}}">
+                value="{{$paket->price}}">
               @error('price')
               <div class="invalid-feedback">
                 {{$message}}
@@ -47,7 +47,7 @@
             <div class="form-group col-12 col-md-6">
               <label>Durasi Paket <span class="text-danger">*</span></label>
               <input type="number" name="duration" class="form-control @error('duration') is-invalid @enderror"
-                value="{{old('duration')}}">
+                value="{{$paket->duration}}">
               @error('duration')
               <div class="invalid-feedback">
                 {{$message}}
