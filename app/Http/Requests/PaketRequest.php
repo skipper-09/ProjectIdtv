@@ -25,6 +25,7 @@ class PaketRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'company_id' => 'required',
             'price' => 'required',
             'duration' => 'required',
         ];

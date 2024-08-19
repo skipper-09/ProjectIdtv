@@ -91,16 +91,20 @@ class CustomerController extends Controller
         Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
-            'ppoe' => $request->ppoe,
+            'nik' => $request->nik,
             'phone' => $request->phone,
             'address' => $request->address,
             'region_id' => $request->region_id,
             'stb_id' => $request->stb_id,
             'company_id' => $request->company_id,
             'username' => $request->username,
+            'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_avtive' => $request->is_active,
         ]);
+
+
+
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 
@@ -142,7 +146,8 @@ class CustomerController extends Controller
         $customer->region_id = $request->region_id;
         $customer->company_id = $request->company_id;
         $customer->mac = $request->mac;
-        $customer->ppoe = $request->ppoe;
+        $customer->nik = $request->nik;
+        $customer->showpassword = $request->password;
         if ($request->password === null) {
             $customer->password;
         } else {

@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id');
-            $table->foreignId('packet_id');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('packet_id');
             $table->date('start_date');
             $table->date('end_date');
-            $table->boolean('status');
+            $table->boolean('status')->default(true);
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('packet_id')->references('id')->on('packages')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

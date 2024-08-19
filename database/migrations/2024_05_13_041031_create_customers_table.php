@@ -19,11 +19,12 @@ return new class extends Migration
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('stb_id');
             $table->string('mac');
-            $table->string('ppoe');
+            $table->string('nik');
             $table->string('name', length: 100);
             $table->string('phone', length: 13);
-            $table->text('address');
+            $table->longText('address');
             $table->string('username');
+            $table->string('showpassword');
             $table->string('password');
             $table->boolean('is_active')->default(true);
             $table->rememberToken();

@@ -45,8 +45,10 @@ class PacketController extends Controller
             }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('duration', function ($data) {
-            return $data->duration.' Bulan';
-        })->make(true);
+            return $data->duration . ' Bulan';
+        })->editColumn('company_id', function ($data) {
+            return $data->company->name;
+        })->rawColumns(['action', 'company_id', 'duration'])->make(true);
     }
 
     /**
@@ -87,7 +89,7 @@ class PacketController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Edit Paket',
-            'paket'=> Package::findOrFail($id)
+            'paket' => Package::findOrFail($id)
         ];
         return view('pages.paket.edit', $data);
     }
@@ -98,10 +100,7 @@ class PacketController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        
-    }
+    public function edit($id) {}
 
     /**
      * Update the specified resource in storage.
@@ -113,12 +112,12 @@ class PacketController extends Controller
     public function update(PaketRequest $request, $id)
     {
         $request->validated();
-        $paket= Package::findOrFail($id);
+        $paket = Package::findOrFail($id);
         $paket->name = $request->name;
         $paket->price = $request->price;
         $paket->duration = $request->duration;
         $paket->save();
-        return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Paket!']); 
+        return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Paket!']);
     }
 
     /**

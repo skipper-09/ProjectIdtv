@@ -9,7 +9,15 @@ class Package extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'price','duration'
+        'name',
+        'price',
+        'duration',
+        'company_id'
     ];
     protected $primaryKey = 'id';
+
+    public function company()
+    {
+        $this->belongsTo(Company::class, 'id', 'company_id');
+    }
 }

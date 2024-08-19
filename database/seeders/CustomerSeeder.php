@@ -22,10 +22,11 @@ class CustomerSeeder extends Seeder
             'region_id' => 1,
             'stb_id' => 1,
             'mac' => '064220908733',
-            'ppoe' => 'csnetjjg@3510072601520002',
+            'nik' => '3510072601520002',
             'phone' => '0876544646',
             'address' => 'RT5 RW2 KAMPUNG BARU JL JUANDA NO 61',
             'username' => 'ahmad',
+            'showpassword' => 'ahmad',
             'password' => Hash::make('ahmad'),
         ]);
     }

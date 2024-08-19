@@ -12,7 +12,18 @@ class Customer extends Model
     use HasFactory, HasApiTokens;
     protected $guard = 'customer';
     protected $fillable = [
-        'name', 'address', 'phone', 'mac', 'username', 'password', 'ppoe', 'company_id', 'stb_id', 'region_id', 'is_active'
+        'name',
+        'address',
+        'phone',
+        'mac',
+        'username',
+        'password',
+        'showpassword',
+        'nik',
+        'company_id',
+        'stb_id',
+        'region_id',
+        'is_active'
     ];
     protected $primaryKey = 'id';
 
