@@ -9,7 +9,13 @@ class Company extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'address', 'phone', 'email', 'is_active'
+        'name',
+        'address',
+        'phone',
+        'email',
+        'is_active',
+        'owner_id',
+
     ];
     protected $primaryKey = 'id';
 
@@ -19,6 +25,6 @@ class Company extends Model
     }
     public function owner()
     {
-        return $this->hasOne(owner::class);
+        return $this->belongsTo(owner::class, 'owner_id', 'id');
     }
 }

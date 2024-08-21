@@ -10,12 +10,18 @@ class owner extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'phone', 'email', 'address', 'company_id', 'username', 'password'
+        'name',
+        'phone',
+        'email',
+        'address',
+        'company_id',
+        'username',
+        'password'
     ];
     protected $primaryKey = 'id';
 
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->hasMany(Company::class);
     }
 }

@@ -15,13 +15,11 @@ return new class extends Migration
     {
         Schema::create('owners', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id');
             $table->string('name', length: 100);
             $table->string('phone', length: 14);
             $table->longText('address');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
