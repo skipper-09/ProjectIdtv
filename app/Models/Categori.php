@@ -20,4 +20,9 @@ class Categori extends Model
             ->logFillable();
         // Chain fluent methods for configuration options
     }
+
+    public function chanel()
+    {
+        return $this->hasMany(Chanel::class);
+    }
 }

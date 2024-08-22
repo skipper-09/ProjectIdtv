@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('stb_id');
             $table->string('mac');
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('SET NULL')->onUpdate('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('stb_id')->references('id')->on('stbs')->onDelete('restrict')->onUpdate('cascade');
         });

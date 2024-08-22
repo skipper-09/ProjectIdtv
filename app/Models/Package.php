@@ -18,6 +18,6 @@ class Package extends Model
 
     public function company()
     {
-        $this->belongsTo(Company::class, 'id', 'company_id');
+        $this->belongsTo(Company::class);
     }
 }

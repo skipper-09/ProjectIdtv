@@ -82,9 +82,17 @@ class OwnerController extends Controller
     public function update(OwnerRequest $request, $id)
     {
 
-
+        $request->validated();
         $owner = owner::findOrFail($id);
-        $owner->update($request->validated());
+        $owner->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'username' => $request->username,
+            'address' => $request->address,
+            'showpassword' => $request->password,
+            'password' => $request->password,
+        ]);
         // $owner->name = $request->name;
         // $owner->address = $request->address;
         // $owner->phone = $request->phone;

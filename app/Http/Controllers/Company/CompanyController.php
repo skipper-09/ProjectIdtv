@@ -39,9 +39,9 @@ class CompanyController extends Controller
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return '<div class="d-flex">' . $button . '</div>';
-        })->editColumn('owner_id',function($company) {
+        })->editColumn('owner_id', function ($company) {
             return $company->owner->name;
-        })->rawColumns(['action','owner_id'])->make(true);
+        })->rawColumns(['action', 'owner_id'])->make(true);
     }
 
     public function create()
@@ -61,7 +61,7 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
-            'owner_id'=>$request->owner_id
+            'owner_id' => $request->owner_id
         ]);
 
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Prusahaan!']);
@@ -70,11 +70,12 @@ class CompanyController extends Controller
 
     public function show(owner $owner, $id)
     {
-
+        $company = Company::find($id);
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Edit Perusahaan',
-            'owner' => $owner->find($id)
+            'company' => $company,
+            'owner' => $owner->all()
         ];
         return view('pages.company.company.editcomapny', $data);
     }
@@ -82,8 +83,15 @@ class CompanyController extends Controller
 
     public function update(CompanyRequest $request, $id)
     {
+        $request->validated();
         $owner = Company::findOrFail($id);
-        $owner->update($request->validated());
+        $owner->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'address' => $request->address,
+            'owner_id' => $request->owner_id
+        ]);
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Data Perusahaan!']);
     }
 

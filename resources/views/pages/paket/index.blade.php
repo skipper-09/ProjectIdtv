@@ -76,7 +76,6 @@
 
     <script>
         $(document).ready(function() {
-
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -89,10 +88,7 @@
                         data: 'price',
                         name: 'price',
                     },
-                    {
-                        data: 'company_id',
-                        name: 'company_id',
-                    },
+
                     {
                         data: 'duration',
                         name: 'duration',

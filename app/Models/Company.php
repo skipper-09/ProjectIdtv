@@ -23,6 +23,10 @@ class Company extends Model
     {
         return $this->hasMany(Customer::class);
     }
+    public function paket()
+    {
+        return $this->hasMany(Package::class);
+    }
     public function owner()
     {
         return $this->belongsTo(owner::class, 'owner_id', 'id');

@@ -63,7 +63,7 @@ class CustomerController extends Controller
         })->editColumn('stb', function (Customer $stb) {
             return $stb->stb->name;
         })->editColumn('company', function ($company) {
-            return $company->company->name;
+            return optional($company->company)->name ?? 'Tidak ada perusahaan';
         })->editColumn('region', function (Customer $region) {
             return $region->region->name;
         })->editColumn('created_at', function (Customer $date) {

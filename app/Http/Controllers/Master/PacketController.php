@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaketRequest;
+use App\Models\Company;
 use App\Models\Package;
 use App\Models\User;
 use Exception;
@@ -31,7 +32,7 @@ class PacketController extends Controller
 
     public function getData()
     {
-        $data = Package::query()->orderByDesc('id');
+        $data = Package::all();
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -48,7 +49,7 @@ class PacketController extends Controller
             return $data->duration . ' Bulan';
         })->editColumn('company_id', function ($data) {
             return $data->company->name;
-        })->rawColumns(['action', 'company_id', 'duration'])->make(true);
+        })->rawColumns(['action', 'duration'])->make(true);
     }
 
     /**
@@ -61,6 +62,7 @@ class PacketController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Tambah Paket',
+            'company' => Company::all()
         ];
         return view('pages.paket.add', $data);
     }

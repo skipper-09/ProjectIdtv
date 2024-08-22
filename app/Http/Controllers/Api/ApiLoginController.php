@@ -25,6 +25,7 @@ class ApiLoginController extends Controller
             Auth::guard('customer')->attempt(['username' => $user->username, 'password' => $request->password])
         ) {
             // Auth::loginUsingId($user->id);
+            $data = Customer::where('id', Auth::guard('customer')->user()->id)->with('subcrib')->get();
             return response()->json([
                 'message' => 'succesfully logged in Customer Account',
                 'data' => Auth::guard('customer')->user(),

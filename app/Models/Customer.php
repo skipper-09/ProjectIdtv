@@ -44,4 +44,8 @@ class Customer extends Model
     {
         return $this->belongsTo(Region::class);
     }
+    public function subcrib()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }
