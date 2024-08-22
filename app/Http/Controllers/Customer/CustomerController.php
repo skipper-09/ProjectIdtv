@@ -37,7 +37,7 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::query()->with(['region', 'stb', 'company'])->get();
+        $customer = Customer::with(['region', 'stb', 'company'])->get();
 
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -62,7 +62,7 @@ class CustomerController extends Controller
             return $active;
         })->editColumn('stb', function (Customer $stb) {
             return $stb->stb->name;
-        })->editColumn('company', function (Customer $company) {
+        })->editColumn('company', function ($company) {
             return $company->company->name;
         })->editColumn('region', function (Customer $region) {
             return $region->region->name;

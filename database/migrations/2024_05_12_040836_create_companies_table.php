@@ -20,7 +20,7 @@ return new class extends Migration
             $table->longText('address');
             $table->string('phone');
             $table->string('email')->nullable();
-            $table->foreign('owner_id')->references('id')->on('owners')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('owner_id')->references('id')->on('owners')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->timestamps();
         });
     }

@@ -56,6 +56,21 @@
                             </div>
                             @enderror
                         </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Pemilik<span class="text-danger">*</span></label>
+                            <select class="form-control select2 @error('owner_id') is-invalid @enderror"
+                                name="owner_id">
+                                <option value="">Pilih Pemilik</option>
+                                @foreach ($owner as $k)
+                                <option value="{{ $k->id }}">{{ $k->name }} </option>
+                                @endforeach
+                            </select>
+                            @error('owner_id')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
                         <div class="form-group col-12 ">
                             <label>Alamat<span class="text-danger">*</span></label>
                             <textarea name="address" id="" cols="30" rows="10"

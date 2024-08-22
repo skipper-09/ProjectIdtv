@@ -26,7 +26,7 @@ class OwnerController extends Controller
 
     public function getData()
     {
-        $owner = owner::query()->with(['company'])->get();
+        $owner = owner::query()->get();
         return DataTables::of($owner)->addIndexColumn()->addColumn('action', function ($owner) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -39,9 +39,7 @@ class OwnerController extends Controller
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return '<div class="d-flex">' . $button . '</div>';
-        })->editColumn('company', function (owner $owner) {
-            return $owner->company->name;
-        })->make(true);
+        })->rawColumns(['action'])->make(true);
     }
 
     public function create()
@@ -49,7 +47,6 @@ class OwnerController extends Controller
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Tambah Pemilik',
-            'company' => Company::all()
         ];
         return view('pages.company.owner.addowner', $data);
     }
@@ -61,8 +58,9 @@ class OwnerController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
+            'username' => $request->username,
             'address' => $request->address,
-            'company_id' => $request->company_id,
+            'showpassword' => $request->password,
             'password' => $request->password,
         ]);
 

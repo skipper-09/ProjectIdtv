@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('phone', length: 14);
             $table->longText('address');
             $table->string('email')->unique();
+            $table->string('username');
+            $table->string('showpassword');
             $table->string('password');
             $table->timestamps();
         });

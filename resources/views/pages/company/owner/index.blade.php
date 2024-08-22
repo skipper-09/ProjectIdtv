@@ -41,8 +41,9 @@
                                                 <th>Nama</th>
                                                 <th>No Hp</th>
                                                 <th>Alamat</th>
+                                                <th>Username</th>
                                                 <th>Email</th>
-                                                <th>Perusahaan</th>
+                                                
                                                 @canany(['update-owner','delete-owner'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -96,12 +97,12 @@
                         name: 'address',
                     },
                     {
-                        data: 'email',
-                        name: 'email',
+                        data: 'username',
+                        name: 'username',
                     },
                     {
-                        data: 'company',
-                        name: 'company',
+                        data: 'email',
+                        name: 'email',
                     },
                     @canany(['update-owner','delete-owner'])
                     {

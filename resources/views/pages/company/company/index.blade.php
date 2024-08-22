@@ -42,6 +42,7 @@
                                                 <th>No Hp</th>
                                                 <th>Alamat</th>
                                                 <th>Email</th>
+                                                <th>Pemilik</th>
                                                 @canany(['update-company','delete-company'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -97,6 +98,10 @@
                     {
                         data: 'email',
                         name: 'eamil',
+                    },
+                    {
+                        data: 'owner_id',
+                        name: 'owner_id',
                     },
                     @canany(['update-company','delete-company'])
                     {

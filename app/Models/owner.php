@@ -14,8 +14,8 @@ class owner extends Model
         'phone',
         'email',
         'address',
-        'company_id',
         'username',
+        'showpassword',
         'password'
     ];
     protected $primaryKey = 'id';

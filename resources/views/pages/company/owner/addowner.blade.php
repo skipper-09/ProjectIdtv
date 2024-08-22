@@ -46,26 +46,22 @@
                             </div>
                             @enderror
                         </div>
+                        
                         <div class="form-group col-12 col-md-6">
-                            <label>Perusahaan<span class="text-danger">*</span></label>
-                            <select class="form-control select2 @error('company_id') is-invalid @enderror"
-                                name="company_id">
-                                <option value="">Pilih Perusahaan</option>
-                                @foreach ($company as $k)
-                                <option value="{{ $k->id }}">{{ $k->name }} </option>
-                                @endforeach
-                            </select>
-                            @error('company_id')
+                            <label>Email<span class="text-danger">*</span></label>
+                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                placeholder="Email" value="{{old('email')}}">
+                            @error('email')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>
                             @enderror
                         </div>
                         <div class="form-group col-12 col-md-6">
-                            <label>Email<span class="text-danger">*</span></label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                placeholder="Email" value="{{old('email')}}">
-                            @error('email')
+                            <label>Username<span class="text-danger">*</span></label>
+                            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror"
+                                placeholder="Username" value="{{old('username')}}">
+                            @error('username')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>

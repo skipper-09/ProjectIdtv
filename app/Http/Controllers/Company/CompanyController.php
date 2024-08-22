@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Company;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest;
 use App\Models\Company;
+use App\Models\owner;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class CompanyController extends Controller
 
     public function getData()
     {
-        $company = Company::query();
+        $company = Company::with('owner')->get();
         return DataTables::of($company)->addIndexColumn()->addColumn('action', function ($company) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -38,7 +39,9 @@ class CompanyController extends Controller
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return '<div class="d-flex">' . $button . '</div>';
-        })->make(true);
+        })->editColumn('owner_id',function($company) {
+            return $company->owner->name;
+        })->rawColumns(['action','owner_id'])->make(true);
     }
 
     public function create()
@@ -46,6 +49,7 @@ class CompanyController extends Controller
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Tambah Perusahaan',
+            'owner' => owner::doesntHave('company')->get()
         ];
         return view('pages.company.company.addcompany', $data);
     }
@@ -57,19 +61,20 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
+            'owner_id'=>$request->owner_id
         ]);
 
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Prusahaan!']);
     }
 
 
-    public function show(Company $company, $id)
+    public function show(owner $owner, $id)
     {
 
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Edit Perusahaan',
-            'company' => $company->find($id)
+            'owner' => $owner->find($id)
         ];
         return view('pages.company.company.editcomapny', $data);
     }

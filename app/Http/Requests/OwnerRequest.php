@@ -30,7 +30,7 @@ class OwnerRequest extends FormRequest
             'phone' => 'required||numeric',
             'email' => 'required||email|unique:owners,email,' . $owner,
             'address' => 'required',
-            'company_id' => 'required',
+            'username' => 'required',
             'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
             'password_confirmation' => 'min:6'
         ];
@@ -45,7 +45,7 @@ class OwnerRequest extends FormRequest
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'The email address is already in use.',
             'address.required' => 'The address field is required.',
-            'company_id.required' => 'The Company field is required.',
+            'username.required' => 'The Username field is required.',
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters long.',
         ];
