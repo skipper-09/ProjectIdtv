@@ -31,6 +31,9 @@ Route::post('auth/signin', [AuthController::class, 'signin'])->name('auth.signin
 Route::get('auth/signout', [AuthController::class, 'signout'])->name('auth.signout');
 //chanel management route
 
+// /testing
+
+Route::get('stream/{replaceurl}', [Chanelcontroller::class, 'stream'])->name('stream');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
 
@@ -41,41 +44,41 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 
 
-//master
-Route::prefix('master')->group(function () {
-    //chanel
-    Route::prefix('stb')->group(function () {
-        Route::get('/', [StbController::class, 'index'])->name('stb')->middleware('can:read-stb');
-        Route::get('getData', [StbController::class, 'getData'])->name('stb.getdata');
-        Route::get('/tambah', [StbController::class, 'create'])->name('stb.add')->middleware('can:read-stb');
-        Route::post('store', [StbController::class, 'store'])->name('stb.store');
-        Route::get('/edit/{id}', [StbController::class, 'show'])->name('stb.edit')->middleware('can:read-stb');
-        Route::put('/update/{id}', [StbController::class, 'update'])->name('stb.update');
-        Route::delete('/delete/{id}', [StbController::class, 'destroy'])->name('stb.delete')->middleware('can:read-stb');
-    });
+    //master
+    Route::prefix('master')->group(function () {
+        //chanel
+        Route::prefix('stb')->group(function () {
+            Route::get('/', [StbController::class, 'index'])->name('stb')->middleware('can:read-stb');
+            Route::get('getData', [StbController::class, 'getData'])->name('stb.getdata');
+            Route::get('/tambah', [StbController::class, 'create'])->name('stb.add')->middleware('can:read-stb');
+            Route::post('store', [StbController::class, 'store'])->name('stb.store');
+            Route::get('/edit/{id}', [StbController::class, 'show'])->name('stb.edit')->middleware('can:read-stb');
+            Route::put('/update/{id}', [StbController::class, 'update'])->name('stb.update');
+            Route::delete('/delete/{id}', [StbController::class, 'destroy'])->name('stb.delete')->middleware('can:read-stb');
+        });
 
-    //region route
-    Route::prefix('region')->group(function () {
-        Route::get('', [RegionController::class, 'index'])->name('region')->middleware('can:read-region');
-        Route::get('getData', [RegionController::class, 'getData'])->name('region.getdata');
-        Route::get('/tambah', [RegionController::class, 'create'])->name('region.add')->middleware('can:create-region');
-        Route::post('store', [RegionController::class, 'store'])->name('region.store');
-        Route::get('/edit/{id}', [RegionController::class, 'show'])->name('region.edit')->middleware('can:update-region');
-        Route::put('/update/{id}', [RegionController::class, 'update'])->name('region.update');
-        Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('region.delete')->middleware('can:delete-region');
-    });
+        //region route
+        Route::prefix('region')->group(function () {
+            Route::get('', [RegionController::class, 'index'])->name('region')->middleware('can:read-region');
+            Route::get('getData', [RegionController::class, 'getData'])->name('region.getdata');
+            Route::get('/tambah', [RegionController::class, 'create'])->name('region.add')->middleware('can:create-region');
+            Route::post('store', [RegionController::class, 'store'])->name('region.store');
+            Route::get('/edit/{id}', [RegionController::class, 'show'])->name('region.edit')->middleware('can:update-region');
+            Route::put('/update/{id}', [RegionController::class, 'update'])->name('region.update');
+            Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('region.delete')->middleware('can:delete-region');
+        });
 
 
-    Route::prefix('paket')->group(function () {
-        Route::get('', [PacketController::class, 'index'])->name('paket')->middleware('can:read-paket');
-        Route::get('getData', [PacketController::class, 'getData'])->name('paket.getdata');
-        Route::get('/tambah', [PacketController::class, 'create'])->name('paket.add')->middleware('can:create-paket');
-        Route::post('store', [PacketController::class, 'store'])->name('paket.store');
-        Route::get('/edit/{id}', [PacketController::class, 'show'])->name('paket.edit')->middleware('can:update-paket');
-        Route::put('/update/{id}', [PacketController::class, 'update'])->name('paket.update');
-        Route::delete('/delete/{id}', [PacketController::class, 'destroy'])->name('paket.delete')->middleware('can:delete-paket');
+        Route::prefix('paket')->group(function () {
+            Route::get('', [PacketController::class, 'index'])->name('paket')->middleware('can:read-paket');
+            Route::get('getData', [PacketController::class, 'getData'])->name('paket.getdata');
+            Route::get('/tambah', [PacketController::class, 'create'])->name('paket.add')->middleware('can:create-paket');
+            Route::post('store', [PacketController::class, 'store'])->name('paket.store');
+            Route::get('/edit/{id}', [PacketController::class, 'show'])->name('paket.edit')->middleware('can:update-paket');
+            Route::put('/update/{id}', [PacketController::class, 'update'])->name('paket.update');
+            Route::delete('/delete/{id}', [PacketController::class, 'destroy'])->name('paket.delete')->middleware('can:delete-paket');
+        });
     });
-});
 
 
     //chanel management route

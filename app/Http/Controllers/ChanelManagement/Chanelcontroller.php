@@ -29,6 +29,14 @@ class Chanelcontroller extends Controller
         return view('pages.chanel.chanel-management.index', $data);
     }
 
+
+    public function stream($replaceurl)
+    {
+        $channel = Chanel::where('replacement_url', $replaceurl)->firstOrFail();
+
+        return redirect($channel->url);
+    }
+
     public function getData()
     {
         $chanel = Chanel::query()->with('categori')->get();
@@ -109,25 +117,26 @@ class Chanelcontroller extends Controller
     public function update(Chanel $chanel, ChanelRequest $request, $id)
     {
         try {
+            $datachanel = $chanel->find($id);
             $filename = '';
             if ($request->hasFile('logo')) {
                 $file  = $request->file('logo');
                 $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('storage/images/chanel/'), $filename);
-                if ($chanel->logo !== 'default.png') {
-                    if (file_exists(public_path('storage/images/chanel/' . $chanel->logo))) {
-                        File::delete(public_path('storage/images/chanel/' . $chanel->logo));
+                if ($datachanel->logo !== 'default.png') {
+                    if (file_exists(public_path('storage/images/chanel/' . $datachanel->logo))) {
+                        File::delete(public_path('storage/images/chanel/' . $datachanel->logo));
                     }
                 }
             } else {
-                $filename = $chanel->logo;
+                $filename = $datachanel->logo;
             }
-            $datachanel = $chanel->find($id);
-            $chanel->update([
+
+            $datachanel->update([
                 'name' => $request->name,
                 'url' => $request->url,
                 'categori_id' => $request->input('categori_id'),
-                'logo' => $filename === null ? $datachanel->logo : $filename,
+                'logo' => $filename,
                 'type' => $request->type,
                 'user_agent' => $request->user_agent,
                 'security_type' => $request->input('security_type'),

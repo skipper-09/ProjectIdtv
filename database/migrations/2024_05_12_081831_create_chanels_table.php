@@ -18,9 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('categori_id');
             $table->string('name', length: 50);
             $table->string('url');
+            $table->string('replacement_url')->nullable();
             $table->string('logo');
             $table->string('user_agent')->nullable();
-            $table->enum('type', ['m3u', 'mpd'])->nullable();
+            $table->enum('type', ['m3u', 'mpd'])->default('m3u');
             $table->enum('security_type', ['clearkey', 'widevine'])->nullable();
             $table->string('security')->nullable();
             $table->boolean('is_active')->default(1);
