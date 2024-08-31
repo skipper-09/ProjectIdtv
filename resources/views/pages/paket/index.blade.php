@@ -84,15 +84,7 @@
                         data: 'name',
                         name: 'name',
                     },
-                    {
-                        data: 'price',
-                        name: 'price',
-                    },
-
-                    {
-                        data: 'duration',
-                        name: 'duration',
-                    },
+                    
                     @canany(['update-paket', 'delete-paket'])
                         {
                             data: 'action',

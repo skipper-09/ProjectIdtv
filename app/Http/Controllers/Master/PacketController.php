@@ -8,17 +8,12 @@ use App\Models\Company;
 use App\Models\Package;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class PacketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
         $data = [
@@ -47,16 +42,10 @@ class PacketController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('duration', function ($data) {
             return $data->duration . ' Bulan';
-        })->editColumn('company_id', function ($data) {
-            return $data->company->name;
         })->rawColumns(['action', 'duration'])->make(true);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
     public function create()
     {
         $data = [
@@ -67,26 +56,20 @@ class PacketController extends Controller
         return view('pages.paket.add', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+   
     public function store(PaketRequest $request)
     {
-        $data = $request->validated();
-        Package::create($data);
+        $request->validated();
+        Package::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration' => $request->duration,
+            'company_id' => $request->company_id
+        ]);
         return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Paket!']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+        public function show($id)
     {
         $data = [
             'type_menu' => '',
@@ -96,21 +79,7 @@ class PacketController extends Controller
         return view('pages.paket.edit', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id) {}
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(PaketRequest $request, $id)
     {
         $request->validated();
@@ -122,12 +91,7 @@ class PacketController extends Controller
         return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Paket!']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function destroy($id)
     {
         try {
@@ -139,7 +103,7 @@ class PacketController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'Data Stb Tidak Bisa Dihapus Karena Masih digunakan oleh Customer!',
+                'message' => 'Data Paket Tidak Bisa Dihapus Karena Masih digunakan oleh Customer!',
                 'trace' => $e->getTrace()
             ]);
         }
