@@ -19,8 +19,6 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
-
-
     <style>
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,

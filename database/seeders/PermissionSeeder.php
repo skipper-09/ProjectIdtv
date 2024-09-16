@@ -18,7 +18,7 @@ class PermissionSeeder extends Seeder
         $arrayOfPermissionNames = [
             'read-dashboard',
             'read-users', 'create-users', 'update-users', 'delete-users',
-            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel',
+            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel','read-chanel-player',
             'read-categori', 'create-categori', 'update-categori', 'delete-categori',
             'read-role', 'create-role', 'update-role', 'delete-role',
             'read-customer', 'create-customer', 'update-customer', 'delete-customer',

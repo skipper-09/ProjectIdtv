@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('packet_id');
-            $table->date('start_date');
+            $table->date('start_date')->nullable();
             $table->date('end_date');
             $table->boolean('status')->default(true);
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');

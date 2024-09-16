@@ -84,6 +84,18 @@
                         data: 'name',
                         name: 'name',
                     },
+                {
+                        data: 'price',
+                        name: 'price',
+                    },
+                {
+                        data: 'company_id',
+                        name: 'company_id',
+                    },
+                {
+                        data: 'duration',
+                        name: 'duration',
+                    },
                     
                     @canany(['update-paket', 'delete-paket'])
                         {

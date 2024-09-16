@@ -22,7 +22,7 @@ class RoleSeeder extends Seeder
         $developer->givePermissionTo([
             'read-dashboard',
             'read-users', 'create-users', 'update-users', 'delete-users',
-            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel',
+            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel','read-chanel-player',
             'read-categori', 'create-categori', 'update-categori', 'delete-categori',
             'read-owner', 'create-owner', 'update-owner', 'delete-owner',
             'read-role', 'create-role', 'update-role', 'delete-role',
@@ -36,7 +36,7 @@ class RoleSeeder extends Seeder
         $administrator->givePermissionTo([
             'read-dashboard',
             'read-users', 'create-users', 'update-users', 'delete-users',
-            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel',
+            'read-chanel', 'create-chanel', 'update-chanel', 'delete-chanel','read-chanel-player',
             'read-categori', 'create-categori', 'update-categori', 'delete-categori',
             'read-owner', 'create-owner', 'update-owner', 'delete-owner',
             'read-role', 'create-role', 'update-role', 'delete-role',

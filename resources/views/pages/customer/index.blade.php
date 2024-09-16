@@ -105,7 +105,9 @@
                     },
                     {
                         data: 'stb',
-                        name: 'stb'
+                        name: 'stb',
+                        orderable: false,
+                        searchable: true,
                     },
                     
                     {
@@ -124,7 +126,10 @@
                     @canany(['read-customer','update-customer','delete-customer'])
                     {
                         data: 'action',
-                        name: 'action'
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+
                     }
                     @endcanany
                 ]

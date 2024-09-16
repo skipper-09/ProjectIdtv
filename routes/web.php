@@ -86,6 +86,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         //chanel
         Route::prefix('chanel')->group(function () {
             Route::get('/', [Chanelcontroller::class, 'index'])->name('chanel')->middleware('can:read-chanel');
+            Route::get('/player/{id}', [Chanelcontroller::class, 'vidiochanel'])->name('chanel.player')->middleware('can:read-chanel-player');
             Route::get('getData', [Chanelcontroller::class, 'getData'])->name('chanel.getdata');
             Route::get('/tambah', [Chanelcontroller::class, 'create'])->name('chanel.add')->middleware('can:create-chanel');
             Route::post('store', [Chanelcontroller::class, 'store'])->name('chanel.store');

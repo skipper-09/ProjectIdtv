@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Package;
+use App\Models\Payment;
 use App\Models\Region;
 use App\Models\Stb;
+use App\Models\Subscription;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -37,7 +41,7 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::with(['region', 'stb', 'company'])->get();
+        $customer = Customer::with(['region', 'stb', 'company'])->orderByDesc('id')->get();
 
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -80,15 +84,17 @@ class CustomerController extends Controller
             'stb' => Stb::all(),
             'region' => Region::all(),
             'company' => Company::all(),
+            'paket' => Package::all()
 
         ];
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(CustomerRequest $request)
+    public function store(Request $request, )
     {
-        $request->validated();
-        Customer::create([
+        // dd($request);
+        //  $request->validated();
+        $customer = Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
             'nik' => $request->nik,
@@ -100,11 +106,23 @@ class CustomerController extends Controller
             'username' => $request->username,
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
-            'is_avtive' => $request->is_active,
+            'is_active' => $request->is_active,
+        ]);
+        $subs = Subscription::create([
+            'customer_id' => $customer->id,
+            'packet_id' => $request->paket_id,
+            'start_date' => Carbon::now(),
+            'end_date' => $request->end_date,
         ]);
 
+        $paket = Package::where('id',$subs->packet_id)->get();
 
-
+        Payment::create([
+            'subcription_id' => $subs->id,
+            'customer_id' => $customer->id,
+            'amount' => $paket[0]->price,
+            'status' => 'paid'
+        ]);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 
@@ -130,6 +148,7 @@ class CustomerController extends Controller
             'stb' => Stb::all(),
             'region' => Region::all(),
             'company' => Company::all(),
+            'paket' => Package::all()
         ];
 
         return view('pages.customer.editcustomer', $data);

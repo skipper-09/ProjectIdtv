@@ -27,7 +27,7 @@ class PacketController extends Controller
 
     public function getData()
     {
-        $data = Package::all();
+        $data = Package::with(['company'])->get();
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -42,7 +42,9 @@ class PacketController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('duration', function ($data) {
             return $data->duration . ' Bulan';
-        })->rawColumns(['action', 'duration'])->make(true);
+        })->editColumn('company_id', function ($data) {
+            return $data->company->name;
+        })->rawColumns(['action', 'duration','company_id'])->make(true);
     }
 
   

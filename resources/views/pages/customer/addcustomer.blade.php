@@ -89,7 +89,7 @@
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Konfirmasi Password <span class="text-danger">*</span></label>
-                                        <input type="text" name="password_confirmation"
+                                        <input type="password" name="password_confirmation"
                                             class="form-control @error('password_confirmation') is-invalid @enderror"
                                             placeholder="Konfirmasi Password">
                                         @error('password_confirmation')
@@ -97,6 +97,15 @@
                                                 {{ $message }}
                                             </div>
                                         @enderror
+                                    </div>
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Paket Pelanggan <span class="text-danger">*</span></label>
+                                        <select class="form-control select2" name="paket_id">
+                                            <option value="">Pilih Paket</option>
+                                            @foreach ($paket as $s)
+                                                <option value="{{ $s->id }}">{{ $s->name }} - Rp. {{ number_format($s->price) }} </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Type STB <span class="text-danger">*</span></label>
@@ -121,11 +130,21 @@
                                         <select class="form-control select2" name="company_id">
                                             <option value="">Pilih Perusahaan</option>
                                             @foreach ($company as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }} </option>
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group col-12 col-md-12">
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Jatuh Tempo <span class="text-danger">*</span></label>
+                                        <input type="date" name="end_date"
+                                            class="form-control @error('end_date') is-invalid @enderror">
+                                        @error('end_date')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
                                         <label>Status <span class="text-danger">*</span></label>
                                         <select class="form-control select2" id="extension" name="is_active">
                                             <option value="">Pilih Status</option>
@@ -140,6 +159,7 @@
                         </form>
                     </div>
                 </div>
+                
             </div>
 
         </section>

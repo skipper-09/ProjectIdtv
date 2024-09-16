@@ -34,7 +34,9 @@ class Chanelcontroller extends Controller
     {
         $channel = Chanel::where('replacement_url', $replaceurl)->firstOrFail();
 
-        return redirect($channel->url);
+        return redirect($channel->url)->withHeaders([
+            'Access-Control-Allow-Origin' => '*',
+        ]);
     }
 
     public function getData()
@@ -46,6 +48,10 @@ class Chanelcontroller extends Controller
             if ($userauth->can('update-chanel')) {
                 $button .= ' <a href="' . route('chanel.edit', ['id' => $chanel->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $chanel->id . ' data-type="edit"><i
                                                             class="fa-solid fa-pencil"></i></a>';
+            }
+            if ($userauth->can('read-chanel-player')) {
+                $button .= ' <a href="' . route('chanel.player', ['id' => $chanel->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $chanel->id . ' data-type="edit"><i
+                                                            class="fa-solid fa-eye"></i></a>';
             }
             if ($userauth->can('delete-chanel')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $chanel->id . ' data-type="delete" data-route="' . route('chanel.delete', ['id' => $chanel->id]) . '"><i
@@ -70,6 +76,26 @@ class Chanelcontroller extends Controller
     }
 
 
+
+    public function vidiochanel($id)
+    {
+        try {
+            $data = [
+                'type_menu' => 'layout',
+                'page_name' => 'Chanel',
+                'player' => Chanel::find($id),
+            ];
+
+            return view('pages.chanel.chanel-management.detailplayer', $data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
+    }
+
+
     public function create()
     {
         $data = [
@@ -85,7 +111,7 @@ class Chanelcontroller extends Controller
     {
         $filename = '';
         if ($request->hasFile('logo')) {
-            $file  = $request->file('logo');
+            $file = $request->file('logo');
             $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/images/chanel/'), $filename);
         }
@@ -111,7 +137,7 @@ class Chanelcontroller extends Controller
             'categori' => Categori::all()
 
         ];
-        return view('pages.chanel.chanel-management.editchanel', $data);
+        return response()->view('pages.chanel.chanel-management.editchanel', $data);
     }
 
     public function update(Chanel $chanel, ChanelRequest $request, $id)
@@ -120,7 +146,7 @@ class Chanelcontroller extends Controller
             $datachanel = $chanel->find($id);
             $filename = '';
             if ($request->hasFile('logo')) {
-                $file  = $request->file('logo');
+                $file = $request->file('logo');
                 $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('storage/images/chanel/'), $filename);
                 if ($datachanel->logo !== 'default.png') {
