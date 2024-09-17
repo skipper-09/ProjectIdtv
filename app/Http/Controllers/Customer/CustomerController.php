@@ -90,7 +90,7 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request, )
+    public function store(Request $request,)
     {
         // dd($request);
         //  $request->validated();
@@ -115,7 +115,7 @@ class CustomerController extends Controller
             'end_date' => $request->end_date,
         ]);
 
-        $paket = Package::where('id',$subs->packet_id)->get();
+        $paket = Package::where('id', $subs->packet_id)->get();
 
         Payment::create([
             'subcription_id' => $subs->id,
@@ -154,27 +154,60 @@ class CustomerController extends Controller
         return view('pages.customer.editcustomer', $data);
     }
 
-    public function update(CustomerRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $request->validated();
+        // $request->validated();
         $customer = Customer::find($id);
-        $customer->name = $request->name;
-        $customer->address = $request->address;
-        $customer->phone = $request->phone;
-        $customer->stb_id = $request->stb_id;
-        $customer->region_id = $request->region_id;
-        $customer->company_id = $request->company_id;
-        $customer->mac = $request->mac;
-        $customer->nik = $request->nik;
-        $customer->showpassword = $request->password;
-        if ($request->password === null) {
-            $customer->password;
-        } else {
-            $customer->password = Hash::make($request->password);
-        }
-        $customer->is_active = $request->is_active == true ? 1 : 0;
-        $customer->save();
+        $customer->update([
+            'name' => $request->name,
+            'mac' => $request->mac,
+            'nik' => $request->nik,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'region_id' => $request->region_id,
+            'stb_id' => $request->stb_id,
+            'company_id' => $request->company_id,
+            'username' => $request->username,
+            'showpassword' => $request->password,
+            'password' => Hash::make($request->password),
+            'is_active' => $request->is_active,
+        ]);
+        // $customer->name = $request->name;
+        // $customer->address = $request->address;
+        // $customer->phone = $request->phone;
+        // $customer->stb_id = $request->stb_id;
+        // $customer->region_id = $request->region_id;
+        // $customer->company_id = $request->company_id;
+        // $customer->mac = $request->mac;
+        // $customer->nik = $request->nik;
+        // $customer->showpassword = $request->showpassword;
+        // $customer->showpassword = $request->password;
+        // if ($request->password === null) {
+        //     $customer->password;
+        // } else {
+        //     $customer->password = Hash::make($request->password);
+        // }
+        // $customer->is_active = $request->is_active == true ? 1 : 0;
 
+
+        $subsid = Subscription::where('customer_id', $customer->id)->get();
+        $subs = Subscription::find($subsid);
+        $subs->update([
+            'customer_id' => $customer->id,
+            'packet_id' => $request->paket_id,
+            'start_date' => $subs[0]->start_date,
+            'end_date' => $request->end_date,
+        ]);
+
+        $paket = Package::where('id', $subs->packet_id)->get();
+        $paymentid = Payment::where('customer_id', $customer->id)->get();
+        $payment = Payment::find($paymentid);
+        $payment->update([
+            'subcription_id' => $subs->id,
+            'customer_id' => $customer->id,
+            'amount' => $paket[0]->price,
+            'status' => 'paid'
+        ]);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Customer!']);
     }
 

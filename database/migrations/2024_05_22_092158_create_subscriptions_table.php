@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('packet_id');
+            $table->string('invoices');
             $table->date('start_date')->nullable();
             $table->date('end_date');
             $table->boolean('status')->default(true);

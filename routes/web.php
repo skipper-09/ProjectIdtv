@@ -215,9 +215,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // Route::get('/bootstrap-dropdown', function () {
 //     return view('pages.bootstrap-dropdown', ['type_menu' => 'bootstrap']);
 // });
-// Route::get('/bootstrap-form', function () {
-//     return view('pages.bootstrap-form', ['type_menu' => 'bootstrap']);
-// });
+Route::get('/bootstrap-form', function () {
+    return view('pages.bootstrap-form', ['type_menu' => 'bootstrap']);
+});
 // Route::get('/bootstrap-list-group', function () {
 //     return view('pages.bootstrap-list-group', ['type_menu' => 'bootstrap']);
 // });
