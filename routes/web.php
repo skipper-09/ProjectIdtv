@@ -7,6 +7,7 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\OwnerController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
@@ -143,6 +144,30 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit')->middleware('can:read-company');
         Route::put('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
         Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete')->middleware('can:read-company');
+    });
+
+
+     //route keuangan
+     Route::prefix('keuangan')->group(function () {
+        Route::prefix('subcription')->group(
+            function () {
+                Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-owner');
+                Route::get('getData', [SubcriptionController::class, 'getData'])->name('keuangan.getdata');
+                Route::get('/tambah', [SubcriptionController::class, 'create'])->name('keuangan.add')->middleware('can:create-owner');
+                Route::post('store', [SubcriptionController::class, 'store'])->name('keuangan.store');
+                Route::get('/edit/{id}', [SubcriptionController::class, 'show'])->name('keuangan.edit')->middleware('can:update-owner');
+                Route::put('/update/{id}', [SubcriptionController::class, 'update'])->name('keuangan.update');
+                Route::delete('/delete/{id}', [SubcriptionController::class, 'destroy'])->name('keuangan.delete')->middleware('can:delete-owner');
+            }
+        );
+
+        // Route::get('', [CompanyController::class, 'index'])->name('company')->middleware('can:read-company');
+        // Route::get('getData', [CompanyController::class, 'getData'])->name('company.getdata');
+        // Route::get('/tambah', [CompanyController::class, 'create'])->name('company.add')->middleware('can:read-company');
+        // Route::post('store', [CompanyController::class, 'store'])->name('company.store');
+        // Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit')->middleware('can:read-company');
+        // Route::put('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
+        // Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete')->middleware('can:read-company');
     });
 
     //setting route

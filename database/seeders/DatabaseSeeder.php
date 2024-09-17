@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             StbSeeder::class,
             ComapanySeeder::class,
             RegionSeeder::class,
+            PaketSeeder::class,
             CustomerSeeder::class,
         ]);
         // \App\Models\User::factory()->create([

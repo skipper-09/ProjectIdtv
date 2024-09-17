@@ -21,4 +21,8 @@ class Package extends Model
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
     }
+    public function paket()
+    {
+        return $this->hasMany(Package::class);
+    }
 }

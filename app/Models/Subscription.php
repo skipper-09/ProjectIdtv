@@ -32,8 +32,8 @@ class Subscription extends Model
     public function generateInvoiceNumber()
     {
         $prefix = 'INV-';
-        $randomNumber = rand(1000, 9999);
-        return $prefix . time() . '-' . $randomNumber;
+        $randomNumber = rand(10000, 99999);
+        return $prefix . $randomNumber;
     }
 
 
@@ -43,6 +43,6 @@ class Subscription extends Model
     }
     public function paket()
     {
-        return $this->belongsTo(Package::class);
+        return $this->belongsTo(Package::class,'packet_id','id');
     }
 }

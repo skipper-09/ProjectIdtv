@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
     <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
+    <style>
+      /* #dataTable{
+        width: 100vw;
+      } */
+    </style>
 @endpush
 
 @section('main')
@@ -23,7 +28,7 @@
 
             <div class="row">
 
-                <div class="col-12 col-md-4 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="card">
                         <form action="{{ route('customer.update', ['id' => $customer->id]) }}" method="POST"
                             enctype="multipart/form-data">
@@ -112,7 +117,7 @@
                                             <option value="">Pilih Paket</option>
                                             @foreach ($paket as $s)
                                                 <option value="{{ $s->id }}"
-                                                    {{ $s->id == $customer->subcrib[0]->packet_id ? ' selected' : '' }}>
+                                                    {{ $s->id == $latestsubcribe->packet_id ? ' selected' : '' }}>
                                                     {{ $s->name }} - Rp.
                                                     {{ number_format($s->price) }} </option>
                                             @endforeach
@@ -152,10 +157,21 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group col-12 col-md-12">
+                                    <div class="form-group col-12 col-md-6">
+                                      <label>Diperpanjang <span class="text-danger">*</span></label>
+                                      <input type="date" name="start_date"
+                                          value="{{ $latestsubcribe->start_date }}"
+                                          class="form-control @error('start_date') is-invalid @enderror">
+                                      @error('start_date')
+                                          <div class="invalid-feedback">
+                                              {{ $message }}
+                                          </div>
+                                      @enderror
+                                  </div>
+                                    <div class="form-group col-12 col-md-6">
                                         <label>Jatuh Tempo <span class="text-danger">*</span></label>
                                         <input type="date" name="end_date"
-                                            value="{{ $customer->subcrib[0]->end_date }}"
+                                            value="{{ $latestsubcribe->end_date }}"
                                             class="form-control @error('end_date') is-invalid @enderror">
                                         @error('end_date')
                                             <div class="invalid-feedback">
@@ -184,19 +200,20 @@
                 </div>
 
 
-                <div class="col-12 col-md-8 col-lg-8">
+                <div class="col-12 col-md-6 col-lg-6">
                     <div class="card">
-
-                        <div class="card-body">
+                        <div class="card-body w-100" >
                             <div class="table-responsive">
                                 <table class="table-striped table" id="dataTable">
                                     <thead>
                                         <tr>
-                                            {{-- <th>No</th> --}}
-                                            <th>Nama</th>
-                                            <th>Mac</th>
-                                            <th>Stb</th>
-                                            <th>Area</th>
+                                            <th>No</th>
+                                            <th>Invoice</th>
+                                            <th>Nominal</th>
+                                            <th>Paket</th>
+                                            <th>Perpanjang</th>
+                                            <th>Deadline</th>
+                                            {{-- <th>Area</th> --}}
                                             <th>Perusahaan</th>
                                             @canany(['read-customer', 'update-customer', 'delete-customer'])
                                                 <th>Action</th>
@@ -229,44 +246,41 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('customer.getdata') }}',
+                ajax: '{{ route('keuangan.getdata') }}',
                 columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     width: '10px',
-                    //     class:'text-center'
-                    // },
                     {
-                        data: 'name',
-                        name: 'name',
-                        width: '200px'
-                    },
-
-                    {
-                        data: 'mac',
-                        name: 'mac'
-                    },
-                    {
-                        data: 'stb',
-                        name: 'stb',
+                        data: 'DT_RowIndex',
                         orderable: false,
-                        searchable: true,
+                        searchable: false,
+                        width: '10px',
+                        class:'text-center'
                     },
-
                     {
-                        data: 'region',
-                        name: 'region',
-                        orderable: false,
-                        searchable: true,
+                        data: 'invoices',
+                        name: 'invoices',
+                    },
+                    {
+                        data: 'nominal',
+                        name: 'nominal',
+                    },
+                    {
+                        data: 'paket',
+                        name: 'paket',
+                    },
+                    {
+                        data: 'start_date',
+                        name: 'start_date',
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date',
                     },
                     {
                         data: 'company',
                         name: 'company',
-                        orderable: false,
-                        searchable: true,
                     },
+
+                    
 
                     @canany(['read-customer', 'update-customer', 'delete-customer'])
                         {
