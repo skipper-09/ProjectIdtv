@@ -244,34 +244,6 @@
     {{-- custom js --}}
     <script src="{{ asset('js/custom.js') }}"></script>
 
-
-    <script>
-        $(document).on('click', '#print-standart', function() {
-            // Logika untuk cetak dengan printer standar
-            // window.open('/print-standart-transaksi', '_blank');
-            const printWindow = window.open('print-standart-transaksi', '_blank');
-            printWindow.document.write(`
-            <html>
-            <head><title>Print Invoice</title></head>
-            <body>
-                <h2>Invoice: ${data.invoice}</h2>
-                <p>Amount: ${data.amount}</p>
-                <p>Package: ${data.package}</p>
-                <p>Perpanjang: ${data.extend_date}</p>
-                <p>Deadline: ${data.deadline}</p>
-                <p>Company: ${data.company}</p>
-            </body>
-            </html>
-        `);
-            printWindow.document.close();
-            printWindow.print(); // Memanggil print default
-        });
-
-        $(document).on('click', '#print-thermal', function() {
-            // Logika untuk cetak dengan thermal printer
-            window.open('/print-thermal-transaksi', '_blank');
-        });
-    </script>
     <script>
         $(document).ready(function() {
 

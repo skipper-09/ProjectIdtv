@@ -43,7 +43,10 @@
                                                 <th>Mac</th>
                                                 <th>Stb</th>
                                                 <th>Area</th>
+                                                <th>Diperpanjang</th>
+                                                <th>Deadline</th>
                                                 <th>Perusahaan</th>
+                                                <th>Renew|Print</th>
                                                 @canany(['read-customer','update-customer','delete-customer'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -96,7 +99,6 @@
                     {
                         data: 'name',
                         name: 'name',
-                        width:'200px'
                     },
                     
                     {
@@ -117,12 +119,23 @@
                         searchable: true,
                     },
                     {
+                        data: 'start_date',
+                        name: 'start_date',
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date',
+                    },
+                    {
                         data: 'company',
                         name: 'company',
                         orderable: false,
                         searchable: true,
                     },
-                    
+                    {
+                        data: 'renew',
+                        name: 'renew',
+                    },
                     @canany(['read-customer','update-customer','delete-customer'])
                     {
                         data: 'action',

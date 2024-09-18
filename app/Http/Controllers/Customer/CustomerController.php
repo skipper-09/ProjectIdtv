@@ -41,8 +41,7 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::with(['region', 'stb', 'company'])->orderBy('id', 'desc')->get();
-
+        $customer = Customer::with(['region', 'stb', 'company','subcrib'])->orderBy('id', 'desc')->get();
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -70,9 +69,30 @@ class CustomerController extends Controller
             return optional($company->company)->name ?? 'Tidak ada perusahaan';
         })->editColumn('region', function (Customer $region) {
             return $region->region->name;
+        })->editColumn('start_date', function (Customer $sub) {
+            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
+        })->editColumn('end_date', function (Customer $sub) {
+            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date;
         })->editColumn('created_at', function (Customer $date) {
             return date('d-m-Y', strtotime($date->created_at));
-        })->rawColumns(['action', 'is_active', 'stb', 'company', 'region', 'created_at'])->make(true);
+        })->addColumn('renew', function ($customer) {
+            $userauth = User::with('roles')->where('id', Auth::id())->first();
+            $button = '';
+            // if ($userauth->can(['read-customer'])) {
+            //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
+            //                                                 class="fas fa-eye"></i></button>';
+            // }
+            if ($userauth->can('update-customer')) {
+                $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
+                                                            class="fa-solid fa-bolt"></i></a>';
+            }
+            if ($userauth->can('delete-customer')) {
+                $button .= ' <button class="btn btn-sm btn-success action" data-id=' . $customer->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="PRINT TRANSAKSI"><i
+                                                            class="fa-solid fa-print"></i></button>';
+            }
+
+            return '<div class="d-flex">' . $button . '</div>';
+        })->rawColumns(['action', 'renew','is_active', 'stb', 'company', 'region', 'created_at','start_date','end_date'])->make(true);
     }
 
 
