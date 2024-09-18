@@ -41,7 +41,7 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::with(['region', 'stb', 'company'])->orderByDesc('id')->get();
+        $customer = Customer::with(['region', 'stb', 'company'])->orderBy('id', 'desc')->get();
 
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -115,12 +115,13 @@ class CustomerController extends Controller
             'end_date' => $request->end_date,
         ]);
 
-        $paket = Package::where('id', $subs->packet_id)->get();
+        $paket = Package::where('id', $subs->packet_id)->first();
 
         Payment::create([
             'subcription_id' => $subs->id,
             'customer_id' => $customer->id,
-            'amount' => $paket[0]->price,
+            'amount' => $paket->price,
+            'tanggal_bayar' => now(),
             'status' => 'paid'
         ]);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
@@ -143,7 +144,7 @@ class CustomerController extends Controller
     {
 
         $customer = Customer::find($id);
-        $latestsub = Subscription::where('customer_id',$customer->id)->orderBy('created_at','asc')->first();
+        $latestsub = Subscription::where('customer_id', $customer->id)->orderBy('created_at', 'asc')->first();
         $data = [
             'type_menu' => '',
             'page_name' => 'Customer',
@@ -176,21 +177,20 @@ class CustomerController extends Controller
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
         ]);
-        
+
         if ($customer->id != null) {
-             
-        $subs = Subscription::where('customer_id',$customer->id)->first();
-        $subs->update([
-            'packet_id' => $request->paket_id,
-            'start_date'=>$request->start_date,
-            'end_date'=> $request->end_date,
-        ]);
-        
+
+            $subs = Subscription::where('customer_id', $customer->id)->first();
+            $subs->update([
+                'packet_id' => $request->paket_id,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+            ]);
         }
-       
 
 
-       
+
+
 
         // $paket = Package::where('id', $subs->packet_id)->get();
         // $paymentid = Payment::where('customer_id', $customer->id)->get();

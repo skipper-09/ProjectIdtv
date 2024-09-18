@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
     <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
     <style>
-      /* #dataTable{
-        width: 100vw;
-      } */
+        /* #dataTable{
+                                                        width: 100vw;
+                                                      } */
     </style>
 @endpush
 
@@ -158,20 +158,19 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-md-6">
-                                      <label>Diperpanjang <span class="text-danger">*</span></label>
-                                      <input type="date" name="start_date"
-                                          value="{{ $latestsubcribe->start_date }}"
-                                          class="form-control @error('start_date') is-invalid @enderror">
-                                      @error('start_date')
-                                          <div class="invalid-feedback">
-                                              {{ $message }}
-                                          </div>
-                                      @enderror
-                                  </div>
+                                        <label>Diperpanjang <span class="text-danger">*</span></label>
+                                        <input type="date" name="start_date"
+                                            value="{{ $latestsubcribe->start_date }}"
+                                            class="form-control @error('start_date') is-invalid @enderror">
+                                        @error('start_date')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Jatuh Tempo <span class="text-danger">*</span></label>
-                                        <input type="date" name="end_date"
-                                            value="{{ $latestsubcribe->end_date }}"
+                                        <input type="date" name="end_date" value="{{ $latestsubcribe->end_date }}"
                                             class="form-control @error('end_date') is-invalid @enderror">
                                         @error('end_date')
                                             <div class="invalid-feedback">
@@ -202,7 +201,7 @@
 
                 <div class="col-12 col-md-6 col-lg-6">
                     <div class="card">
-                        <div class="card-body w-100" >
+                        <div class="card-body w-100">
                             <div class="table-responsive">
                                 <table class="table-striped table" id="dataTable">
                                     <thead>
@@ -230,6 +229,8 @@
             </div>
         </section>
     </div>
+
+    @include('components.modal')
 @endsection
 
 @push('scripts')
@@ -240,20 +241,55 @@
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <!-- Page Specific JS File -->
 
+    {{-- custom js --}}
+    <script src="{{ asset('js/custom.js') }}"></script>
+
+
+    <script>
+        $(document).on('click', '#print-standart', function() {
+            // Logika untuk cetak dengan printer standar
+            // window.open('/print-standart-transaksi', '_blank');
+            const printWindow = window.open('print-standart-transaksi', '_blank');
+            printWindow.document.write(`
+            <html>
+            <head><title>Print Invoice</title></head>
+            <body>
+                <h2>Invoice: ${data.invoice}</h2>
+                <p>Amount: ${data.amount}</p>
+                <p>Package: ${data.package}</p>
+                <p>Perpanjang: ${data.extend_date}</p>
+                <p>Deadline: ${data.deadline}</p>
+                <p>Company: ${data.company}</p>
+            </body>
+            </html>
+        `);
+            printWindow.document.close();
+            printWindow.print(); // Memanggil print default
+        });
+
+        $(document).on('click', '#print-thermal', function() {
+            // Logika untuk cetak dengan thermal printer
+            window.open('/print-thermal-transaksi', '_blank');
+        });
+    </script>
     <script>
         $(document).ready(function() {
 
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('keuangan.getdata') }}',
-                columns: [
-                    {
+                ajax: {
+                    url: '{{ route('keuangan.getdata') }}',
+                    data: function(data) {
+                        data.id = @json($customer->id);
+                    }
+                },
+                columns: [{
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false,
                         width: '10px',
-                        class:'text-center'
+                        class: 'text-center'
                     },
                     {
                         data: 'invoices',
@@ -280,7 +316,7 @@
                         name: 'company',
                     },
 
-                    
+
 
                     @canany(['read-customer', 'update-customer', 'delete-customer'])
                         {

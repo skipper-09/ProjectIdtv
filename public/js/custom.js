@@ -59,4 +59,22 @@ $("#dataTable").on("click", ".action", function () {
             },
         });
     }
+    if (type == "print") {
+        $("#showmodal").find(".modal-content").html(`
+                  <div class="modal-header">
+                <h5 class="modal-title">Print Transaksi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex px-3">
+                    <button class="btn btn-sm btn-success mr-2" id="print-standart">Standart Printer</button>
+                    <button class="btn btn-sm btn-primary" id="print-thermal">Thermal Printer</button>
+                </div>
+            </div>
+            
+            `);
+        $("#showmodal").modal("show");
+    }
 });

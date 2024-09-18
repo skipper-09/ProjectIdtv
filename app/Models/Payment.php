@@ -12,7 +12,8 @@ class Payment extends Model
         'subcription_id',
         'customer_id',
         'amount',
-        'status'
+        'status',
+        'tanggal_bayar'
     ];
     protected $primaryKey = 'id';
 
