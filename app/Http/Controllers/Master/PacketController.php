@@ -44,6 +44,8 @@ class PacketController extends Controller
             return $data->duration . ' Bulan';
         })->editColumn('company_id', function ($data) {
             return $data->company->name;
+        })->editColumn('price', function ($data) {
+            return 'Rp'. ' '.number_format($data->price);
         })->rawColumns(['action', 'duration','company_id'])->make(true);
     }
 

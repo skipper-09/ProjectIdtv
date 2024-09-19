@@ -161,14 +161,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
                 Route::delete('/delete/{id}', [SubcriptionController::class, 'destroy'])->name('keuangan.delete')->middleware('can:delete-owner');
             }
         );
+        Route::prefix('income-harian')->group(
+            function () {
+                Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-owner');
+                Route::get('getData', [SubcriptionController::class, 'getData'])->name('keuangan.getdata');
+            }
+        );
 
-        // Route::get('', [CompanyController::class, 'index'])->name('company')->middleware('can:read-company');
-        // Route::get('getData', [CompanyController::class, 'getData'])->name('company.getdata');
-        // Route::get('/tambah', [CompanyController::class, 'create'])->name('company.add')->middleware('can:read-company');
-        // Route::post('store', [CompanyController::class, 'store'])->name('company.store');
-        // Route::get('/edit/{id}', [CompanyController::class, 'show'])->name('company.edit')->middleware('can:read-company');
-        // Route::put('/update/{id}', [CompanyController::class, 'update'])->name('company.update');
-        // Route::delete('/delete/{id}', [CompanyController::class, 'destroy'])->name('company.delete')->middleware('can:read-company');
+        
     });
 
     //setting route
