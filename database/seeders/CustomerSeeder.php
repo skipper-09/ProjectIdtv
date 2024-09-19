@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Subscription;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
-        Customer::create([
+        $customer = Customer::create([
             'name' => 'YACUP SUGIARTO / SUTOMO YUWONO - RT5 RW2 KAMPUNG BARU JL JUANDA NO 61',
             'company_id' => 1,
             'region_id' => 1,
@@ -28,6 +29,13 @@ class CustomerSeeder extends Seeder
             'username' => 'ahmad',
             'showpassword' => 'ahmad',
             'password' => Hash::make('ahmad'),
+        ]);
+
+        $subcription = Subscription::create([
+            'customer_id' => $customer->id,
+            'packet_id' => 1,
+            'start_date' => now(),
+            'end_date' => now()->addMonth(1),
         ]);
     }
 }

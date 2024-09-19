@@ -7,6 +7,7 @@ use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Company\OwnerController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Keuangan\DailyincomeController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
@@ -147,9 +148,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 
 
-     Route::get('print-standart/{id}', [SubcriptionController::class, 'PrintStandart'])->name('print.standart');
-     //route keuangan
-     Route::prefix('keuangan')->group(function () {
+    Route::get('print-standart/{id}', [SubcriptionController::class, 'PrintStandart'])->name('print.standart');
+    //route keuangan
+    Route::prefix('keuangan')->group(function () {
         Route::prefix('subcription')->group(
             function () {
                 Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-owner');
@@ -163,12 +164,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         );
         Route::prefix('income-harian')->group(
             function () {
-                Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-owner');
-                Route::get('getData', [SubcriptionController::class, 'getData'])->name('keuangan.getdata');
+                Route::get('', [DailyincomeController::class, 'index'])->name('dailyincome')->middleware('can:read-owner');
+                Route::get('getData', [DailyincomeController::class, 'getData'])->name('dailyincome.getdata');
             }
         );
-
-        
     });
 
     //setting route

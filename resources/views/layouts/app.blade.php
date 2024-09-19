@@ -18,6 +18,7 @@
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
     <style>
         /* Chrome, Safari, Edge, Opera */

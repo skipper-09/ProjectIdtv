@@ -91,28 +91,28 @@
 
             <li class="menu-header">KEUNGAN</li>
             @canany(['read-company', 'read-owner'])
-            <li class="nav-item dropdown {{ $type_menu === 'company' ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
-                    <span>Data Keuangan</span></a>
-                <ul class="dropdown-menu">
-                    @can('read-owner')
-                        <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('owner') }}">Income Harian</a>
-                        </li>
-                    @endcan
-                    @can('read-company')
-                        <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('company') }}">Income Periode</a>
-                        </li>
-                    @endcan
-                    @can('read-company')
-                        <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ route('company') }}">Statistik</a>
-                        </li>
-                    @endcan
-                </ul>
-            </li>
-        @endcanany
+                <li class="nav-item dropdown {{ $type_menu === 'Keuangan' ? 'active' : '' }}">
+                    <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
+                        <span>Data Keuangan</span></a>
+                    <ul class="dropdown-menu">
+                        @can('read-owner')
+                            <li class="{{ Request::is('admin/keuangan/income-harian') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('dailyincome') }}">Income Harian</a>
+                            </li>
+                        @endcan
+                        @can('read-company')
+                            <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('company') }}">Income Periode</a>
+                            </li>
+                        @endcan
+                        @can('read-company')
+                            <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('company') }}">Statistik</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
 
             @canany(['read-users', 'read-role'])
                 <li class="menu-header">SETTINGS</li>

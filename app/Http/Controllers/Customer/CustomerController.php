@@ -41,7 +41,7 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::with(['region', 'stb', 'company','subcrib'])->orderBy('id', 'desc')->get();
+        $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->get();
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -70,9 +70,9 @@ class CustomerController extends Controller
         })->editColumn('region', function (Customer $region) {
             return $region->region->name;
         })->editColumn('start_date', function (Customer $sub) {
-            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
+            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
-            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date;
+            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date;
         })->editColumn('created_at', function (Customer $date) {
             return date('d-m-Y', strtotime($date->created_at));
         })->addColumn('renew', function ($customer) {
@@ -92,7 +92,7 @@ class CustomerController extends Controller
             }
 
             return '<div class="d-flex">' . $button . '</div>';
-        })->rawColumns(['action', 'renew','is_active', 'stb', 'company', 'region', 'created_at','start_date','end_date'])->make(true);
+        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date'])->make(true);
     }
 
 

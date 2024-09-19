@@ -43,6 +43,6 @@ class Subscription extends Model
     }
     public function paket()
     {
-        return $this->belongsTo(Package::class,'packet_id','id');
+        return $this->belongsTo(Package::class, 'packet_id', 'id');
     }
 }
