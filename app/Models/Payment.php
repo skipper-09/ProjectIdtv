@@ -17,13 +17,13 @@ class Payment extends Model
     ];
     protected $primaryKey = 'id';
 
-    public function subscription()
+    public function subscrib()
     {
-        return $this->belongsTo(Subscription::class, 'subscription_id', 'id');
+        return $this->belongsTo(Subscription::class, 'subcription_id', 'id');
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+        return $this->belongsTo(Customer::class);
     }
 }

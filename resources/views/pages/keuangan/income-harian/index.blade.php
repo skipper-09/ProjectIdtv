@@ -26,8 +26,8 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                         <div class="card card-statistic-1">
-                            <div class="card-icon bg-primary">
-                                <i class="far fa-user"></i>
+                            <div class="card-icon bg-success ">
+                                <i class="fas fa-money-bill-wave"></i>
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
@@ -47,14 +47,18 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>Nik</th>
+                                                    <th>Nama</th>
+                                                    <th>Paket</th>
+                                                    <th>Perpanjang</th>
+                                                    <th>Deadline</th>
                                                     <th>Status</th>
-                                                    <th>TGL</th>
+                                                    <th>Tanggal Bayar</th>
                                                     @canany(['update-owner', 'delete-owner'])
                                                         <th>Action</th>
                                                     @endcanany
@@ -95,6 +99,26 @@
                 serverSide: true,
                 ajax: '{{ route('dailyincome.getdata') }}',
                 columns: [{
+                        name: 'nik',
+                        data: 'nik',
+                    },
+                    {
+                        name: 'customer',
+                        data: 'customer',
+                    },
+                    {
+                        name: 'paket',
+                        data: 'paket',
+                    },
+                    {
+                        name: 'start_date',
+                        data: 'start_date',
+                    },
+                    {
+                        name: 'end_date',
+                        data: 'end_date',
+                    },
+                    {
                         name: 'status',
                         data: 'status',
                     },

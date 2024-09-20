@@ -45,4 +45,8 @@ class Subscription extends Model
     {
         return $this->belongsTo(Package::class, 'packet_id', 'id');
     }
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
