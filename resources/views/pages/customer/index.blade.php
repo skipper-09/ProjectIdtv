@@ -103,7 +103,7 @@
                     {
                         data: 'name',
                         name: 'name',
-                        width: '100%',
+                        width: '200px'
                     },
 
                     {

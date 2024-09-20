@@ -72,7 +72,14 @@ class CustomerController extends Controller
         })->editColumn('start_date', function (Customer $sub) {
             return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
-            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date;
+            $cus = '';
+            if($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == today()->format('Y-m-d')){
+                $cus= '<span class="text-danger">'.$sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date.'</span>';
+            }else{
+                $cus = '<span class="text-success fw-bold">'.$sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date.'</span>';
+            }
+            return $cus; 
+            
         })->editColumn('created_at', function (Customer $date) {
             return date('d-m-Y', strtotime($date->created_at));
         })->addColumn('renew', function ($customer) {

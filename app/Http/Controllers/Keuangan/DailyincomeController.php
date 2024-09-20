@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Keuangan;
 
+use App\Exports\DailyIncomeExport;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+
 use Yajra\DataTables\DataTables;
 
 class DailyincomeController extends Controller
@@ -50,7 +54,7 @@ class DailyincomeController extends Controller
 
 
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id]) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -70,8 +74,8 @@ class DailyincomeController extends Controller
         })->editColumn('created_at', function ($data) {
             return
                 Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at, 'UTC')
-                ->setTimezone(config('app.timezone'))
-                ->format('Y-m-d H:i:s');
+                    ->setTimezone(config('app.timezone'))
+                    ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'paid') {
@@ -83,5 +87,25 @@ class DailyincomeController extends Controller
             }
             return $span;
         })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date'])->make(true);
+    }
+
+
+    public function export_excel()
+    {
+        return Excel::download(new DailyIncomeExport, 'tes.xlsx');
+    }
+
+    public function PrintStandart($id)
+    {
+
+        $paymen = Payment::find($id);
+        $sub = Subscription::find($paymen->subcription_id);
+        $cus = Customer::find($sub->customer_id);
+        $data = [
+            'page_name' => $sub->invoices,
+            'customer' => $cus,
+            'subcription' => $sub
+        ];
+        return view('pages.customer.print', $data);
     }
 }

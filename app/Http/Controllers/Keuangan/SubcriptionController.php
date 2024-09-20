@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
 use Exception;
@@ -49,7 +50,7 @@ class SubcriptionController extends Controller
             }
 
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id]) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -89,12 +90,13 @@ class SubcriptionController extends Controller
 
     public function PrintStandart($id)
     {
-        $sub = Subscription::find($id);
-        $cus = Customer::find($sub->customer_id);
-        $data = [
-            'customer' => $cus,
-            'subcription' => $sub
-        ];
+            $sub = Subscription::find($id);
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name'=> $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub
+            ];    
 
         return view('pages.customer.print', $data);
     }
