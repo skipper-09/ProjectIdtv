@@ -8,6 +8,7 @@ use App\Http\Controllers\Company\OwnerController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Keuangan\DailyincomeController;
+use App\Http\Controllers\Keuangan\PeriodeIncomeController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
@@ -43,6 +44,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         return redirect()->route('dashboard');
     });
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('can:read-dashboard');
+
+    Route::get('customer-chart', [DashboardController::class, 'getChartData'])->name('customer.chart')->middleware('can:read-dashboard');
 
 
 
@@ -167,6 +170,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             function () {
                 Route::get('', [DailyincomeController::class, 'index'])->name('dailyincome')->middleware('can:read-owner');
                 Route::get('getData', [DailyincomeController::class, 'getData'])->name('dailyincome.getdata');
+            }
+        );
+        Route::prefix('income-periode')->group(
+            function () {
+                Route::post('', [PeriodeIncomeController::class, 'index'])->name('periodeincome')->middleware('can:read-owner');
+                Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
             }
         );
     });

@@ -6,6 +6,35 @@
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
+
+    {{-- button --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.5/css/buttons.dataTables.min.css">
+    <style>
+        .dt-buttons {
+            margin-bottom: 10px;
+        }
+
+        .dt-buttons button {
+            background-color: #04AA6D;
+            /* Green */
+            border-radius: 5px;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .dt-buttons button:hover {
+            background-color: #04AA6D !important;
+            border: none !important;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+        }
+    </style>
 @endpush
 
 @section('main')
@@ -14,7 +43,9 @@
             <div class="section-header">
                 <div class="">
                     <h1>{{ $page_name }}</h1>
-                    <p>Tanggal {{ now()->format('d-m-Y') }}</p>
+                    <p>Mulai Tanggal <strong>{{ $start_date }}</strong> S/d
+                        <strong>{{ $end_date }}</strong>
+                    </p>
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
@@ -47,6 +78,10 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
+                                {{-- <div class="card-header">
+                                    <a href="{{ route('dailyincome.export.excel') }}" class="btn btn-primary">Export
+                                        {{ $page_name }}</a>
+                                </div> --}}
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table-striped table" id="dataTable">
@@ -89,15 +124,30 @@
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/custom.js') }}"></script>
     <!-- Page Specific JS File -->
-
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.print.min.js"></script>
 
     <script>
         $(document).ready(function() {
 
+            var start = @json($start_date);
+            var end = @json($end_date);
+
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('dailyincome.getdata') }}',
+                ajax: {
+                    url: '{{ route('periodeincome.getdata') }}',
+                    data: {
+                        start_date: start,
+                        end_date: end
+                    }
+                },
                 columns: [{
                         name: 'nik',
                         data: 'nik',
@@ -129,10 +179,23 @@
                     @canany(['update-owner', 'delete-owner'])
                         {
                             data: 'action',
-                            name: 'action'
+                            name: 'action',
                         }
                     @endcanany
-                ]
+                ],
+                dom: 'Bfrtip', // This is needed for the buttons to appear
+                buttons: [{
+                    extend: 'csv',
+                    text: 'Export as CSV',
+                    exportOptions: {
+                        columns: ':visible:not(:last-child)' // Export all columns except the last (actions)
+                    },
+                    filename: function() {
+                        var d = new Date();
+                        return 'Data_Income_' + d.getFullYear() + '_' + (d.getMonth() + 1) +
+                            '_' + d.getDate();
+                    }
+                }, ]
             });
 
             @if (Session::has('message'))

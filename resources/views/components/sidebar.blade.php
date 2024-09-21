@@ -101,8 +101,9 @@
                             </li>
                         @endcan
                         @can('read-company')
-                            <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('company') }}">Income Periode</a>
+                            <li class="{{ Request::is('admin/income-periode') ? 'active' : '' }}">
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#showmodalkeu">Income
+                                    Periode</a>
                             </li>
                         @endcan
                         @can('read-company')

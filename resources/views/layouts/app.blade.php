@@ -32,6 +32,16 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .modal-backdrop {
+            z-index: 1040 !important;
+            /* Default z-index untuk backdrop */
+        }
+
+        .modal {
+            z-index: 1050 !important;
+            /* Default z-index untuk modal */
+        }
     </style>
 
     <!-- Start GA -->
@@ -62,9 +72,12 @@
             <!-- Content -->
             @yield('main')
 
+
             <!-- Footer -->
             @include('components.footer')
+
         </div>
+        @include('components.modal-component.incomeperiode')
     </div>
 
     <!-- General JS Scripts -->

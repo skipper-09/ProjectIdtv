@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Keuangan;
 
-use App\Exports\DailyIncomeExport;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Payment;
@@ -11,30 +10,32 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\Console\Input\Input;
+use Yajra\DataTables\Facades\DataTables;
 
-use Yajra\DataTables\DataTables;
-
-class DailyincomeController extends Controller
+class PeriodeIncomeController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
-        $payment = Payment::whereDate('created_at', today())->get();
-
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->get();
         $data = [
             'type_menu' => 'Keuangan',
-            'page_name' => 'Pendapatan Harian',
+            'page_name' => 'Pendapatan Periode',
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'income' => $payment->sum('amount')
 
         ];
-        return view('pages.keuangan.income-harian.index', $data);
+        return view('pages.keuangan.income-periode.index', $data);
     }
-    public function getData()
+    public function getData(Request $request)
     {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', today())->orderByDesc('id')->get();
-
+        $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -43,10 +44,6 @@ class DailyincomeController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-
-
-
-
             if ($userauth->can('delete-customer')) {
                 $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
                                                      class="fa-solid fa-bolt"></i></button>';
