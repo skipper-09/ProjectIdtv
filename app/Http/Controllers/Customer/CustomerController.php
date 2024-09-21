@@ -94,8 +94,8 @@ class CustomerController extends Controller
                                                             class="fa-solid fa-bolt"></i></a>';
             }
             if ($userauth->can('delete-customer')) {
-                $button .= ' <button class="btn btn-sm btn-success action" data-id=' . $customer->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="PRINT TRANSAKSI"><i
-                                                            class="fa-solid fa-print"></i></button>';
+                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id,'type'=>'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
+                class="fa-solid fa-print"></i></a>';
             }
 
             return '<div class="d-flex">' . $button . '</div>';

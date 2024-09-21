@@ -64,7 +64,7 @@
                                                {{ $subcription->invoices}}
                                                 </span></span></td>
                                     <td class="text-center">
-                                        {{ \Carbon\Carbon::parse($subcription->emd_date)->format('F j, Y')}}
+                                        {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y')}}
                                     </td>
                                     <td class="text-center">
                                         {{ $subcription->paket->duration }} Bulan
@@ -107,7 +107,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style=";padding: 3px" class="text-center">{{ \Carbon\Carbon::parse($subcription->emd_date)->format('F j, Y')}}</td>
+                            <td style=";padding: 3px" class="text-center">{{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y')}}</td>
                             <td style=";padding: 3px" class="text-center">Manual</td>
                             <td style=";padding: 3px" class="text-center">{{ $subcription->invoices}}</td>
                             <td style=";padding: 3px" class="text-center">Rp. {{ number_format($subcription->paket->price) }}</td>
@@ -120,11 +120,10 @@
                 <ul style="margin-top: -10px">
                     <li>
                         Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda<br></li>
-                    <li>
-                        Jika informasi pada bukti pembayaran ini ada kesalahan, silahkan hubungi kami<br><br><b>PT CAHAYA
-                            SOLUSINDO INTERNUSA<br>
-                            Jalan Letjen S.Parman no 58 banyuwangi - Jawa Timur<br>
-                            082111777179</b></li>
+                    <li class="w-75">
+                        Jika informasi pada bukti pembayaran ini ada kesalahan, silahkan hubungi kami<br><br><b>{{ $customer->company->name }}<br>
+                            {{ $customer->company->address }}<br>
+                            {{ $customer->company->phone }}</b></li>
                 </ul>
             </span></div>
         <hr>

@@ -80,7 +80,7 @@
                     </li>
                 @endcanany
                 @can('read-customer')
-                    <li class="{{ Request::is('customer') ? 'active' : '' }}">
+                    <li class="{{ Request::is('admin/customer') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('customer') }}"><i class="fas fa-people-group">
                             </i> <span>Customers</span>
                         </a>
@@ -101,7 +101,7 @@
                             </li>
                         @endcan
                         @can('read-company')
-                            <li class="{{ Request::is('admin/income-periode') ? 'active' : '' }}">
+                            <li class="{{ Request::is('admin/keuangan/income-periode') ? 'active' : '' }}">
                                 <a class="nav-link" href="#" data-toggle="modal" data-target="#showmodalkeu">Income
                                     Periode</a>
                             </li>

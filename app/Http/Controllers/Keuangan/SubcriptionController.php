@@ -50,7 +50,7 @@ class SubcriptionController extends Controller
             }
 
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id]) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id,'type'=> 'subscription']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -88,8 +88,12 @@ class SubcriptionController extends Controller
 
 
 
-    public function PrintStandart($id)
+    public function PrintStandart($id,$type)
     {
+
+        
+
+        if ($type === 'subscription') {
             $sub = Subscription::find($id);
             $cus = Customer::find($sub->customer_id);
             $data = [
@@ -98,6 +102,26 @@ class SubcriptionController extends Controller
                 'subcription' => $sub
             ];    
 
+        
+        }elseif ($type === 'income') {
+            $paymen = Payment::find($id);
+            $sub = Subscription::find($paymen->subcription_id);
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub
+            ];
+        }else{
+            $cus = Customer::find($id);
+            $sub = Subscription::where('customer_id',$cus->id)->orderBy('created_at','asc')->first();
+            $paymen = Payment::where('subcription_id',$sub->id)->first();
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub
+            ];
+        }
         return view('pages.customer.print', $data);
     }
 }

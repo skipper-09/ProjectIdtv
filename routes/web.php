@@ -151,8 +151,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 
 
-    Route::get('print-standart/{id}', [SubcriptionController::class, 'PrintStandart'])->name('print.standart');
-    Route::get('print-standart/{id}', [DailyincomeController::class, 'PrintStandart'])->name('print.standart');
+    Route::get('print-standart/{id}/{type}', [SubcriptionController::class, 'PrintStandart'])->name('print.standart');
+    // Route::get('print-standart/{id}', [DailyincomeController::class, 'PrintStandart'])->name('print.standart');
     //route keuangan
     Route::prefix('keuangan')->group(function () {
         Route::prefix('subcription')->group(
