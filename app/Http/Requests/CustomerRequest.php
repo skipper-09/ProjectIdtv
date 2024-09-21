@@ -27,18 +27,28 @@ class CustomerRequest extends FormRequest
         if ($this->isMethod('PUT')) {
             return [
                 'name' => 'required',
-                'ppoe' => 'required',
+                'nik' => 'required',
                 'mac' => 'required',
                 'username' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'paket_id' => 'required',
+                'stb_id' => 'required',
+                'region_id' => 'required',
                 'password' => '',
                 'password_confirmation' => 'same:password'
             ];
         } else {
             return [
                 'name' => 'required',
-                'ppoe' => 'required',
+                'nik' => 'required',
                 'mac' => 'required',
                 'username' => 'required',
+                'address' => 'required',
+                'phone' => 'required',
+                'paket_id' => 'required',
+                'stb_id' => 'required',
+                'region_id' => 'required',
                 'password' => 'required||min:6',
                 'password_confirmation' => 'same:password|required'
             ];
@@ -47,11 +57,11 @@ class CustomerRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'The nama field is required.',
-            'ppoe.required' => 'The ppoe field is required.',
-            'mac.required' => 'The mac field is required.',
-            'username.required' => 'The username field is required.',
-            'password.required' => 'The password field is required.',
+            'name.required' => 'Nama Wajib di Isi',
+            'nik.required' => 'Nik Wajib di Isi',
+            'mac.required' => 'Mac Wajib di Isi',
+            'username.required' => 'Username Wajib di Isi',
+            'password.required' => 'Password Wajib di Isi',
             'password.min' => 'The password must be at least 6 characters long.',
         ];
     }

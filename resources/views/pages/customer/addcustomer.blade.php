@@ -28,7 +28,7 @@
                                 <div class="row">
                                     <div class="form-group col-12 col-md-6">
                                         <label>Nama Client <span class="text-danger">*</span></label>
-                                        <input type="text" name="name"
+                                        <input type="text" name="name" value="{{ old('name') }}"
                                             class="form-control @error('name') is-invalid @enderror"
                                             placeholder="Nama Customer">
                                         @error('name')
@@ -39,7 +39,7 @@
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Mac <span class="text-danger">*</span></label>
-                                        <input type="text" name="mac"
+                                        <input type="text" name="mac" value="{{ old('mac') }}"
                                             class="form-control @error('mac') is-invalid @enderror" placeholder="Mac STB">
                                         @error('mac')
                                             <div class="invalid-feedback">
@@ -49,11 +49,16 @@
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Alamat <span class="text-danger">*</span></label>
-                                        <input type="text" name="address" class="form-control" placeholder="Alamat">
+                                        <input type="text" value="{{ old('address') }}" name="address" class="form-control @error('address') is-invalid @enderror"" placeholder="Alamat">
+                                        @error('address')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Nik<span class="text-danger">*</span></label>
-                                        <input type="text" name="nik"
+                                        <input type="number" name="nik" value="{{ old('nik') }}"
                                             class="form-control @error('nik') is-invalid @enderror" placeholder="Nik">
                                         @error('nik')
                                             <div class="invalid-feedback">
@@ -63,11 +68,16 @@
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>No Telepon<span class="text-danger">*</span></label>
-                                        <input type="text" name="phone" class="form-control" placeholder="No Telepon">
+                                        <input type="number" value="{{ old('phone') }}" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="No Telepon">
+                                        @error('phone')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Username<span class="text-danger">*</span></label>
-                                        <input type="text" name="username"
+                                        <input type="text" name="username" value="{{ old('username') }}"
                                             class="form-control @error('username') is-invalid @enderror"
                                             placeholder="Username">
                                         @error('username')
@@ -99,41 +109,57 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-12 col-md-12">
-                                        <label>Paket Pelanggan <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="paket_id">
-                                            <option value="">Pilih Paket</option>
-                                            @foreach ($paket as $s)
-                                                <option value="{{ $s->id }}">{{ $s->name }} - Rp. {{ number_format($s->price) }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12 col-md-6">
-                                        <label>Type STB <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="stb_id">
-                                            <option value="">Pilih Type STB</option>
-                                            @foreach ($stb as $s)
-                                                <option value="{{ $s->id }}">{{ $s->name }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12 col-md-6">
-                                        <label>Area <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="region_id">
-                                            <option value="">Pilih Area</option>
-                                            @foreach ($region as $s)
-                                                <option value="{{ $s->id }}">{{ $s->name }} </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-12 col-md-12">
                                         <label>Perusahaan <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="company_id">
+                                        <select class="form-control select2" name="company_id" id="company">
                                             <option value="">Pilih Perusahaan</option>
                                             @foreach ($company as $item)
                                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Paket Pelanggan <span class="text-danger">*</span></label>
+                                        <select class="form-control  @error('paket_id') is-invalid @enderror select2" name="paket_id" id="package">
+                                            <option value="">Pilih Paket</option>
+                                            @foreach ($paket as $s)
+                                                <option value="{{ $s->id }}">{{ $s->name }} - Rp. {{ number_format($s->price) }} </option>
+                                            @endforeach
+                                        </select>
+                                        @error('paket_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Type STB <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('stb_id') is-invalid @enderror select2" name="stb_id">
+                                            <option value="">Pilih Type STB</option>
+                                            @foreach ($stb as $s)
+                                                <option value="{{ $s->id }}">{{ $s->name }} </option>
+                                            @endforeach
+                                        </select>
+                                        @error('stb_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-12 col-md-6">
+                                        <label>Area <span class="text-danger">*</span></label>
+                                        <select class="form-control @error('region_id') is-invalid @enderror select2" name="region_id">
+                                            <option value="">Pilih Area</option>
+                                            @foreach ($region as $s)
+                                                <option value="{{ $s->id }}">{{ $s->name }} </option>
+                                            @endforeach
+                                        </select>
+                                        @error('region_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                    
                                     <div class="form-group col-12 col-md-6">
                                         <label>Jatuh Tempo <span class="text-danger">*</span></label>
                                         <input type="date" name="end_date"
@@ -172,6 +198,29 @@
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <!-- Page Specific JS File -->
 
+{{-- <script>
+     $('#company').on('change', function() {
+        var company_id = $(this).val();
+
+        if(company_id) {
+            $.ajax({
+                url: "{{ route('customer.getpaket', ':company_id') }}".replace(':company_id', company_id),
+                type: "GET",
+                dataType: "json",
+                success: function(data) {
+                    $('#package').empty();
+                    $('#package').append('<option value="">Pilih Paket</option>');
+                    $.each(data, function(key, value) {
+                        $('#package').append('<option value="'+ value.id +'">'+ value.name +' - ' + value.price +'</option>');
+                    });
+                }
+            });
+        } else {
+            $('#package').empty();
+            $('#package').append('<option value="">Pilih Paket</option>');
+        }
+    });
+</script> --}}
 
     {{-- <script>
     $(document).ready(function($) {

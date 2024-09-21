@@ -118,7 +118,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('', [CustomerController::class, 'index'])->name('customer')->middleware('can:read-customer');
             Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
             Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
-            Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');
+            // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
+            // Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');
             Route::get('/tambah', [CustomerController::class, 'create'])->name('customer.add')->middleware('can:create-customer');
             Route::post('store', [CustomerController::class, 'store'])->name('customer.store');
             Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');

@@ -32,11 +32,11 @@ class CustomerController extends Controller
     }
 
 
-    public function getcompany(Request $request)
-    {
-        $data['company_id'] = Region::where('company_id', $request->company_id)->get();
-        return response()->json($data);
-    }
+    // public function getcompany(Request $request)
+    // {
+    //     $data['company_id'] = Region::where('company_id', $request->company_id)->get();
+    //     return response()->json($data);
+    // }
 
 
     public function getData()
@@ -117,10 +117,10 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request,)
+    public function store(CustomerRequest $request,)
     {
         // dd($request);
-        //  $request->validated();
+        $request->validated();
         $customer = Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -248,4 +248,11 @@ class CustomerController extends Controller
             ]);
         }
     }
+
+
+    // public function getPaket($company_id){
+    //     $packages = Package::where('company_id', $company_id)->get();
+
+    // return response()->json($packages);
+    // }
 }
