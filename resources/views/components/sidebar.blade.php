@@ -131,6 +131,11 @@
                                 <a class="nav-link" href="{{ route('user') }}">User</a>
                             </li>
                         @endcan
+                        @can('read-users')
+                            <li class="{{ Request::is('admin/settings/log-activity') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('log') }}">Log Activity</a>
+                            </li>
+                        @endcan
 
                     </ul>
                 </li>

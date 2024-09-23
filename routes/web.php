@@ -13,6 +13,7 @@ use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
+use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
 use Illuminate\Support\Facades\Route;
@@ -200,6 +201,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [UserController::class, 'show'])->name('user.edit')->middleware('can:update-users');
             Route::put('/update/{id}', [UserController::class, 'update'])->name('user.update');
             Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('user.delete')->middleware('can:delete-users');
+        });
+        Route::prefix('log-activity')->group(function () {
+            Route::get('', [LogController::class, 'index'])->name('log')->middleware('can:read-users');
+            Route::get('getData', [LogController::class, 'getData'])->name('log.getdata');
         });
     });
 });

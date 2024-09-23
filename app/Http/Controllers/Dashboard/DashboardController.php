@@ -15,12 +15,17 @@ class DashboardController extends Controller
 {
   public function index()
   {
+    $lastactivity = Activity::orderBy('created_at', 'desc')->take(5)->get();
+    // Decode JSON properties
+    foreach ($lastactivity as $activity) {
+      $activity->properties = json_decode($activity->properties, true);
+  }
     $data = [
       'chanel' => Chanel::all(),
       'company' => Company::all(),
       'customer' => Customer::all(),
       'income' => Payment::all(),
-      // 'log' => Activity::all(),
+      'log' =>  $lastactivity,
       'type_menu' => 'dashboard',
       'page_name' => 'Dashboard',
     ];

@@ -70,7 +70,7 @@ class PeriodeIncomeController extends Controller
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->end_date;
         })->editColumn('created_at', function ($data) {
             return
-                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at, 'UTC')
+                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
                 ->setTimezone(config('app.timezone'))
                 ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {

@@ -85,7 +85,9 @@ class CategoryChanelcontroller extends Controller
     public function destroy($id)
     {
         try {
-            Categori::where('id', $id)->delete();
+           $categori= Categori::findOrFail($id);
+           $categori->delete();
+         
             //return response
             return response()->json([
                 'status' => 'success',
