@@ -110,16 +110,17 @@
                                     </div>
                                     <div class="form-group col-12 col-md-12">
                                         <label>Perusahaan <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" name="company_id" id="company">
+                                        <select class="form-control select2" name="company_id">
                                             <option value="">Pilih Perusahaan</option>
                                             @foreach ($company as $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group col-12 col-md-12">
                                         <label>Paket Pelanggan <span class="text-danger">*</span></label>
-                                        <select class="form-control  @error('paket_id') is-invalid @enderror select2" name="paket_id" id="package">
+                                        <select class="form-control select2 @error('paket_id') is-invalid @enderror" name="paket_id" id="package">
                                             <option value="">Pilih Paket</option>
                                             @foreach ($paket as $s)
                                                 <option value="{{ $s->id }}">{{ $s->name }} - Rp. {{ number_format($s->price) }} </option>
@@ -199,41 +200,10 @@
     <!-- Page Specific JS File -->
 
 {{-- <script>
-     $('#company').on('change', function() {
-        var company_id = $(this).val();
+    $(document).ready(function() {
+    // Inisialisasi Select2 setelah halaman siap
+    $('.select2').select2();
+}); --}}
 
-        if(company_id) {
-            $.ajax({
-                url: "{{ route('customer.getpaket', ':company_id') }}".replace(':company_id', company_id),
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    $('#package').empty();
-                    $('#package').append('<option value="">Pilih Paket</option>');
-                    $.each(data, function(key, value) {
-                        $('#package').append('<option value="'+ value.id +'">'+ value.name +' - ' + value.price +'</option>');
-                    });
-                }
-            });
-        } else {
-            $('#package').empty();
-            $('#package').append('<option value="">Pilih Paket</option>');
-        }
-    });
-</script> --}}
-
-    {{-- <script>
-    $(document).ready(function($) {
-            $('#extension').change(function() {
-                var selected = $('#extension').val()
-                if (selected == 'mpd') {
-                    $('#security').removeClass('d-none');
-                    $('#security-type').removeClass('d-none');
-                } else {
-                    $('#security').addClass('d-none');
-                    $('#security-type').addClass('d-none');
-                }
-            });
-        });
-</script> --}}
+</script>
 @endpush

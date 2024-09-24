@@ -93,7 +93,8 @@ class StbController extends Controller
     public function destroy($id)
     {
         try {
-            $stb = Stb::where('id', $id)->delete();
+            $stb = Stb::findOrFail($id);
+            $stb->delete();
             return response()->json([
                 'status' => 'success',
                 'success' => true,

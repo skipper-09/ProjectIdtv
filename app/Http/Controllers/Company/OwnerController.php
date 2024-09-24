@@ -106,7 +106,8 @@ class OwnerController extends Controller
     public function destroy($id)
     {
         try {
-            owner::where('id', $id)->delete();
+            $owner = owner::findOrFail($id);
+            $owner->delete();
             //return response
             return response()->json([
                 'status' => 'success',

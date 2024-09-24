@@ -27,6 +27,7 @@ class PermissionSeeder extends Seeder
             'read-region', 'create-region', 'update-region', 'delete-region',
             'read-stb', 'create-stb', 'update-stb', 'delete-stb',
             'read-paket', 'create-paket', 'update-paket', 'delete-paket',
+            'delete-log',
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];

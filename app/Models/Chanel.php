@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Chanel extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
     protected $fillable = [
         'name',
         'categori_id',
@@ -36,5 +38,16 @@ class Chanel extends Model
         static::creating(function ($channel) {
             $channel->replacement_url = Str::uuid(); // atau metode lain untuk menghasilkan URL unik
         });
+    }
+
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults() ->useLogName('Chanel')->logOnly(['name']);
+    }
+
+    public function getDescriptionForEvent(string $event): string
+    {
+        return "Chanel has been {$event}"; // Mengembalikan deskripsi sesuai dengan event
     }
 }

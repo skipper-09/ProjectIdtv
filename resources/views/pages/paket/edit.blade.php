@@ -69,6 +69,6 @@
 
 @push('scripts')
 <!-- JS Libraies -->
-
+<script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 <!-- Page Specific JS File -->
 @endpush

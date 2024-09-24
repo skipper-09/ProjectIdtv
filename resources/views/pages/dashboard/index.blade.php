@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
+<link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
 @endpush
 
 @section('main')
@@ -108,7 +109,7 @@
                                     alt="avatar">
                                 <div class="media-body">
                                     <div class="text-primary float-right">{{ $item->created_at }}</div>
-                                    <div class="media-title">{{$item->causer['name']}}</div>
+                                    <div class="media-title">{{$item->causer->name ?? 'N/A'}}</div>
                                     <span class="text-small text-muted"> {{$item->description}}</span>
                                     <span class="text-small text-muted">
                                         @if ($item->event == 'updated')
@@ -136,7 +137,7 @@
 
                         </ul>
                         <div class="pt-1 pb-1 text-center">
-                            <a href="#" class="btn btn-primary btn-lg btn-round">
+                            <a href="{{ route('log') }}" class="btn btn-primary btn-lg btn-round">
                                 View All
                             </a>
                         </div>
@@ -158,6 +159,7 @@
 <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
 <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
 <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
+<script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
 <!-- Page Specific JS File -->
 {{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}

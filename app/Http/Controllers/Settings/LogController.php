@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +33,34 @@ class LogController extends Controller
             ->format('Y-m-d H:i:s');
         })->editColumn('description',function($data){
             $properties = json_decode($data->properties, true);
-            $old = isset($properties['old']) ? json_encode($properties['old']) : 'N/A';
-            $new = isset($properties['attributes']) ? json_encode($properties['attributes']) : 'N/A';
-            return "{$data->description}<br>Old Values: {$old}<br>New Values: {$new}";
+            $old = isset($properties['old']) ? implode(',',$properties['old']) : 'N/A';
+            $new = isset($properties['attributes']) ? implode(', ', $properties['attributes']) : 'N/A';
+            $result = '';
+            if ($data->event == 'update') {
+                $result = "{$data->description} <strong>{$old}</strong> to <strong>{$new}</strong>";
+            }elseif($data->event =='created'){
+                $result = "{$data->description} <strong>{$new}</strong>";
+            }else{
+                $result = "{$data->description} <strong>{$old}</strong>";
+            }
+            return $result;
         })->rawColumns(['causer','created_at','description'])->make(true);
+    }
+
+
+    public function cleanlog(){
+        try{
+            Activity::truncate();
+        return response()->json([
+            'status' => 'success',
+            'success' => true,
+            'message' => 'User Berhasil Dihapus!.',
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'message' => $e->getMessage(),
+            'trace' => $e->getTrace()
+        ]);
+    }
     }
 }

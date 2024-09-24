@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -10,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Input\Input;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,6 +21,8 @@ class PeriodeIncomeController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $company_id = $request->input('company_id');
+        
         $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->get();
         $data = [
             'type_menu' => 'Keuangan',
@@ -34,8 +38,10 @@ class PeriodeIncomeController extends Controller
     {
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
-
+        $company_id = $request->input('company_id');
+        
         $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
             $userauth = User::with('roles')->where('id', Auth::id())->first();

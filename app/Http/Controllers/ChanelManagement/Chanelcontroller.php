@@ -193,7 +193,8 @@ class Chanelcontroller extends Controller
                 }
             }
 
-            Chanel::where('id', $id)->delete();
+            $chanel = Chanel::findOrFail($id);
+            $chanel->delete();
             //return response
             return response()->json([
                 'status' => 'success',

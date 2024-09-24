@@ -234,7 +234,8 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         try {
-            Customer::where('id', $id)->delete();
+            $customer = Customer::findOrFail($id);
+            $customer->delete();
             //return response
             return response()->json([
                 'status' => 'success',

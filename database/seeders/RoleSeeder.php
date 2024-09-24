@@ -31,6 +31,7 @@ class RoleSeeder extends Seeder
             'read-region', 'create-region', 'update-region', 'delete-region',
             'read-stb', 'create-stb', 'update-stb', 'delete-stb',
             'read-paket', 'create-paket', 'update-paket', 'delete-paket',
+            'delete-log'
         ]);
 
         $administrator->givePermissionTo([
@@ -45,6 +46,7 @@ class RoleSeeder extends Seeder
             'read-region', 'create-region', 'update-region', 'delete-region',
             'read-stb', 'create-stb', 'update-stb', 'delete-stb',
             'read-paket', 'create-paket', 'update-paket', 'delete-paket',
+            'delete-log'
         ]);
 
         $staff->givePermissionTo([

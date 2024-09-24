@@ -4,6 +4,7 @@
 
 @push('style')
 <!-- CSS Libraries -->
+<link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
 @endpush
 
 @section('main')
@@ -45,6 +46,6 @@
 
 @push('scripts')
 <!-- JS Libraies -->
-
+<script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 <!-- Page Specific JS File -->
 @endpush

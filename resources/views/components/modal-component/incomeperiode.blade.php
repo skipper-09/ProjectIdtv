@@ -25,10 +25,21 @@
                         </div>
                     @enderror
                 </div>
+                <div class="form-group col-12 col-md-12">
+                    <label>Perusahaan <span class="text-danger">*</span></label>
+                    <select class="form-control select2" name="company_id">
+                        <option value="">Pilih Perusahaan</option>
+                        @foreach ($companies as $item)
+                            <option value="{{ $item->id }}">
+                                {{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class=" text-left">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </form>
+    
 @endsection

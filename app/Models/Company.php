@@ -31,4 +31,10 @@ class Company extends Model
     {
         return $this->belongsTo(owner::class, 'owner_id', 'id');
     }
+
+    //static get all self item
+    public static function getAllItems()
+    {
+        return self::all(); // Mengambil semua data dari model Item
+    }
 }

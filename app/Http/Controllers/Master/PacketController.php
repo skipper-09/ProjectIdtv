@@ -99,7 +99,8 @@ class PacketController extends Controller
     public function destroy($id)
     {
         try {
-            $stb = Package::where('id', $id)->delete();
+            $paket = Package::findOrFail($id);
+            $paket->delete();
             return response()->json([
                 'status' => 'success',
                 'success' => true,

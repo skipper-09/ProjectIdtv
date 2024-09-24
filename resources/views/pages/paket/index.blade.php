@@ -68,7 +68,7 @@
     <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
-
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <!-- Page Specific JS File -->
     <script src="{{ asset('js/custom.js') }}"></script>
     <!-- Page Specific JS File -->

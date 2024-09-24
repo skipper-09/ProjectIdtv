@@ -20,6 +20,9 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
+    
+    
+    {{-- <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}"> --}}
     <style>
         /* Chrome, Safari, Edge, Opera */
         input::-webkit-outer-spin-button,
@@ -77,8 +80,8 @@
             @include('components.footer')
 
         </div>
-        @include('components.modal-component.incomeperiode')
     </div>
+    @include('components.modal-component.incomeperiode',['companies'=>$companies])
 
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
@@ -96,6 +99,15 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+
+
+    <script>
+        $(document).ready(function() {
+    // Inisialisasi Select2 setelah halaman siap
+        $('.select2').select2();});
+
+    </script>
+
 </body>
 
 </html>
