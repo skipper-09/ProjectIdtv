@@ -107,8 +107,8 @@
                             </li>
                         @endcan
                         @can('read-company')
-                            <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                                <a class="nav-link" href="{{ route('company') }}">Statistik</a>
+                            <li class="{{ Request::is('admin/keuangan/statistik') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('statistik') }}">Statistik</a>
                             </li>
                         @endcan
                     </ul>

@@ -9,6 +9,7 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Keuangan\DailyincomeController;
 use App\Http\Controllers\Keuangan\PeriodeIncomeController;
+use App\Http\Controllers\Keuangan\StatistikController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
@@ -177,6 +178,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::prefix('income-periode')->group(
             function () {
                 Route::post('', [PeriodeIncomeController::class, 'index'])->name('periodeincome')->middleware('can:read-owner');
+                Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
+            }
+        );
+        Route::prefix('statistik')->group(
+            function () {
+                Route::get('', [StatistikController::class, 'index'])->name('statistik')->middleware('can:read-owner');
                 Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
             }
         );

@@ -23,15 +23,20 @@ class PeriodeIncomeController extends Controller
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
         $company = Company::find($company_id);
-        
-        $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->get();
+        if ($company_id == null) {
+            $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        } else {
+            $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                $query->where('company_id', $company_id);
+            })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        }
         $data = [
             'type_menu' => 'Keuangan',
             'page_name' => 'Pendapatan Periode',
             'start_date' => $startDate,
             'end_date' => $endDate,
-            'company_id'=>$company_id,
-            'company'=>$company->name,
+            'company_id' => $company_id,
+            'company' => $company == null ? 'Semua Perusahaan' : $company->name,
             'income' => $payment->sum('amount')
 
         ];
@@ -42,12 +47,15 @@ class PeriodeIncomeController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
-        
-        
-        $payment = Payment::whereHas('customer', function ($query) use($company_id)  {
-            $query->where('company_id', $company_id);
-        })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
-        
+
+        if ($company_id == null) {
+            $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        } else {
+            $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                $query->where('company_id', $company_id);
+            })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        }
+
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -63,7 +71,7 @@ class PeriodeIncomeController extends Controller
 
 
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id,'type'=>'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -97,7 +105,7 @@ class PeriodeIncomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner'])->make(true);
     }
 
 

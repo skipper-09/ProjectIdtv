@@ -1,42 +1,13 @@
 @extends('layouts.app')
 
-@section('main')
-    @extends('layouts.app')
-
 @section('title', $page_name)
 
 @push('style')
     <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/jqvmap/dist/jqvmap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/summernote/dist/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
-
-    {{-- button --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.5/css/buttons.dataTables.min.css">
-    <style>
-        .dt-buttons {
-            margin-bottom: 10px;
-        }
-
-        .dt-buttons button {
-            background-color: #04AA6D;
-            /* Green */
-            border-radius: 5px;
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .dt-buttons button:hover {
-            background-color: #04AA6D !important;
-            border: none !important;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border-radius: 5px;
-        }
+    <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     </style>
 @endpush
 
@@ -45,38 +16,17 @@
         <section class="section">
             <div class="section-header">
                 <div class="">
-                    <h1>{{ $page_name }}</h1>
-                    <p>Mulai Tanggal <strong>{{ $start_date }}</strong> S/d
-                        <strong>{{ $end_date }}</strong>
-                    </p>
+                    <h1>{{ $page_name }} {{ date('Y') }}</h1>
+
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-                    <div class="breadcrumb-item">{{ $page_name }}</div>
+                    <div class="breadcrumb-item">{{ $page_name }} {{ date('Y') }}</div>
                 </div>
             </div>
 
-            <div class="section-body">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-success ">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>FROFIT (IDR)</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ number_format($income) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                </div>
-                {{-- <h2 class="section-title">This is Example Page</h2>
-            <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
+            <div class="section-body">
                 <div class="section-body">
                     <div class="row">
                         <div class="col-12">
@@ -86,130 +36,67 @@
                                         {{ $page_name }}</a>
                                 </div> --}}
                                 <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table-striped table" id="dataTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nik</th>
-                                                    <th>Nama</th>
-                                                    <th>Paket</th>
-                                                    <th>Perpanjang</th>
-                                                    <th>Deadline</th>
-                                                    <th>Status</th>
-                                                    <th>Tanggal Bayar</th>
-                                                    @canany(['update-owner', 'delete-owner'])
-                                                        <th>Action</th>
-                                                    @endcanany
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
+                                    <canvas id="myChart" height="182"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
     </div>
 
 
-@endsection
+    @push('scripts')
+        <!-- JS Libraies -->
+        <script src="{{ asset('library/simpleweather/jquery.simpleWeather.min.js') }}"></script>
+        <script src="{{ asset('library/chart.js/dist/Chart.min.js') }}"></script>
+        <script src="{{ asset('library/jqvmap/dist/jquery.vmap.min.js') }}"></script>
+        <script src="{{ asset('library/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
+        <script src="{{ asset('library/summernote/dist/summernote-bs4.min.js') }}"></script>
+        <script src="{{ asset('library/chocolat/dist/js/jquery.chocolat.min.js') }}"></script>
+        <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
+        <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
-@push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
-    <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
 
-    <!-- Page Specific JS File -->
-    <script src="{{ asset('js/custom.js') }}"></script>
-    <!-- Page Specific JS File -->
-    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.print.min.js"></script>
+        <script>
+            $(document).ready(function() {
 
-    <script>
-        $(document).ready(function() {
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var data = @json($data);
+                const months = [];
+                for (let i = 0; i < 12; i++) {
+                    const month = new Date(0, i).toLocaleString('default', {
+                        month: 'long'
+                    });
+                    months.push(month);
+                }
 
-            var start = @json($start_date);
-            var end = @json($end_date);
-
-            $('#dataTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: '{{ route('periodeincome.getdata') }}',
+                var chart = new Chart(ctx, {
+                    type: 'line',
                     data: {
-                        start_date: start,
-                        end_date: end
-                    }
-                },
-                columns: [{
-                        name: 'nik',
-                        data: 'nik',
+                        labels: months,
+                        datasets: [{
+                            label: 'Pendapatan',
+                            data: Object.values(data),
+                            borderWidth: 3,
+                            borderColor: "#6777ef",
+                            backgroundColor: "#6777ef",
+                            pointBackgroundColor: "#fff",
+                            pointBorderColor: "#6777ef",
+                            pointRadius: 4,
+                            tension: 0.1
+                        }]
                     },
-                    {
-                        name: 'customer',
-                        data: 'customer',
-                    },
-                    {
-                        name: 'paket',
-                        data: 'paket',
-                    },
-                    {
-                        name: 'start_date',
-                        data: 'start_date',
-                    },
-                    {
-                        name: 'end_date',
-                        data: 'end_date',
-                    },
-                    {
-                        name: 'status',
-                        data: 'status',
-                    },
-                    {
-                        name: 'created_at',
-                        data: 'created_at',
-                    },
-                    @canany(['update-owner', 'delete-owner'])
-                        {
-                            data: 'action',
-                            name: 'action',
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: 50
+                            }
                         }
-                    @endcanany
-                ],
-                dom: 'Bfrtip', // This is needed for the buttons to appear
-                buttons: [{
-                    extend: 'csv',
-                    text: 'Export as CSV',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Export all columns except the last (actions)
-                    },
-                    filename: function() {
-                        var d = new Date();
-                        return 'Data_Income_' + d.getFullYear() + '_' + (d.getMonth() + 1) +
-                            '_' + d.getDate();
                     }
-                }, ]
-            });
-
-            @if (Session::has('message'))
-                iziToast.success({
-                    title: `{{ Session::get('status') }}`,
-                    message: `{{ Session::get('message') }}`,
-                    position: 'topRight'
                 });
-            @endif
-        });
-    </script>
-@endpush
-
+            });
+        </script>
+    @endpush
 @endsection
