@@ -33,7 +33,7 @@ class DailyincomeController extends Controller
     public function getData()
     {
 
-        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', today())->orderByDesc('id')->get();
+        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', now())->orderByDesc('id')->get();
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -63,6 +63,8 @@ class DailyincomeController extends Controller
             return $data->customer->nik;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
+        })->editColumn('owner', function ($data) {
+            return $data->customer->company->name;
         })->editColumn('paket', function ($data) {
             return $data->subscrib->paket->name;
         })->editColumn('start_date', function ($data) {
@@ -86,7 +88,7 @@ class DailyincomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner'])->make(true);
     }
 
 

@@ -42,7 +42,7 @@
         <section class="section">
             <div class="section-header">
                 <div class="">
-                    <h1>{{ $page_name }}</h1>
+                    <h1>{{ $page_name }} - {{ $company }}</h1>
                     <p>Mulai Tanggal <strong>{{ $start_date }}</strong> S/d
                         <strong>{{ $end_date }}</strong>
                     </p>
@@ -94,6 +94,7 @@
                                                     <th>Deadline</th>
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
+                                                    <th>Owner</th>
                                                     @canany(['update-owner', 'delete-owner'])
                                                         <th>Action</th>
                                                     @endcanany
@@ -132,12 +133,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.5/js/buttons.print.min.js"></script>
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
 
             var start = @json($start_date);
             var end = @json($end_date);
+            var company_id = @json($company_id);
 
             $('#dataTable').DataTable({
                 processing: true,
@@ -146,7 +149,8 @@
                     url: '{{ route('periodeincome.getdata') }}',
                     data: {
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        company_id:company_id
                     }
                 },
                 columns: [{
@@ -176,6 +180,10 @@
                     {
                         name: 'created_at',
                         data: 'created_at',
+                    },
+                    {
+                        name: 'owner',
+                        data: 'owner',
                     },
                     @canany(['update-owner', 'delete-owner'])
                         {

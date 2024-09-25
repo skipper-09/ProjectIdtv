@@ -22,6 +22,7 @@ class PeriodeIncomeController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
+        $company = Company::find($company_id);
         
         $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->get();
         $data = [
@@ -29,6 +30,8 @@ class PeriodeIncomeController extends Controller
             'page_name' => 'Pendapatan Periode',
             'start_date' => $startDate,
             'end_date' => $endDate,
+            'company_id'=>$company_id,
+            'company'=>$company->name,
             'income' => $payment->sum('amount')
 
         ];
@@ -40,7 +43,10 @@ class PeriodeIncomeController extends Controller
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
         
-        $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        
+        $payment = Payment::whereHas('customer', function ($query) use($company_id)  {
+            $query->where('company_id', $company_id);
+        })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
         
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -68,6 +74,8 @@ class PeriodeIncomeController extends Controller
             return $data->customer->name;
         })->editColumn('paket', function ($data) {
             return $data->subscrib->paket->name;
+        })->editColumn('owner', function ($data) {
+            return $data->customer->company->name;
         })->editColumn('start_date', function ($data) {
             return
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date;
@@ -89,7 +97,7 @@ class PeriodeIncomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner'])->make(true);
     }
 
 
