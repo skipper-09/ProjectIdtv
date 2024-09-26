@@ -58,14 +58,14 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Pemilik<span class="text-danger">*</span></label>
-                            <select class="form-control select2 @error('owner_id') is-invalid @enderror"
-                                name="owner_id">
+                            <select class="form-control select2 @error('user_id') is-invalid @enderror"
+                                name="user_id">
                                 <option value="">Pilih Pemilik</option>
                                 @foreach ($owner as $k)
                                 <option value="{{ $k->id }}">{{ $k->name }} </option>
                                 @endforeach
                             </select>
-                            @error('owner_id')
+                            @error('user_id')
                             <div class="invalid-feedback">
                                 {{$message}}
                             </div>

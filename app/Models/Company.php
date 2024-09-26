@@ -14,7 +14,7 @@ class Company extends Model
         'phone',
         'email',
         'is_active',
-        'owner_id',
+        'user_id',
 
     ];
     protected $primaryKey = 'id';
@@ -29,7 +29,7 @@ class Company extends Model
     }
     public function owner()
     {
-        return $this->belongsTo(owner::class, 'owner_id', 'id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     //static get all self item

@@ -26,7 +26,7 @@ class CompanyController extends Controller
 
     public function getData()
     {
-        $company = Company::with('owner')->get();
+        $company = Company::with('owner')->orderBy('id','asc')->get();
         return DataTables::of($company)->addIndexColumn()->addColumn('action', function ($company) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -46,10 +46,11 @@ class CompanyController extends Controller
 
     public function create()
     {
+        
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Tambah Perusahaan',
-            'owner' => owner::doesntHave('company')->get()
+            'owner' => User::whereDoesntHave('company')->get()
         ];
         return view('pages.company.company.addcompany', $data);
     }
@@ -61,14 +62,14 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
-            'owner_id' => $request->owner_id
+            'user_id' => $request->user_id
         ]);
 
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Prusahaan!']);
     }
 
 
-    public function show(owner $owner, $id)
+    public function show(User $owner, $id)
     {
         $company = Company::find($id);
         $data = [
@@ -90,7 +91,7 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
-            'owner_id' => $request->owner_id
+            'user_id' => $request->user_id
         ]);
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Data Perusahaan!']);
     }

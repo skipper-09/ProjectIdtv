@@ -132,17 +132,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     //route company
     Route::prefix('company')->group(function () {
-        Route::prefix('owner')->group(
-            function () {
-                Route::get('', [OwnerController::class, 'index'])->name('owner')->middleware('can:read-owner');
-                Route::get('getData', [OwnerController::class, 'getData'])->name('owner.getdata');
-                Route::get('/tambah', [OwnerController::class, 'create'])->name('owner.add')->middleware('can:create-owner');
-                Route::post('store', [OwnerController::class, 'store'])->name('owner.store');
-                Route::get('/edit/{id}', [OwnerController::class, 'show'])->name('owner.edit')->middleware('can:update-owner');
-                Route::put('/update/{id}', [OwnerController::class, 'update'])->name('owner.update');
-                Route::delete('/delete/{id}', [OwnerController::class, 'destroy'])->name('owner.delete')->middleware('can:delete-owner');
-            }
-        );
+        // Route::prefix('owner')->group(
+        //     function () {
+        //         Route::get('', [OwnerController::class, 'index'])->name('owner')->middleware('can:read-owner');
+        //         Route::get('getData', [OwnerController::class, 'getData'])->name('owner.getdata');
+        //         Route::get('/tambah', [OwnerController::class, 'create'])->name('owner.add')->middleware('can:create-owner');
+        //         Route::post('store', [OwnerController::class, 'store'])->name('owner.store');
+        //         Route::get('/edit/{id}', [OwnerController::class, 'show'])->name('owner.edit')->middleware('can:update-owner');
+        //         Route::put('/update/{id}', [OwnerController::class, 'update'])->name('owner.update');
+        //         Route::delete('/delete/{id}', [OwnerController::class, 'destroy'])->name('owner.delete')->middleware('can:delete-owner');
+        //     }
+        // );
 
         Route::get('', [CompanyController::class, 'index'])->name('company')->middleware('can:read-company');
         Route::get('getData', [CompanyController::class, 'getData'])->name('company.getdata');

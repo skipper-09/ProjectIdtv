@@ -66,11 +66,11 @@
                         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-building"></i>
                             <span>Perusahaan</span></a>
                         <ul class="dropdown-menu">
-                            @can('read-owner')
+                            {{-- @can('read-owner')
                                 <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
                                 </li>
-                            @endcan
+                            @endcan --}}
                             @can('read-company')
                                 <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('company') }}">Perusahaan</a>

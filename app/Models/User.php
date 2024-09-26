@@ -47,6 +47,12 @@ class User extends Authenticatable
     ];
 
 
+    public function company()
+    {
+        return $this->hasMany(Company::class);
+    }
+
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults() ->useLogName('User')->logOnly(['name','username','email']);

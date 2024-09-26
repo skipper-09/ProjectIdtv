@@ -99,8 +99,10 @@
                         name: 'email'
                     },
                     {
-                        data: 'roles[0].name',
-                        name: 'roles[0].name'
+                        data: 'roles.name',
+                        name: 'roles.name',
+                        orderable: false,
+                        searchable: false,
                     },
                     {
                         data: 'action',

@@ -67,7 +67,7 @@
                                     <option value="">Pilih Pemilik</option>
                                     @foreach ($owner as $k)
                                         <option value="{{ $k->id }}"
-                                            {{ $k->id == $company->owner_id ? ' selected' : '' }}>{{ $k->name }}
+                                            {{ $k->id == $company->user_id ? ' selected' : '' }}>{{ $k->name }} - {{ $k->roles->name }}
                                         </option>
                                     @endforeach
                                 </select>

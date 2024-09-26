@@ -28,7 +28,19 @@ class CompanyRequest extends FormRequest
             'address' => 'required',
             'email' => 'required|email',
             'phone' => 'required|integer',
-            'owner_id' => 'required'
+            'user_id' => 'required'
+        ];
+    }
+
+
+    public function messages(){
+        return[
+            'name.required' => 'Nama Perusahaan Wajib Diisi',
+            'address.required' => 'Alamat Perusahaan Wajib Diisi',
+            'email' => 'Email Perusahaan Wajib Diisi',
+            'phone.required' => 'Nomor Hp Perusahaan Wajib Diisi',
+            'phone.integer'=> 'Hanya inputkan Nomor',
+            'user_id.required' => 'Pemilik Perusahaan Wajib Diisi',
         ];
     }
 }
