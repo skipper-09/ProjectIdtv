@@ -14,7 +14,9 @@ class Subscription extends Model
         'invoices',
         'start_date',
         'end_date',
-        'status'
+        'status',
+        'fee',
+        'is_claim'
     ];
     protected $primaryKey = 'id';
 

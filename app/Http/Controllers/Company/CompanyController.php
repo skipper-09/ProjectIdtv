@@ -41,7 +41,9 @@ class CompanyController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('owner_id', function ($company) {
             return $company->owner->name;
-        })->rawColumns(['action', 'owner_id'])->make(true);
+        })->editColumn('fee_reseller', function ($company) {
+            return 'Rp '. number_format($company->fee_reseller);
+        })->rawColumns(['action', 'owner_id','fee_reseller'])->make(true);
     }
 
     public function create()

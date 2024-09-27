@@ -69,7 +69,7 @@
                                     <td class="text-center">
                                         {{ $subcription->paket->duration }} Bulan
                                     </td>
-                                    <td class="text-end">Rp. {{ number_format($subcription->paket->price) }}</td>
+                                    <td class="text-end">Rp. {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}</td>
                                 </tr>
                                
                             </tbody>
@@ -84,7 +84,7 @@
                                 <tr>
                                     <td colspan="3" class="text-end border-bottom-0"><strong>Total :</strong></td>
                                     <td class="text-end border-bottom-0">
-                                        Rp. {{ number_format($subcription->paket->price) }}
+                                        Rp. {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
                                     </td>
                                 </tr>
                             </tfoot>
@@ -110,7 +110,7 @@
                             <td style=";padding: 3px" class="text-center">{{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y')}}</td>
                             <td style=";padding: 3px" class="text-center">Manual</td>
                             <td style=";padding: 3px" class="text-center">{{ $subcription->invoices}}</td>
-                            <td style=";padding: 3px" class="text-center">Rp. {{ number_format($subcription->paket->price) }}</td>
+                            <td style=";padding: 3px" class="text-center">Rp. {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}</td>
                         </tr>
                     </tbody>
                 </table>

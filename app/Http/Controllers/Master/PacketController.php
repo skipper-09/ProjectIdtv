@@ -27,7 +27,7 @@ class PacketController extends Controller
 
     public function getData()
     {
-        $data = Package::with(['company'])->get();
+        $data = Package::all();
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -42,8 +42,6 @@ class PacketController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('duration', function ($data) {
             return $data->duration . ' Bulan';
-        })->editColumn('company_id', function ($data) {
-            return $data->company->name;
         })->editColumn('price', function ($data) {
             return 'Rp'. ' '.number_format($data->price);
         })->rawColumns(['action', 'duration','company_id'])->make(true);
@@ -55,7 +53,6 @@ class PacketController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Tambah Paket',
-            'company' => Company::all()
         ];
         return view('pages.paket.add', $data);
     }
@@ -68,7 +65,6 @@ class PacketController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'duration' => $request->duration,
-            'company_id' => $request->company_id
         ]);
         return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Paket!']);
     }

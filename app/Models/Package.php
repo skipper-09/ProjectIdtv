@@ -14,15 +14,11 @@ class Package extends Model
         'name',
         'price',
         'duration',
-        'company_id'
     ];
     protected $primaryKey = 'id';
 
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
-    }
+   
     public function paket()
     {
         return $this->hasMany(Package::class);

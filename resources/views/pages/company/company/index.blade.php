@@ -43,6 +43,7 @@
                                                 <th>No Hp</th>
                                                 <th>Alamat</th>
                                                 <th>Email</th>
+                                                <th>Fee</th>
                                                 <th>Pemilik</th>
                                                 @canany(['update-company','delete-company'])
                                                 <th>Action</th>
@@ -99,7 +100,11 @@
                     },
                     {
                         data: 'email',
-                        name: 'eamil',
+                        name: 'email',
+                    },
+                    {
+                        data: 'fee_reseller',
+                        name: 'fee_reseller',
                     },
                     {
                         data: 'owner_id',

@@ -136,7 +136,9 @@
                     @canany(['update-owner', 'delete-owner'])
                         {
                             data: 'action',
-                            name: 'action'
+                            name: 'action',
+                            orderable: false,
+                        searchable: false,
                         }
                     @endcanany
                 ]

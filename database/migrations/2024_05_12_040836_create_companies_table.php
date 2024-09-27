@@ -20,6 +20,7 @@ return new class extends Migration
             $table->longText('address');
             $table->string('phone');
             $table->string('email')->nullable();
+            $table->integer('fee_reseller')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->timestamps();
         });

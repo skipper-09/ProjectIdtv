@@ -142,12 +142,15 @@ class CustomerController extends Controller
             'end_date' => $request->end_date,
         ]);
 
-        $paket = Package::where('id', $subs->packet_id)->first();
+        $paket = Package::find($subs->packet_id);
+        
+
+        $amount = $paket->price + $customer->company->fee_reseller;
 
         Payment::create([
             'subcription_id' => $subs->id,
             'customer_id' => $customer->id,
-            'amount' => $paket->price,
+            'amount' => $amount,
             'tanggal_bayar' => now(),
             'status' => 'paid'
         ]);

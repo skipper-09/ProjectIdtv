@@ -97,7 +97,9 @@
                     @canany(['update-stb','delete-stb'])
                     {
                         data: 'action',
-                        name: 'action'
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
                     }
                     @endcanany
                 ]

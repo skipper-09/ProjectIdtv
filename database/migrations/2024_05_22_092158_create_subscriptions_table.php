@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('invoices');
             $table->date('start_date')->nullable();
             $table->date('end_date');
+            $table->integer('fee')->nullable();
+            $table->boolean('is_claim')->default(false);
             $table->boolean('status')->default(true);
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('packet_id')->references('id')->on('packages')->onDelete('cascade')->onUpdate('cascade');

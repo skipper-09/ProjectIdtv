@@ -16,7 +16,6 @@ class PaketSeeder extends Seeder
     public function run()
     {
         Package::insert([
-            'company_id' => 1,
             'name' => 'Paket Minimum',
             'duration' => 1,
             'price' => '100000'
