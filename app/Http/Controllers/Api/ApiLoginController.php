@@ -34,7 +34,6 @@ class ApiLoginController extends Controller
         } else {
             return response()->json([
                 'message' => 'Login failed Usernama dan Password Salah',
-
             ]);
         }
     }

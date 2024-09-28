@@ -54,7 +54,7 @@ class LogController extends Controller
         return response()->json([
             'status' => 'success',
             'success' => true,
-            'message' => 'User Berhasil Dihapus!.',
+            'message' => 'Log Berhasil Dihapus!.',
         ]);
     } catch (Exception $e) {
         return response()->json([

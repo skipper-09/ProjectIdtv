@@ -79,12 +79,17 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Role <span class="text-danger">*</span></label>
-                            <select class="form-control select2" name="role">
+                            <select class="form-control select2 @error('role') is-invalid @enderror" name="role">
                                 <option value="">Pilih Role</option>
                                 @foreach ($role as $s)
                                 <option value="{{ $s->name }}">{{ $s->name }} </option>
                                 @endforeach
                             </select>
+                            @error('role')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
                         </div>
                     </div>
                 </div>

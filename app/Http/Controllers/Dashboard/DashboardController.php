@@ -15,7 +15,7 @@ class DashboardController extends Controller
 {
   public function index()
   {
-    $lastactivity = Activity::with('causer')->orderBy('created_at', 'desc')->take(5)->get();
+    $lastactivity = Activity::with('causer')->orderBy('created_at', 'desc')->take(4)->get();
     // Decode JSON properties
     foreach ($lastactivity as $activity) {
       $activity->properties = json_decode($activity->properties, true);

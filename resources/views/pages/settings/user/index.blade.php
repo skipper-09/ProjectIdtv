@@ -115,5 +115,12 @@
             });
 
         });
+        @if (Session::has('message'))
+                iziToast.success({
+                    title: `{{ Session::get('status') }}`,
+                    message: `{{ Session::get('message') }}`,
+                    position: 'topRight'
+                });
+            @endif
     </script>
 @endpush

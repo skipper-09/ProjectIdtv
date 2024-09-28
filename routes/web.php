@@ -218,8 +218,9 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('user.delete')->middleware('can:delete-users');
         });
         Route::prefix('log-activity')->group(function () {
-            Route::get('', [LogController::class, 'index'])->name('log')->middleware('can:read-users');
+            Route::get('', [LogController::class, 'index'])->name('log')->middleware('can:read-log');
             Route::get('getData', [LogController::class, 'getData'])->name('log.getdata');
+            Route::delete('clear-log', [LogController::class, 'cleanlog'])->name('log.clear')->middleware('can:clean-log');
         });
     });
 });

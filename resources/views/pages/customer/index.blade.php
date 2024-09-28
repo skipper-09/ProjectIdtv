@@ -142,6 +142,8 @@
                     {
                         data: 'renew',
                         name: 'renew',
+                        orderable: false,
+                        searchable: false,
                     },
                     @canany(['read-customer', 'update-customer', 'delete-customer'])
                         {

@@ -66,7 +66,8 @@ class RoleSeeder extends Seeder
             'read-income-harian',
             'read-statustik',
             'read-feeclaim',
-            'read-income-periode'
+            'read-income-periode',
+            'read-log','clean-log',
         ]);
 
         $administrator->givePermissionTo([
@@ -116,7 +117,8 @@ class RoleSeeder extends Seeder
             'read-income-harian',
             'read-statustik',
             'read-feeclaim',
-            'read-income-periode'
+            'read-income-periode',
+            'read-log','clean-log',
         ]);
 
         $staff->givePermissionTo([

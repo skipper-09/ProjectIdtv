@@ -25,10 +25,10 @@
         <div class="row">
           <div class="col-12">
             <div class="card">
-              @can('delete-log')
+              @can('clean-log')
               <div class="card-header">
-                <a href="{{ route('user.add') }}" class="btn btn-primary">Delete
-                  {{ $page_name }}</a>
+                <button id="clearLogsBtn" class="btn btn-primary">Delete
+                  {{ $page_name }}</button>
               </div>
               @endcan
               <div class="card-body">
@@ -65,13 +65,56 @@
 <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
 
+
 <!-- Page Specific JS File -->
 <script src="{{ asset('js/custom.js') }}"></script>
 <!-- Page Specific JS File -->
 
 
+
+
+
+
 <script>
   $(document).ready(function() {
+
+    $("#clearLogsBtn").on("click", function() {
+      swal({
+            title: "Apakah Kamu Yakin?",
+            text: "Semua Log akan terhapus",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: "{{ route('log.clear') }}",
+                    method: "DELETE",
+                    type: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    success: function (res) {
+                        //reload table
+                        $("#dataTable").DataTable().ajax.reload();
+                        // Do something with the result
+                        if (res.status === "success") {
+                            swal("Deleted!", res.message, {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("Error!", res.message, {
+                                icon: "error",
+                            });
+                        }
+                    },
+                });
+            }
+        });
+        });
+
 
             $('#dataTable').DataTable({
                 processing: true,
