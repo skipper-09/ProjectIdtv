@@ -9,6 +9,7 @@
     <title>@yield('title') &mdash; IDTV</title>
 
     <!-- General CSS Files -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/IDTV.png') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
@@ -20,8 +21,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components.css') }}">
-    
-    
+
+
     {{-- <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}"> --}}
     <style>
         /* Chrome, Safari, Edge, Opera */
@@ -81,7 +82,7 @@
 
         </div>
     </div>
-    @include('components.modal-component.incomeperiode',['companies'=>$companies])
+    @include('components.modal-component.incomeperiode', ['companies' => $companies])
 
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
@@ -103,9 +104,9 @@
 
     <script>
         $(document).ready(function() {
-    // Inisialisasi Select2 setelah halaman siap
-        $('.select2').select2();});
-
+            // Inisialisasi Select2 setelah halaman siap
+            $('.select2').select2();
+        });
     </script>
 
 </body>

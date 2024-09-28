@@ -25,7 +25,8 @@ class UserController extends Controller
     }
     public function getData()
     {
-        $user = User::with('roles')->whereNotIn('name', ['Developer']);
+        $user = User::with('roles')->whereNotIn('name', ['Developer'])->orderBy('id', 'desc')->get();
+
         return DataTables::of($user)->addIndexColumn()->addColumn('action', function ($user) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -61,7 +62,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
-            $user= User::findOrFail($id);
+            $user = User::findOrFail($id);
             $user->delete();
             return response()->json([
                 'status' => 'success',

@@ -26,7 +26,7 @@ class CompanyController extends Controller
 
     public function getData()
     {
-        $company = Company::with('owner')->orderBy('id','asc')->get();
+        $company = Company::with('owner')->orderBy('id', 'asc')->get();
         return DataTables::of($company)->addIndexColumn()->addColumn('action', function ($company) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -42,13 +42,13 @@ class CompanyController extends Controller
         })->editColumn('owner_id', function ($company) {
             return $company->owner->name;
         })->editColumn('fee_reseller', function ($company) {
-            return 'Rp '. number_format($company->fee_reseller);
-        })->rawColumns(['action', 'owner_id','fee_reseller'])->make(true);
+            return 'Rp ' . number_format($company->fee_reseller);
+        })->rawColumns(['action', 'owner_id', 'fee_reseller'])->make(true);
     }
 
     public function create()
     {
-        
+
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Tambah Perusahaan',
@@ -71,14 +71,14 @@ class CompanyController extends Controller
     }
 
 
-    public function show(User $owner, $id)
+    public function show($id)
     {
         $company = Company::find($id);
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Edit Perusahaan',
             'company' => $company,
-            'owner' => $owner->all()
+            'owner' => User::with('roles')->whereNotIn('name', ['Developer'])->get(),
         ];
         return view('pages.company.company.editcomapny', $data);
     }

@@ -113,6 +113,12 @@
                         @endcan
                     </ul>
                 </li>
+
+                <li class="{{ Request::is('admin/keuangan/fee-claim') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('feeclaim') }}"><i class="fas fa-hourglass">
+                        </i> <span>Fee Reseller</span>
+                    </a>
+                </li>
             @endcanany
 
             @canany(['read-users', 'read-role'])

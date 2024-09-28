@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="form-group col-12 col-md-6">
                     <label>Mulai Tanggal <span class="text-danger">*</span></label>
-                    <input type="date" name="start_date" class="form-control @error('name') is-invalid @enderror">
+                    <input type="date" name="start_date" class="form-control @error('name') is-invalid @enderror" required>
                     @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -18,7 +18,7 @@
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label>Sampai Tanggal <span class="text-danger">*</span></label>
-                    <input type="date" name="end_date" class="form-control @error('mac') is-invalid @enderror">
+                    <input type="date" name="end_date" class="form-control @error('mac') is-invalid @enderror" required>
                     @error('mac')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -26,9 +26,9 @@
                     @enderror
                 </div>
                 <div class="form-group col-12 col-md-12">
-                    <label>Perusahaan <span class="text-danger">*</span></label>
+                    <label>Perusahaan </label>
                     <select class="form-control select2" name="company_id">
-                        <option value="">Pilih Perusahaan</option>
+                        <option value="">Semua Perusahaan</option>
                         @foreach ($companies as $item)
                             <option value="{{ $item->id }}">
                                 {{ $item->name }}</option>
@@ -41,5 +41,5 @@
             </div>
         </div>
     </form>
-    
+
 @endsection

@@ -82,6 +82,10 @@ class PeriodeIncomeController extends Controller
             return $data->customer->name;
         })->editColumn('paket', function ($data) {
             return $data->subscrib->paket->name;
+        })->editColumn('pokok', function ($data) {
+            return number_format($data->subscrib->paket->price);
+        })->editColumn('fee_reseller', function ($data) {
+            return number_format($data->customer->company->fee_reseller);
         })->editColumn('owner', function ($data) {
             return $data->customer->company->name;
         })->editColumn('start_date', function ($data) {
@@ -105,7 +109,7 @@ class PeriodeIncomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee_reseller'])->make(true);
     }
 
 

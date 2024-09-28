@@ -92,6 +92,8 @@
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
                                                     <th>Deadline</th>
+                                                    <th>Harga Pokok</th>
+                                                    <th>Fee Reseller</th>
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
@@ -150,7 +152,7 @@
                     data: {
                         start_date: start,
                         end_date: end,
-                        company_id:company_id
+                        company_id: company_id
                     }
                 },
                 columns: [{
@@ -174,6 +176,14 @@
                         data: 'end_date',
                     },
                     {
+                        name: 'pokok',
+                        data: 'pokok',
+                    },
+                    {
+                        name: 'fee_reseller',
+                        data: 'fee_reseller',
+                    },
+                    {
                         name: 'status',
                         data: 'status',
                     },
@@ -188,9 +198,9 @@
                     @canany(['update-owner', 'delete-owner'])
                         {
                             data: 'action',
-                            name: 'action',,
+                            name: 'action',
                             orderable: false,
-                        searchable: false,
+                            searchable: false,
                         }
                     @endcanany
                 ],

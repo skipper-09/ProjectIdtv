@@ -9,6 +9,8 @@ use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Keuangan\DailyincomeController;
 use App\Http\Controllers\Keuangan\PeriodeIncomeController;
+
+use App\Http\Controllers\Keuangan\FeeClaimController;
 use App\Http\Controllers\Keuangan\StatistikController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
@@ -171,20 +173,26 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         );
         Route::prefix('income-harian')->group(
             function () {
-                Route::get('', [DailyincomeController::class, 'index'])->name('dailyincome')->middleware('can:read-owner');
+                Route::get('', [DailyincomeController::class, 'index'])->name('dailyincome')->middleware('can:read-income-harian');
                 Route::get('getData', [DailyincomeController::class, 'getData'])->name('dailyincome.getdata');
             }
         );
         Route::prefix('income-periode')->group(
             function () {
-                Route::post('', [PeriodeIncomeController::class, 'index'])->name('periodeincome')->middleware('can:read-owner');
+                Route::post('', [PeriodeIncomeController::class, 'index'])->name('periodeincome')->middleware('can:read-income-periode');
                 Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
             }
         );
         Route::prefix('statistik')->group(
             function () {
-                Route::get('', [StatistikController::class, 'index'])->name('statistik')->middleware('can:read-owner');
+                Route::get('', [StatistikController::class, 'index'])->name('statistik')->middleware('can:read-statistik');
                 Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
+            }
+        );
+        Route::prefix('fee-claim')->group(
+            function () {
+                Route::get('', [FeeClaimController::class, 'index'])->name('feeclaim')->middleware('can:read-feeclaim');
+                Route::get('getData', [FeeClaimController::class, 'getData'])->name('feeclaim.getdata');
             }
         );
     });
