@@ -19,17 +19,36 @@ class DashboardController extends Controller
     // Decode JSON properties
     foreach ($lastactivity as $activity) {
       $activity->properties = json_decode($activity->properties, true);
-  }
+    }
+
+    if (!auth()->user()->hasRole('Reseller')) {
+      $data = [
+        'chanel' => Chanel::all(),
+        'company' => Company::all(),
+        'customer' => Customer::all(),
+        'income' => Payment::all(),
+        'log' =>  $lastactivity,
+        'type_menu' => 'dashboard',
+        'page_name' => 'Dashboard',
+      ];
+      return view('pages.dashboard.index', $data);
+    }
+
+
+    $currentMonthStart = Carbon::now()->startOfMonth(); // Tanggal 1 bulan ini
+    $currentMonthEnd = Carbon::now()->endOfMonth();
+
+
+    $company = Company::where('user_id', auth()->id())->first();
     $data = [
-      'chanel' => Chanel::all(),
-      'company' => Company::all(),
-      'customer' => Customer::all(),
-      'income' => Payment::all(),
-      'log' =>  $lastactivity,
+      'customer' => Customer::where('company_id', '=', $company->id)->get(),
+      'income' => Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($company) {
+        $query->where('company_id', $company->id);
+      }),
       'type_menu' => 'dashboard',
       'page_name' => 'Dashboard',
     ];
-    return view('pages.dashboard.index', $data);
+    return view('pages.dashboard.reseller', $data);
   }
 
 
@@ -50,12 +69,25 @@ class DashboardController extends Controller
       $endDate = $currentDate; // Hingga tanggal hari ini
     }
 
+    $user = auth()->user();
+    $company = Company::where('user_id', '=', auth()->id())->first();
+
+
+
     // Ambil data dari database sesuai dengan rentang waktu ini
-    $customers = Customer::whereBetween('created_at', [$startDate, $endDate])
-      ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
-      ->groupBy('date')
-      ->get()
-      ->keyBy('date'); // Menggunakan keyBy untuk membuat array dengan key sebagai tanggal
+    if ($user->hasRole('Reseller')) {
+      $customers = Customer::whereBetween('created_at', [$startDate, $endDate])->where('company_id', '=', $company->id)
+        ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+        ->groupBy('date')
+        ->get()
+        ->keyBy('date'); // Menggunakan keyBy untuk membuat array dengan key sebagai tanggal
+    } else {
+      $customers = Customer::whereBetween('created_at', [$startDate, $endDate])
+        ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
+        ->groupBy('date')->where('company_id',)
+        ->get()
+        ->keyBy('date'); // Menggunakan keyBy untuk membuat array dengan key sebagai tanggal
+    }
 
     // Siapkan data untuk chart
     $labels = [];

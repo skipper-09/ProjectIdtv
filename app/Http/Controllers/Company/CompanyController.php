@@ -52,7 +52,7 @@ class CompanyController extends Controller
         $data = [
             'type_menu' => 'company',
             'page_name' => 'Tambah Perusahaan',
-            'owner' => User::whereDoesntHave('company')->get()
+            'owner' => User::with('roles')->whereNotIn('name', ['Developer'])->whereDoesntHave('company')->get()
         ];
         return view('pages.company.company.addcompany', $data);
     }

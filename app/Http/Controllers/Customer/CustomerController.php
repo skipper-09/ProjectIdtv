@@ -41,7 +41,12 @@ class CustomerController extends Controller
 
     public function getData()
     {
-        $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->get();
+        if (auth()->user()->hasRole('Reseller')) {
+            $company = Company::where('user_id', '=', auth()->id())->first();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderBy('id', 'desc')->get();
+        } else {
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->get();
+        }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -73,13 +78,12 @@ class CustomerController extends Controller
             return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
             $cus = '';
-            if($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == today()->format('Y-m-d')){
-                $cus= '<span class="text-danger">'.$sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date.'</span>';
-            }else{
-                $cus = '<span class="text-success fw-bold">'.$sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date.'</span>';
+            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == today()->format('Y-m-d')) {
+                $cus = '<span class="text-danger">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
+            } else {
+                $cus = '<span class="text-success fw-bold">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
             }
-            return $cus; 
-            
+            return $cus;
         })->editColumn('created_at', function (Customer $date) {
             return date('d-m-Y', strtotime($date->created_at));
         })->addColumn('renew', function ($customer) {
@@ -93,8 +97,8 @@ class CustomerController extends Controller
                 $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
                                                             class="fa-solid fa-bolt"></i></a>';
             }
-            if ($userauth->can('delete-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id,'type'=>'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
+            if ($userauth->can('read-customer')) {
+                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -140,10 +144,11 @@ class CustomerController extends Controller
             'packet_id' => $request->paket_id,
             'start_date' => Carbon::now(),
             'end_date' => $request->end_date,
+            'fee' => Company::find($request->company_id)->first()->fee_reseller,
         ]);
 
         $paket = Package::find($subs->packet_id);
-        
+
 
         $amount = $paket->price + $customer->company->fee_reseller;
 

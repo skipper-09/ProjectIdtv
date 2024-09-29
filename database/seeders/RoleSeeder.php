@@ -18,6 +18,7 @@ class RoleSeeder extends Seeder
         $developer = Role::create(['name' => 'Developer']);
         $staff = Role::create(['name' => 'Staff']);
         $administrator = Role::create(['name' => 'Administrator']);
+        $reseler = Role::create(['name' => 'Reseller']);
         //give permission role
         $developer->givePermissionTo([
             'read-dashboard',
@@ -67,7 +68,8 @@ class RoleSeeder extends Seeder
             'read-statustik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log','clean-log',
+            'read-log',
+            'clean-log',
         ]);
 
         $administrator->givePermissionTo([
@@ -118,7 +120,8 @@ class RoleSeeder extends Seeder
             'read-statustik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log','clean-log',
+            'read-log',
+            'clean-log',
         ]);
 
         $staff->givePermissionTo([
@@ -128,10 +131,11 @@ class RoleSeeder extends Seeder
             'update-users',
             'delete-users',
             'read-customer'
-            // 'read-chanel', 
-            // 'read-categori',
-            // 'read-role',
-            // 'read-region',
+        ]);
+
+        $reseler->givePermissionTo([
+            'read-dashboard',
+            'read-customer',
         ]);
     }
 }

@@ -86,11 +86,16 @@
                         </a>
                     </li>
                 @endcan
+                <li class="{{ Request::is('admin/pendapatan') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('pendapatan.reseller') }}"><i class="fas fa-hourglass">
+                        </i> <span>Pendapatan</span>
+                    </a>
+                </li>
             @endcanany
 
 
-            <li class="menu-header">KEUNGAN</li>
             @canany(['read-company', 'read-owner'])
+                <li class="menu-header">KEUNGAN</li>
                 <li class="nav-item dropdown {{ $type_menu === 'Keuangan' ? 'active' : '' }}">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
                         <span>Data Keuangan</span></a>

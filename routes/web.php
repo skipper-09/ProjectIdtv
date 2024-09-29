@@ -16,6 +16,7 @@ use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
+use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
@@ -121,6 +122,25 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
         });
     });
+
+
+    //reseler
+    //customer route
+    Route::prefix('pendapatan')->group(
+        function () {
+            Route::get('', [PendapatanController::class, 'index'])->name('pendapatan.reseller')->middleware('can:read-customer');
+            // Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
+            // Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
+            // // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
+            // // Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');
+            // Route::get('/tambah', [CustomerController::class, 'create'])->name('customer.add')->middleware('can:create-customer');
+            // Route::post('store', [CustomerController::class, 'store'])->name('customer.store');
+            // Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');
+            // Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
+            // Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
+        }
+    );
+
 
     //customer route
     Route::prefix('customer')->group(
