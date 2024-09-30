@@ -10,16 +10,36 @@ use Illuminate\Http\Request;
 
 class ApichanelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $chanel = Chanel::with('categori')->get();
-       return ResponseFormatter::success($chanel, 'Chanel retrieved successfully');
+
+        $id = $request->input('id');
+        $name = $request->input('name');
+        $stream = $request->input('url');
+
+        if ($id) {
+            $chanel = Chanel::with('categori')->find($id);
+            if ($chanel) {
+                return ResponseFormatter::success($chanel, 'Chanel berhasil diambil');
+            } else {
+                return ResponseFormatter::error($chanel, 'Data Chanel tidak ada', 400);
+            }
+        }
+
+        $chanel = Chanel::with('categori');
+        if ($name) {
+            $chanel->where('name', 'like', '%' . $name . '%');
+        }
+        if ($stream) {
+            $chanel->where('replacement_url', 'like', '%' . $name . '%');
+        }
+        return ResponseFormatter::success($chanel->get(), 'Chanel berhasil diambil');
     }
 
     public function category()
     {
-        $categories = Categori::with('chanel')->get();
-        
+        $categories = Categori::all();
+
         return ResponseFormatter::success($categories, 'Category retrieved successfully');
     }
 }
