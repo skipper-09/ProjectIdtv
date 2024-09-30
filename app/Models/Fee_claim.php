@@ -14,7 +14,12 @@ class Fee_claim extends Model
     protected $primaryKey = 'id';
 
 public function company(){
-   return $this->belongsTo(Company::class);
+   return $this->belongsTo(Company::class,'company_id','id');
 }
+public function detailfee(){
+   return $this->hasMany(DetailClaim::class);
+}
+
+
 
 }

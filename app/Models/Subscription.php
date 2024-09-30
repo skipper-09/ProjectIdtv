@@ -51,4 +51,8 @@ class Subscription extends Model
     {
         return $this->hasMany(Payment::class);
     }
+    public function detailfee()
+    {
+        return $this->hasMany(DetailClaim::class);
+    }
 }

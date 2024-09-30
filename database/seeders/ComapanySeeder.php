@@ -21,7 +21,7 @@ class ComapanySeeder extends Seeder
                     'name' => 'PT. CAHAYA SOLUSINDO',
                     'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
                     'phone' => '6282111777179',
-                    'user_id' => 2,
+                    'user_id' => 3,
                     'fee_reseller' => 20000
                 ],
 

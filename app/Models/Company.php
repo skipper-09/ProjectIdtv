@@ -23,6 +23,10 @@ class Company extends Model
     {
         return $this->hasMany(Customer::class);
     }
+    public function feeclaim()
+    {
+        return $this->hasMany(Fee_claim::class);
+    }
    
     public function owner()
     {

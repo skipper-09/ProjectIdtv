@@ -139,12 +139,14 @@ class CustomerController extends Controller
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
         ]);
+        $company = Company::find($request->company_id);
+        
         $subs = Subscription::create([
             'customer_id' => $customer->id,
             'packet_id' => $request->paket_id,
             'start_date' => Carbon::now(),
             'end_date' => $request->end_date,
-            'fee' => Company::find($request->company_id)->first()->fee_reseller,
+            'fee' => $company->fee_reseller ?? 0,
         ]);
 
         $paket = Package::find($subs->packet_id);

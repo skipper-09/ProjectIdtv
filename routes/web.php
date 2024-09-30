@@ -129,6 +129,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::prefix('pendapatan')->group(
         function () {
             Route::get('', [PendapatanController::class, 'index'])->name('pendapatan.reseller')->middleware('can:read-customer');
+            Route::get('/getData', [PendapatanController::class, 'getData'])->name('reseller.getdata');
             // Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
             // Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
             // // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
