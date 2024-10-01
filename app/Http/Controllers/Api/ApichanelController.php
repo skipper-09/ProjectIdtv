@@ -36,10 +36,25 @@ class ApichanelController extends Controller
         return ResponseFormatter::success($chanel->get(), 'Chanel berhasil diambil');
     }
 
-    public function category()
+    public function category(Request $request)
     {
-        $categories = Categori::all();
+        $id = $request->input('id');
+        $name = $request->input('name');
 
-        return ResponseFormatter::success($categories, 'Category retrieved successfully');
+        if ($id) {
+            $category = Categori::with('chanel')->find($id);
+            if ($category) {
+                return ResponseFormatter::success($category, 'Category retrieved successfully');
+            } else {
+                return ResponseFormatter::error($category, 'Category not found', 404);
+            }
+        }
+
+        $categories = Categori::with('chanel');
+        if ($name) {
+            $categories->where('name', 'like', '%' . $name . '%');
+        }
+
+        return ResponseFormatter::success($categories->get(), 'Categories retrieved successfully');
     }
 }
