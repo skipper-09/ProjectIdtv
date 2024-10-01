@@ -25,18 +25,18 @@ class FeeClaimController extends Controller
 
     public function getData()
     {
-        $fee = Fee_claim::all();
+        $fee = Fee_claim::orderByDesc('id')->get();
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-company')) {
-                $button .= ' <a href="' . route('company.edit', ['id' => $fee->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $fee->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></a>';
+                $button .= ' <a href="' . route('feeclaim.show', ['id' => $fee->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $fee->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Prses Data"><i
+                                                            class="fa-solid fa-eye"></i></a>';
             }
-            if ($userauth->can('delete-fee')) {
-                $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $fee->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
-                                                            class="fa-solid fa-trash"></i></button>';
-            }
+            // if ($userauth->can('delete-fee')) {
+            //     $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $fee->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
+            //                                                 class="fa-solid fa-trash"></i></button>';
+            // }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('bank_name',function($data){
             return $data->company->bank_name;
@@ -64,5 +64,16 @@ class FeeClaimController extends Controller
             ->format('Y-m-d H:i:s');;
         })->rawColumns(['action','rekening','bank_name','owner_rek','created_at','company','amount','status'])->make(true);
         
+    }
+
+
+    public function show($id){
+        $feeclaim = Fee_claim::findOrFail($id);
+        $data = [
+            'type_menu' => 'Keungan',
+            'page_name' => 'Update' .' '. $feeclaim->company->name,
+            'feeclaim'=>$feeclaim,
+        ];
+        return view('pages.keuangan.fee-claim.prosesclaim', $data);
     }
 }

@@ -25,7 +25,7 @@
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
-                                    <h4>Pelanggan</h4>
+                                    <h4>Pelanggan Bulan ini</h4>
                                 </div>
                                 <p class="font-weight-bold" style="font-size: 16px; color:black">
                                     {{ $customer->count() }}</p>

@@ -7,7 +7,6 @@ use App\Models\Chanel;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Payment;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
@@ -35,13 +34,13 @@ class DashboardController extends Controller
     }
 
 
-    $currentMonthStart = Carbon::now()->startOfMonth(); // Tanggal 1 bulan ini
-    $currentMonthEnd = Carbon::now()->endOfMonth();
+    $currentMonthStart = \Carbon\Carbon::now()->startOfMonth(); // Tanggal 1 bulan ini
+    $currentMonthEnd = \Carbon\Carbon::now()->endOfMonth();
 
 
     $company = Company::where('user_id', auth()->id())->first();
     $data = [
-      'customer' => Customer::where('company_id', '=', $company->id)->get(),
+      'customer' => Customer::where('company_id', '=', $company->id)->whereMonth('created_at',\Carbon\Carbon::now()->month)->get(),
       'income' => Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($company) {
         $query->where('company_id', $company->id);
       }),
