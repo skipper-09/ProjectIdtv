@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subcription_id');
             $table->unsignedBigInteger('customer_id');
             $table->integer('amount');
+            $table->integer('fee');
             $table->enum('status', ['paid', 'unpaid', 'pending']);
             $table->date('tanggal_bayar');
             $table->timestamps();

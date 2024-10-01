@@ -22,7 +22,10 @@ class ComapanySeeder extends Seeder
                     'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
                     'phone' => '6282111777179',
                     'user_id' => 3,
-                    'fee_reseller' => 20000
+                    'fee_reseller' => 20000,
+                    'rekening' => 23232323232323,
+                    'bank_name' => 'BCA',
+                    'owner_rek' => 'Musthopa',
                 ],
 
             ]

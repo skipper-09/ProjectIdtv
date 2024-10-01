@@ -158,6 +158,7 @@ class CustomerController extends Controller
             'subcription_id' => $subs->id,
             'customer_id' => $customer->id,
             'amount' => $amount,
+            'fee'=> $customer->company->fee_reseller,
             'tanggal_bayar' => now(),
             'status' => 'paid'
         ]);
