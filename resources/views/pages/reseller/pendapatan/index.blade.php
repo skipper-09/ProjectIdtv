@@ -55,7 +55,7 @@
         <div class="col-12 mb-3">
             <div class="d-flex justify-content-center align-items-center">
     
-    <button class="btn btn-sm btn-primary mr-2">Ajukan Claim</button>
+    <a href="{{ route('reseller.reqclaim') }}"><button class="btn btn-sm btn-primary mr-2">Ajukan Claim</button></a>
     <button class="btn btn-sm btn-warning mr-2">History Claim</button>
             </div>
         </div>

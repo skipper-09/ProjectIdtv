@@ -28,7 +28,10 @@ class CompanyRequest extends FormRequest
             'address' => 'required',
             'email' => 'required|email',
             'phone' => 'required|integer',
-            'user_id' => 'required'
+            'user_id' => 'required',
+            'rekening' => 'required',
+            'bank_name' => 'required',
+            'owner_rek' => 'required',
         ];
     }
 

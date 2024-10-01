@@ -12,6 +12,7 @@ class Payment extends Model
         'subcription_id',
         'customer_id',
         'amount',
+        'fee',
         'status',
         'tanggal_bayar'
     ];
