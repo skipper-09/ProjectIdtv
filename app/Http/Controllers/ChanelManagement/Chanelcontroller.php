@@ -107,24 +107,39 @@ class Chanelcontroller extends Controller
         return view('pages.chanel.chanel-management.addchanel', $data);
     }
 
-    public function store(ChanelRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'categori_id' => 'required|exists:categoris,id',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'type' => 'required|in:m3u,mpd',
+            'user_agent' => 'nullable|string|max:255',
+            'security_type' => 'nullable|in:clearkey,widevine',
+            'security' => 'nullable|string|max:255',
+        ]);
+
         $filename = '';
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('storage/images/chanel/'), $filename);
         }
-        Chanel::create([
-            'name' => $request->name,
-            'url' => $request->url,
-            'categori_id' => $request->input('categori_id'),
-            'logo' => $filename,
-            'type' => $request->type,
-            'user_agent' => $request->user_agent,
-            'security_type' => $request->input('security_type'),
-            'security' => $request->security,
-        ]);
+
+        Chanel::create(
+            [
+                'name' => $request->name,
+                'url' => $request->url,
+                'categori_id' => $request->input('categori_id'),
+                'logo' => $filename,
+                'type' => $request->type,
+                'user_agent' => $request->user_agent,
+                'security_type' => $request->input('security_type'),
+                'security' => $request->security,
+            ]
+        );
+
         return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Chanel!']);
     }
 
@@ -140,22 +155,67 @@ class Chanelcontroller extends Controller
         return response()->view('pages.chanel.chanel-management.editchanel', $data);
     }
 
-    public function update(Chanel $chanel, ChanelRequest $request, $id)
+    // public function update(Chanel $chanel, ChanelRequest $request, $id)
+    // {
+    //     try {
+    //         $datachanel = $chanel->find($id);
+    //         $filename = '';
+    //         if ($request->hasFile('logo')) {
+    //             $file = $request->file('logo');
+    //             $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
+    //             $file->move(public_path('storage/images/chanel/'), $filename);
+    //             if ($datachanel->logo !== 'default.png') {
+    //                 if (file_exists(public_path('storage/images/chanel/' . $datachanel->logo))) {
+    //                     File::delete(public_path('storage/images/chanel/' . $datachanel->logo));
+    //                 }
+    //             }
+    //         } else {
+    //             $filename = $datachanel->logo;
+    //         }
+
+    //         $datachanel->update([
+    //             'name' => $request->name,
+    //             'url' => $request->url,
+    //             'categori_id' => $request->input('categori_id'),
+    //             'logo' => $filename,
+    //             'type' => $request->type,
+    //             'user_agent' => $request->user_agent,
+    //             'security_type' => $request->input('security_type'),
+    //             'security' => $request->security,
+    //         ]);
+    //         return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Chanel!']);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'message' => $e->getMessage(),
+    //             'trace' => $e->getTrace()
+    //         ]);
+    //     }
+    // }
+
+    public function update(Chanel $chanel, Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'categori_id' => 'required|exists:categoris,id',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'type' => 'required|in:m3u,mpd',
+            'user_agent' => 'nullable|string|max:255',
+            'security_type' => 'nullable|in:clearkey,widevine',
+            'security' => 'nullable|string|max:255',
+        ]);
+
         try {
-            $datachanel = $chanel->find($id);
-            $filename = '';
+            $datachanel = $chanel::findOrFail($id);
+            $filename = $datachanel->logo;
+
             if ($request->hasFile('logo')) {
                 $file = $request->file('logo');
                 $filename = 'chanel_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('storage/images/chanel/'), $filename);
-                if ($datachanel->logo !== 'default.png') {
-                    if (file_exists(public_path('storage/images/chanel/' . $datachanel->logo))) {
-                        File::delete(public_path('storage/images/chanel/' . $datachanel->logo));
-                    }
+                if ($datachanel->logo !== 'default.png' && file_exists(public_path('storage/images/chanel/' . $datachanel->logo))) {
+                    File::delete(public_path('storage/images/chanel/' . $datachanel->logo));
                 }
-            } else {
-                $filename = $datachanel->logo;
             }
 
             $datachanel->update([
@@ -168,6 +228,7 @@ class Chanelcontroller extends Controller
                 'security_type' => $request->input('security_type'),
                 'security' => $request->security,
             ]);
+
             return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Chanel!']);
         } catch (Exception $e) {
             return response()->json([
