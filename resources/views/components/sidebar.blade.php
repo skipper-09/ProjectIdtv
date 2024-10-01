@@ -86,11 +86,13 @@
                         </a>
                     </li>
                 @endcan
+                @if (Auth::user()->hasRole('Reseller'))
                 <li class="{{ Request::is('admin/pendapatan') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('pendapatan.reseller') }}"><i class="fas fa-hourglass">
                         </i> <span>Pendapatan</span>
                     </a>
                 </li>
+                @endif
             @endcanany
 
 

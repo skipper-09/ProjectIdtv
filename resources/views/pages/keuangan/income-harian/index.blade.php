@@ -40,6 +40,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="card card-statistic-1">
+                            <div class="card-icon bg-success ">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="card-wrap">
+                                <div class="card-header">
+                                    <h4>FROFIT BERSIH (IDR)</h4>
+                                </div>
+                                <div class="card-body">
+                                    {{ number_format($incomeclean) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
                 {{-- <h2 class="section-title">This is Example Page</h2>
@@ -58,6 +73,8 @@
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
                                                     <th>Deadline</th>
+                                                    <th>Harga Pokok</th>
+                                                    <th>Fee Reseller</th>
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
@@ -120,6 +137,14 @@
                     {
                         name: 'end_date',
                         data: 'end_date',
+                    },
+                    {
+                        name: 'pokok',
+                        data: 'pokok',
+                    },
+                    {
+                        name: 'fee',
+                        data: 'fee',
                     },
                     {
                         name: 'status',

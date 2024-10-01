@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reseller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\DetailClaim;
 use App\Models\Fee_claim;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -21,7 +22,7 @@ class PendapatanController extends Controller
         $company = Company::where('user_id', auth()->id())->first();
         $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
-        })->sum('fee');
+        })->where('is_claim',false)->sum('fee');
 
         $data = [
             'type_menu' => 'layout',
@@ -39,6 +40,8 @@ class PendapatanController extends Controller
             $query->where('status', true);
         })->whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
+        })->whereHas('subscrib', function ($query) {
+            $query->where('is_claim', false);
         })->get();
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -107,6 +110,8 @@ class PendapatanController extends Controller
             $query->where('status', true);
         })->whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
+        })->whereHas('subscrib', function ($query) {
+            $query->where('is_claim', false);
         })->sum('fee');
         $data = [
             'categori' => null,
@@ -121,6 +126,12 @@ class PendapatanController extends Controller
     public function storeClaim(Request $request)
     {
         try {
+            $subsid = $request->input('subscribe_id');
+
+            if (!$subsid || count($subsid) == 0) {
+                return redirect()->back()->with(['status' => 'Error!', 'message' => 'Tidak Ada Data untuk di claim']);
+            }
+
             $company = Company::where('user_id', auth()->id())->first();
             $claim = Fee_claim::create([
                 'company_id' => $company->id,
@@ -128,6 +139,18 @@ class PendapatanController extends Controller
                 'status'=>'pending'
             ]);
 
+
+            foreach ($subsid as $id) {
+                //inset in table detail claim
+                Subscription::findOrFail($id)->update([
+                    'is_claim'=>true,
+                ]);
+
+                DetailClaim::create([
+                   'subcription_id' => $id,
+                   'feeclaim_id' => $claim->id,
+                ]);
+            }
             return redirect()->route('dashboard')->with(['status' => 'Success!', 'message' => 'Request Claim Sedang di proses!']);
 
         } catch (Exception $e) {

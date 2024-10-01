@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Fee_claim;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -37,10 +38,31 @@ class FeeClaimController extends Controller
                                                             class="fa-solid fa-trash"></i></button>';
             }
             return '<div class="d-flex">' . $button . '</div>';
-        })->editColumn('owner_id', function ($data) {
-            return $data->owner->name;
-        })->editColumn('fee_reseller', function ($data) {
-            return 'Rp ' . number_format($data->fee_reseller);
-        })->rawColumns(['action', 'owner_id', 'fee_reseller'])->make(true);
+        })->editColumn('bank_name',function($data){
+            return $data->company->bank_name;
+        })->editColumn('rekening',function($data){
+            return $data->company->rekening;
+        })->editColumn('owner_rek',function($data){
+            return $data->company->owner_rek;
+        })->editColumn('amount',function($data){
+            return number_format($data->amount);
+        })->editColumn('company',function($data){
+            return $data->company->name;
+        })->editColumn('status',function($data){
+            $span = '';
+            if ($data->status == 'pending') {
+                $span = '<span class="badge badge-warning">Pending</span>';
+            } else if ($data->status == 'aproved') {
+                $span = '<span class="badge badge-success">Aproved</span>';
+            } else {
+                $span = '<span class="badge badge-danger">Rejected</span>';
+            }
+            return $span;
+        })->editColumn('created_at',function($data){
+            return Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
+            ->setTimezone(config('app.timezone'))
+            ->format('Y-m-d H:i:s');;
+        })->rawColumns(['action','rekening','bank_name','owner_rek','created_at','company','amount','status'])->make(true);
+        
     }
 }

@@ -3,73 +3,211 @@
 @section('title', $page_name)
 
 @push('style')
-    <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
+<!-- CSS Libraries -->
+<link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+<link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
+<link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
+<link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
 @endpush
 
 @section('main')
-    <div class="main-content">
-        <section class="section">
-            <div class="section-header">
-                <h1>{{ $page_name }}</h1>
-                <div class="section-header-breadcrumb">
-                    <div class="breadcrumb-item active"><a href="{{ route('paket') }}">Paket</a></div>
-                    <div class="breadcrumb-item">{{ $page_name }}</div>
-                </div>
+<div class="main-content">
+    <section class="section">
+        <div class="section-header">
+            <h1>{{ $page_name }}</h1>
+            <div class="section-header-breadcrumb">
+                <div class="breadcrumb-item active"><a href="{{ route('paket') }}">Paket</a></div>
+                <div class="breadcrumb-item">{{ $page_name }}</div>
             </div>
+        </div>
 
 
-            <div class="card">
-                <form action="{{ route('reseller.reqclaimstore') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="form-group col-12 col-md-6">
-                                <label>Nomor Rekening <span class="text-danger">*</span></label>
-                                <input type="text" name="rekname" value="{{ $company->rekening }}" readonly
-                                    class="form-control @error('rekname') is-invalid @enderror" value="{{ old('rekname') }}">
-                                @error('rekname')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+        <div class="card">
+            <form action="{{ route('reseller.reqclaimstore') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6">
+                            <label>Nomor Rekening <span class="text-danger">*</span></label>
+                            <input type="text" name="rekname" value="{{ $company->rekening }}" readonly
+                                class="form-control @error('rekname') is-invalid @enderror"
+                                value="{{ old('rekname') }}">
+                            @error('rekname')
+                            <div class="invalid-feedback">
+                                {{ $message }}
                             </div>
-                            <div class="form-group col-12 col-md-6">
-                                <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
-                                <input type="text" name="name" value="{{ $company->owner_rek }}" readonly
-                                    class="form-control @error('name') is-invalid @enderror"
-                                    value="{{ old('name') }}">
-                                @error('name')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
+                            @enderror
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
+                            <input type="text" name="name" value="{{ $company->owner_rek }}" readonly
+                                class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+                            @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
                             </div>
-                            <div class="form-group col-12 col-md-6">
-                                <label>Jumlah Claim <span class="text-danger">*</span></label>
-                                <input type="number" name="amount" readonly value="{{ $amount }}"
-                                    class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
-                                @error('amount')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
+                            @enderror
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Jumlah Claim <span class="text-danger">*</span></label>
+                            <input type="number" name="amount" readonly value="{{ $amount }}"
+                                class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
+                            @error('amount')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div>
+                                        <h4>Dapat di Claim</h4>
+                                        <p class="text-muted">Pilih semua data untuk diclaim pendatapan anda</p>
                                     </div>
-                                @enderror
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table-striped table" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" id="select-all"></th>
+                                                    <th>Nik</th>
+                                                    <th>Nama</th>
+                                                    <th>Paket</th>
+                                                    <th>Perpanjang</th>
+                                                    <th>Deadline</th>
+                                                    <th>Status Pembayaran</th>
+                                                    <th>Fee</th>
+                                                    <th>Tanggal Bayar</th>
+                                                    <th>Owner</th>
+                                                    <th>Status Claim</th>
+                                                    @canany(['update-owner', 'delete-owner'])
+                                                    <th>Action</th>
+                                                    @endcanany
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer text-left">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-            </div>
-    </div>
-    </section>
-    </div>
+                </div>
+                <div class="card-footer text-left">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+</div>
+</section>
+</div>
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
-    <!-- Page Specific JS File -->
+<!-- JS Libraies -->
+<script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
+<!-- Page Specific JS File -->
+
+<script>
+    @if (Session::has('message'))
+            iziToast.success({
+                title: `{{ Session::get('status') }}`,
+                message: `{{ Session::get('message') }}`,
+                position: 'topRight'
+            });
+    @endif
+</script>
+
+
+<script>
+    $(document).ready(function() {
+    
+              var table = $('#dataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{{ route('reseller.getdata') }}',
+                    columns: [
+                        { 
+                data: 'subcription_id', 
+                name: 'subcription_id',
+                orderable: false,
+                searchable: false,
+                render: function(data, type, full, meta){
+                    return '<input type="checkbox" class="claim-checkbox" name="subscribe_id[]" value="' + data + '">';
+                }
+            },
+                    {
+                            name: 'nik',
+                            data: 'nik',
+                        },
+                        {
+                            name: 'customer',
+                            data: 'customer',
+                        },
+                        {
+                            name: 'paket',
+                            data: 'paket',
+                        },
+                        {
+                            name: 'start_date',
+                            data: 'start_date',
+                        },
+                        {
+                            name: 'end_date',
+                            data: 'end_date',
+                        },
+                        {
+                            name: 'status',
+                            data: 'status',
+                        },
+                        {
+                            name: 'fee',
+                            data: 'fee',
+                        },
+                        {
+                            name: 'created_at',
+                            data: 'created_at',
+                        },
+                        {
+                            name: 'owner',
+                            data: 'owner',
+                        },
+                        {
+                            name: 'claim',
+                            data: 'claim',
+                        },
+                        @canany(['update-owner', 'delete-owner'])
+                            {
+                                data: 'action',
+                                name: 'action',
+                                orderable: false,
+                            searchable: false,
+                            }
+                        @endcanany
+                    ],
+                });
+
+                $('#select-all').on('click', function(){
+                var rows = table.rows({ 'search': 'applied' }).nodes();
+                $('input[type="checkbox"]', rows).prop('checked', this.checked);
+                });
+
+    // Handle click on individual row checkboxes
+    $('#claims-table tbody').on('change', 'input.claim-checkbox', function(){
+        if(!this.checked){
+            var el = $('#select-all').get(0);
+            if(el && el.checked && ('indeterminate' in el)){
+                el.indeterminate = true;
+            }
+        }
+    });
+                
+
+    });
+
+       
+</script>
 @endpush

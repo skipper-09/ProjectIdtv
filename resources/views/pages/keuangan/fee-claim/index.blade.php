@@ -28,21 +28,18 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-                                {{-- @can('create-company')
-                                    <div class="card-header">
-                                        <a href="{{ route('company.add') }}" class="btn btn-primary">Tambah
-                                            {{ $page_name }}</a>
-                                    </div>
-                                @endcan --}}
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Nama</th>
+                                                    <th>Nama Bank</th>
+                                                    <th>Nomor Rekening</th>
+                                                    <th>Nama Pemilik Rekening</th>
                                                     <th>Jumlah</th>
+                                                    <th>Tanggal Pengajuan</th>
                                                     <th>Status</th>
-
+                                                    <th>Perusahaan</th>
                                                     @canany(['update-company', 'delete-company'])
                                                         <th>Action</th>
                                                     @endcanany
@@ -83,17 +80,36 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('feeclaim.getdata') }}',
-                columns: [{
-                        data: 'name',
-                        name: 'name',
+                columns: [
+                    {
+                        data: 'bank_name',
+                        name: 'bank_name',
+                    },
+                    {
+                        data: 'rekening',
+                        name: 'rekening',
+                    },
+                    
+                    {
+                        data: 'owner_rek',
+                        name: 'owner_rek',
                     },
                     {
                         data: 'amount',
                         name: 'amount',
                     },
                     {
+                        data: 'created_at',
+                        name: 'created_at',
+                    },
+                    
+                    {
                         data: 'status',
                         name: 'status',
+                    },
+                    {
+                        data: 'company',
+                        name: 'company',
                     },
 
                     @canany(['update-company', 'delete-company'])
