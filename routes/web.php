@@ -126,21 +126,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     //reseler
     //customer route
+    
     Route::prefix('pendapatan')->group(
         function () {
             Route::get('', [PendapatanController::class, 'index'])->name('pendapatan.reseller')->middleware('can:read-customer');
             Route::get('/getData', [PendapatanController::class, 'getData'])->name('reseller.getdata');
             Route::get('/req-claim', [PendapatanController::class, 'reqClaim'])->name('reseller.reqclaim');
             Route::post('/req-claim/add', [PendapatanController::class, 'storeClaim'])->name('reseller.reqclaimstore');
-            // Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
-            // Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
-            // // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
-            // // Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');
-            // Route::get('/tambah', [CustomerController::class, 'create'])->name('customer.add')->middleware('can:create-customer');
-            // Route::post('store', [CustomerController::class, 'store'])->name('customer.store');
-            // Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');
-            // Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
-            // Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
+            Route::get('/history-claim', [PendapatanController::class, 'HistoryClaim'])->name('reseller.historyclaim');
+            Route::get('/getHistory', [PendapatanController::class, 'GetHistory'])->name('reseller.datahistory');
+            Route::get('/detail/{id}', [PendapatanController::class, 'detail'])->name('reseller.detail');
+           
         }
     );
 
@@ -223,6 +219,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
                 Route::get('', [FeeClaimController::class, 'index'])->name('feeclaim')->middleware('can:read-feeclaim');
                 Route::get('getData', [FeeClaimController::class, 'getData'])->name('feeclaim.getdata');
                 Route::get('show/{id}', [FeeClaimController::class, 'show'])->name('feeclaim.show');
+                Route::put('/update/{id}', [FeeClaimController::class, 'Aprove'])->name('feeclaim.aprove');
             }
         );
     });

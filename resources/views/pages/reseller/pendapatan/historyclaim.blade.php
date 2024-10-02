@@ -27,7 +27,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Dapat di Claim</h4>
+                                <h4>Total Claim</h4>
                             </div>
                             <p class="font-weight-bold" style="font-size: 16px; color:black">
                                 Rp. {{ number_format($claim) }}</p>
@@ -55,34 +55,31 @@
         <div class="col-12 mb-3">
             <div class="d-flex justify-content-center align-items-center">
     
-    <a href="{{ route('reseller.reqclaim') }}"><button class="btn btn-sm btn-primary mr-2">Ajukan Claim</button></a>
-    <a href="{{ route('reseller.historyclaim') }}"><button class="btn btn-sm btn-warning mr-2">History Claim</button></a>
+                <a href="{{ route('pendapatan.reseller') }}"><button class="btn btn-sm btn-success mr-2">Data Dapat di Claim</button></a>
+    {{-- <a href="{{ route('reseller.reqclaim') }}"><button class="btn btn-sm btn-primary mr-2">Ajukan Claim</button></a> --}}
+   
             </div>
         </div>
         {{-- card --}}
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Dapat di Claim</h4>
+                    <h4>History Pengajuan Claim</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table-striped table" id="dataTable">
                             <thead>
                                 <tr>
-                                    <th>Nik</th>
-                                    <th>Nama</th>
-                                    <th>Paket</th>
-                                    <th>Perpanjang</th>
-                                    <th>Deadline</th>
-                                    <th>Status Pembayaran</th>
-                                    <th>Fee</th>
-                                    <th>Tanggal Bayar</th>
-                                    <th>Owner</th>
-                                    <th>Status Claim</th>
-                                    @canany(['update-owner', 'delete-owner'])
-                                    <th>Action</th>
-                                    @endcanany
+                                    <th>Nama Bank</th>
+                                                    <th>Nomor Rekening</th>
+                                                    <th>Nama Pemilik Rekening</th>
+                                                    <th>Jumlah</th>
+                                                    <th>Tanggal Pengajuan</th>
+                                                    <th>Status</th>
+                                                    <th>Perusahaan</th>
+                                                    <th>Detail</th>
+                                                    
                                 </tr>
                             </thead>
                         </table>
@@ -92,6 +89,8 @@
         </div>
     </section>
 </div>
+
+@include('components.modal')
 @endsection
 
 @push('scripts')
@@ -107,6 +106,7 @@
 <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
 <!-- Page Specific JS File -->
+<script src="{{ asset('js/custom.js') }}"></script>
 {{-- <script src="{{ asset('js/page/index-0.js') }}"></script> --}}
 <script>
     @if (Session::has('message'))
@@ -120,58 +120,48 @@
 <script>
     $(document).ready(function() {
 
-            $('#dataTable').DataTable({
+        $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('reseller.getdata') }}',
-                columns: [{
-                        name: 'nik',
-                        data: 'nik',
+                ajax: '{{ route('reseller.datahistory') }}',
+                columns: [
+                    {
+                        data: 'bank_name',
+                        name: 'bank_name',
                     },
                     {
-                        name: 'customer',
-                        data: 'customer',
+                        data: 'rekening',
+                        name: 'rekening',
+                    },
+                    
+                    {
+                        data: 'owner_rek',
+                        name: 'owner_rek',
                     },
                     {
-                        name: 'paket',
-                        data: 'paket',
+                        data: 'amount',
+                        name: 'amount',
                     },
                     {
-                        name: 'start_date',
-                        data: 'start_date',
-                    },
-                    {
-                        name: 'end_date',
-                        data: 'end_date',
-                    },
-                    {
-                        name: 'status',
-                        data: 'status',
-                    },
-                    {
-                        name: 'fee',
-                        data: 'fee',
-                    },
-                    {
-                        name: 'created_at',
                         data: 'created_at',
+                        name: 'created_at',
+                    },
+                    
+                    {
+                        data: 'status',
+                        name: 'status',
                     },
                     {
-                        name: 'owner',
-                        data: 'owner',
+                        data: 'company',
+                        name: 'company',
                     },
-                    {
-                        name: 'claim',
-                        data: 'claim',
-                    },
-                    @canany(['update-owner', 'delete-owner'])
                         {
                             data: 'action',
                             name: 'action',
                             orderable: false,
-                        searchable: false,
+                            searchable: false,
                         }
-                    @endcanany
+                   
                 ]
             });
                     });

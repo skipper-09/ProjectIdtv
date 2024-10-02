@@ -54,7 +54,7 @@ class DashboardController extends Controller
   public function getChartData(Request $request)
   {
     // Default untuk rentang waktu 1 minggu
-    $currentDate = Carbon::now();
+    $currentDate = \Carbon\Carbon::now();
 
 
 

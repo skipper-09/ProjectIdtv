@@ -20,8 +20,9 @@
         </div>
 
         <div class="card">
-            <form action="{{ route('stb.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('feeclaim.aprove',['id'=>$feeclaim->id]) }}" method="POST" enctype="multipart/form-data">
               @csrf
+              @method('PUT')
               {{-- <div class="card-header">
                 <h4>Default Validation</h4>
               </div> --}}
@@ -47,8 +48,17 @@
                       @enderror
                   </div>
                   <div class="form-group col-12 col-md-6">
+                    <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
+                    <input type="text" name="owner_name" readonly value="{{ $feeclaim->company->owner_rek }}" class="form-control @error('owner_name') is-invalid @enderror">
+                    @error('owner_name')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+                  <div class="form-group col-12 col-md-6">
                       <label>Nomial Request <span class="text-danger">*</span></label>
-                      <input type="text" name="amount" readonly value="{{ $feeclaim->company->fee_reseller }}" class="form-control @error('amount') is-invalid @enderror">
+                      <input type="text" name="amount" readonly value="{{ number_format($feeclaim->amount) }}" class="form-control @error('amount') is-invalid @enderror">
                       @error('amount')
                       <div class="invalid-feedback">
                           {{$message}}
@@ -56,9 +66,11 @@
                       @enderror
                   </div>
                   <div class="form-group col-12 col-md-12">
-                      <label>Bukti Transfer <span class="text-danger">*</span></label>
-                      <input type="file" name="internal" class="form-control @error('internal') is-invalid @enderror" value="{{old('internal')}}">
-                      @error('internal')
+                    <label>Bukti Transfer</label>
+                    <input type="file" accept="image/*" name="buktitf" class="form-control @error('buktitf') is-invalid @enderror"
+                        onchange="previewFile(this);">
+                    <img id="img" src="#" alt="your image" class="image-preview mt-1 d-none" />
+                      @error('buktitf')
                       <div class="invalid-feedback">
                           {{$message}}
                       </div>
@@ -66,11 +78,11 @@
                   </div>
                   <div class="form-group col-12 col-md-12">
                     <label>Status <span class="text-danger">*</span></label>
-                    <select class="form-control select2" id="extension" name="is_active">
+                    <select class="form-control select2" id="extension" name="status">
                         <option value="">Pilih Status</option>
-                        <option value="1">pending</option>
-                        <option value="0">Aproved</option>
-                        <option value="0">Rejected</option>
+                        <option value="pending" {{ $feeclaim->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="aproved" {{ $feeclaim->status == 'aproved' ? 'selected' : '' }}>Aproved</option>
+                        <option value="rejected" {{ $feeclaim->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
                     </select>
                       @error('internal')
                       <div class="invalid-feedback">
@@ -97,4 +109,19 @@
 <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
 <!-- Page Specific JS File -->
+<script>
+   function previewFile(input) {
+            var file = $("input[type=file]").get(0).files[0];
+
+            if (file) {
+                $('#img').removeClass('d-none');
+                var reader = new FileReader();
+                reader.onload = function() {
+                    $("#img").attr("src", reader.result);
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+</script>
 @endpush

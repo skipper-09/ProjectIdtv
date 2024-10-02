@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id');
             $table->integer('amount');
             $table->enum('status',['pending','aproved','rejected'])->default('pending');
+            $table->string('bukti_tf')->nullable();
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
 

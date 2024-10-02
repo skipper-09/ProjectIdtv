@@ -9,7 +9,7 @@ class Fee_claim extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'company_id','amount','status'
+        'company_id','amount','status','bukti_tf'
     ];
     protected $primaryKey = 'id';
 

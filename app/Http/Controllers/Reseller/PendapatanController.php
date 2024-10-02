@@ -160,4 +160,82 @@ class PendapatanController extends Controller
             ], 500);
         }
     }
+
+
+
+    //history claim
+    public function HistoryClaim(){
+        try {
+            $company = Company::where('user_id', auth()->id())->first();
+        $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })->where('is_claim',true)->sum('fee');
+
+        $data = [
+            'type_menu' => 'layout',
+            'page_name' => 'History Claim',
+            'claim' => $canclaim,
+        ];
+        return view('pages.reseller.pendapatan.historyclaim', $data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ], 500);        }
+    }
+
+
+    public function detail($id)
+    {
+        $data = [
+            'type_menu' => '',
+            'page_name' => 'Claim',
+            'detail' => Fee_claim::find($id), 
+        ];
+        return view('pages.reseller.pendapatan.detail', $data);
+    }
+
+
+    public function GetHistory(){
+        $fee = Fee_claim::orderByDesc('id')->get();
+        return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
+            $userauth = User::with('roles')->where('id', Auth::id())->first();
+            $button = '';
+        
+            
+            $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $fee->id . ' data-type="show" data-route="' . route('reseller.detail', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
+            class="fas fa-eye"></i></button>';
+            
+            // if ($userauth->can('delete-fee')) {
+            //     $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $fee->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
+            //                                                 class="fa-solid fa-trash"></i></button>';
+            // }
+            return '<div class="d-flex">' . $button . '</div>';
+        })->editColumn('bank_name', function ($data) {
+            return $data->company->bank_name;
+        })->editColumn('rekening', function ($data) {
+            return $data->company->rekening;
+        })->editColumn('owner_rek', function ($data) {
+            return $data->company->owner_rek;
+        })->editColumn('amount', function ($data) {
+            return number_format($data->amount);
+        })->editColumn('company', function ($data) {
+            return $data->company->name;
+        })->editColumn('status', function ($data) {
+            $span = '';
+            if ($data->status == 'pending') {
+                $span = '<span class="badge badge-warning">Pending</span>';
+            } else if ($data->status == 'aproved') {
+                $span = '<span class="badge badge-success">Aproved</span>';
+            } else {
+                $span = '<span class="badge badge-danger">Rejected</span>';
+            }
+            return $span;
+        })->editColumn('created_at', function ($data) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
+                ->setTimezone(config('app.timezone'))
+                ->format('Y-m-d H:i:s');
+            ;
+        })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'company', 'amount', 'status'])->make(true);
+    }
 }
