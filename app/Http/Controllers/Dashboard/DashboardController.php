@@ -83,7 +83,7 @@ class DashboardController extends Controller
     } else {
       $customers = Customer::whereBetween('created_at', [$startDate, $endDate])
         ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
-        ->groupBy('date')->where('company_id',)
+        ->groupBy('date')
         ->get()
         ->keyBy('date'); // Menggunakan keyBy untuk membuat array dengan key sebagai tanggal
     }
