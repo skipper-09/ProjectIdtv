@@ -28,7 +28,7 @@ class Chanel extends Model
 
     public function categori()
     {
-        return $this->belongsTo(Categori::class);
+        return $this->belongsTo(Categori::class,'categori_id','id');
     }
 
     public static function boot()

@@ -36,15 +36,15 @@ class Customer extends Model
 
     public function stb()
     {
-        return $this->belongsTo(Stb::class);
+        return $this->belongsTo(Stb::class,'stb_id','id');
     }
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class,'company_id','id');
     }
     public function region()
     {
-        return $this->belongsTo(Region::class);
+        return $this->belongsTo(Region::class,'region_id','id');
     }
     public function subcrib()
     {
