@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
                         'packet_id' => $item->packet_id,
                         'start_date' => $today,
                         'end_date' => Carbon::parse($today)->addMonth($paket->duration)->toDateString(), // Misalkan perpanjangan 1 bulan
-                        'status' => 0
+                        'status' => false
                     ]);
                 }
             }

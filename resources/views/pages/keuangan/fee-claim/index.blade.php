@@ -22,12 +22,27 @@
             </div>
 
             <div class="section-body">
+               
                 {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
                 <div class="section-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
+                                @if (!Auth::user()->hasRole('Reseller'))
+                                <div class="card-header row">
+                                  <div class="form-group col-6 col-md-4">
+                                      <label>Filter Perusahaan <span class="text-danger">*</span></label>
+                                      <select class="form-control select2 filter" id="Filter" name="company_id">
+                                          <option value="">Filter Perusahaan</option>
+                                          @foreach ($company as $item)
+                                          <option value="{{ $item->id }}">
+                                              {{ $item->name }}</option>
+                                          @endforeach
+                                      </select>
+                                  </div>
+                              </div>
+                                @endif
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table-striped table" id="dataTable">
@@ -76,10 +91,16 @@
     <script>
         $(document).ready(function() {
 
-            $('#dataTable').DataTable({
+            var table = $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('feeclaim.getdata') }}',
+                ajax: {
+                    url:'{{ route('feeclaim.getdata') }}',
+                    type:'GET',
+                    data: function(d){
+                        d.filter = $('#Filter').find(":selected").val()
+                    }
+                },
                 columns: [
                     {
                         data: 'bank_name',
@@ -123,6 +144,11 @@
                 ]
             });
 
+
+            $('.filter').on('change',function(){
+                let idfilterselected = $('#Filter').find(":selected").val();
+                table.ajax.reload(false,null);
+            })
             @if (Session::has('message'))
                 iziToast.success({
                     title: `{{ Session::get('status') }}`,

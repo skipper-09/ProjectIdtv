@@ -15,6 +15,7 @@ class Company extends Model
         'email',
         'is_active',
         'user_id',
+        'fee_reseller',
         'rekening',
         'bank_name',
         'owner_rek',

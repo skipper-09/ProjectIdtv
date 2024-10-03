@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Keuangan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Fee_claim;
 use App\Models\User;
 use Exception;
@@ -19,26 +20,27 @@ class FeeClaimController extends Controller
         $data = [
             'type_menu' => 'Keungan',
             'page_name' => 'Fee Reseller',
+            'company' => Company::all()
         ];
         return view('pages.keuangan.fee-claim.index', $data);
     }
 
 
-    public function getData()
+    public function getData(Request $request)
     {
-        $fee = Fee_claim::orderByDesc('id')->get();
+        if ($request->has('filter') && !empty($request->input('filter'))) {
+            $fee = Fee_claim::where('company_id',$request->input('filter'))->orderByDesc('id')->get();
+        }else{
+            $fee = Fee_claim::orderByDesc('id')->get();
+        }
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
-            $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
-        
-            if ($userauth->can('update-company')) {
+            if ($fee->status == 'pending') {
                     $button .= ' <a href="' . route('feeclaim.show', ['id' => $fee->id]) . '" class="btn btn-sm btn-success action mr-1 " data-id=' . $fee->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Prses Data"><i
                                                                 class="fa-solid fa-eye"></i></a>';
+            }else{
+                $button = '<span class="badge badge-success">Sudah Di proses</span>';
             }
-            // if ($userauth->can('delete-fee')) {
-            //     $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $fee->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
-            //                                                 class="fa-solid fa-trash"></i></button>';
-            // }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('bank_name', function ($data) {
             return $data->company->bank_name;

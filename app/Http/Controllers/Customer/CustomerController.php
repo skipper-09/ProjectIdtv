@@ -27,6 +27,7 @@ class CustomerController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Customer',
+            'company'=>Company::all()
         ];
         return view('pages.customer.index', $data);
     }
@@ -39,13 +40,21 @@ class CustomerController extends Controller
     // }
 
 
-    public function getData()
+    public function getData(Request $request)
     {
+        
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderBy('id', 'desc')->get();
-        } else {
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->get();
+            $customer =Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderBy('id', 'asc')->get();
+        } else { 
+            
+                if ($request->has('filter') && !empty($request->input('filter'))) {
+                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $request->input('filter'))->orderBy('id', 'asc')->get();
+
+                    // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+                }else{
+                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'asc')->get();
+                }
         }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -78,7 +87,7 @@ class CustomerController extends Controller
             return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
             $cus = '';
-            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date == today()->format('Y-m-d')) {
+            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date < today()->format('Y-m-d')) {
                 $cus = '<span class="text-danger">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
             } else {
                 $cus = '<span class="text-success fw-bold">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
@@ -154,6 +163,7 @@ class CustomerController extends Controller
 
         $amount = $paket->price + $customer->company->fee_reseller;
 
+        //insert to payment table
         Payment::create([
             'subcription_id' => $subs->id,
             'customer_id' => $customer->id,
@@ -171,9 +181,7 @@ class CustomerController extends Controller
             'type_menu' => '',
             'page_name' => 'Customer',
             'customer' => Customer::where('id', $id)->get()
-
         ];
-
         return view('pages.customer.detail-customer', $data);
     }
 

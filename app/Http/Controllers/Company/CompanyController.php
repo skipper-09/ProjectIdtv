@@ -64,7 +64,11 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'rekening' => $request->rekening,
+            'bank_name' => $request->bank_name,
+            'owner_rek' => $request->owner_rek,
+            'fee_reseller'=>$request->fee_reseller
         ]);
 
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Prusahaan!']);
@@ -93,7 +97,11 @@ class CompanyController extends Controller
             'phone' => $request->phone,
             'email' => $request->email,
             'address' => $request->address,
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'rekening' => $request->rekening,
+            'bank_name' => $request->bank_name,
+            'owner_rek' => $request->owner_rek,
+            'fee_reseller'=>$request->fee_reseller
         ]);
         return redirect()->route('company')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Data Perusahaan!']);
     }

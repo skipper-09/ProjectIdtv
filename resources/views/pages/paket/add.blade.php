@@ -46,19 +46,6 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-12 col-md-6">
-                                <label>Perusahaan <span class="text-danger">*</span></label>
-                                <select class="form-control select2 @error('company_id') is-invalid @enderror" name="company_id">
-                                    <option value="">Pilih Perusahaan</option>
-                                    @foreach ($company as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }} </option>
-                                    @endforeach
-                                </select>
-                                @error('company_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label>Durasi Paket <span class="text-danger">*</span></label>

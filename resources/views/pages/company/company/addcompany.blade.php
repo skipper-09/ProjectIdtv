@@ -18,12 +18,9 @@
                     <div class="breadcrumb-item">{{ $page_name }}</div>
                 </div>
             </div>
-
-
             <div class="card">
                 <form action="{{ route('company.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
@@ -68,6 +65,50 @@
                                     @endforeach
                                 </select>
                                 @error('user_id')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Nama Bank<span class="text-danger">*</span></label>
+                                <input type="text" name="bank_name"
+                                    class="form-control @error('bank_name') is-invalid @enderror" placeholder="Nama Bank"
+                                    >
+                                @error('bank_name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
+                                <input type="text" name="owner_rek"
+                                    class="form-control @error('owner_rek') is-invalid @enderror" placeholder="Nama Pemilik"
+                                    >
+                                @error('owner_rek')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Nomor Rekening<span class="text-danger">*</span></label>
+                                <input type="number" name="rekening"
+                                    class="form-control @error('rekening') is-invalid @enderror" placeholder="Nomor Rekening"
+                                    >
+                                @error('rekening')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Fee Reseller<span class="text-danger">*</span></label>
+                                <input type="number" name="fee_reseller"
+                                    class="form-control @error('fee_reseller') is-invalid @enderror" placeholder="Jumlah Fee Reseller"
+                                    >
+                                @error('fee_reseller')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>

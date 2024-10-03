@@ -199,17 +199,14 @@ class PendapatanController extends Controller
     public function GetHistory(){
         $fee = Fee_claim::orderByDesc('id')->get();
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
-            $userauth = User::with('roles')->where('id', Auth::id())->first();
-            $button = '';
-        
             
+            $button = '';
+        if ($fee->status == 'pending') {
+            $button = '<span class="badge badge-success">Sedang dicek</span>';
+        }else{
             $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $fee->id . ' data-type="show" data-route="' . route('reseller.detail', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             class="fas fa-eye"></i></button>';
-            
-            // if ($userauth->can('delete-fee')) {
-            //     $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $fee->id . ' data-type="delete" data-route="' . route('company.delete', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
-            //                                                 class="fa-solid fa-trash"></i></button>';
-            // }
+        }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('bank_name', function ($data) {
             return $data->company->bank_name;
