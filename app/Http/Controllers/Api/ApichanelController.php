@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Categori;
 use App\Models\Chanel;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 
 class ApichanelController extends Controller
@@ -56,5 +57,21 @@ class ApichanelController extends Controller
         }
 
         return ResponseFormatter::success($categories->get(), 'Categories retrieved successfully');
+    }
+
+
+    public function HistoryLangganan(Request $request){
+
+        $customerId = $request->input('customer_id');
+        if ($customerId) {
+            $subs = Subscription::where('customer_id',$customerId)->get();
+            if ($subs) {
+                return ResponseFormatter::success($subs, 'History Subscription berhasil diambil');
+            } else {
+                return ResponseFormatter::error($subs, 'History Subscription kosong', 400);
+            }
+        }
+        return ResponseFormatter::error('data kosong', 'Inputkan Customer_id', 400);
+        
     }
 }

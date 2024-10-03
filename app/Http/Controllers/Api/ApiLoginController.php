@@ -25,10 +25,16 @@ class ApiLoginController extends Controller
             Auth::guard('customer')->attempt(['username' => $user->username, 'password' => $request->password])
         ) {
             // Auth::loginUsingId($user->id);
-            $data = Customer::where('id', Auth::guard('customer')->user()->id)->with('subcrib')->get();
+            $data = Customer::where('id', Auth::guard('customer')->user()->id)->whereHas('subcrib',function($query){
+                $query->orderBy('end_date', 'asc');
+            })->with(['subcrib' => function($query) {
+                $query->orderBy('end_date', 'asc')
+                      ->limit(1); // Get only the latest subscription
+            }])->first();
+        
             return response()->json([
                 'message' => 'succesfully logged in Customer Account',
-                'data' => Auth::guard('customer')->user(),
+                'data' => $data,
                 'token' => $token,
             ]);
         } else {
