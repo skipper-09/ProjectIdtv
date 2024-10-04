@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('type', ['m3u', 'mpd'])->default('m3u');
             $table->enum('security_type', ['clearkey', 'widevine'])->nullable();
             $table->string('security')->nullable();
-            $table->boolean('is_active')->default(1);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->foreign('categori_id')->references('id')->on('categoris')->onDelete('restrict')->onUpdate('cascade');
         });

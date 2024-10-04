@@ -194,6 +194,7 @@ class Chanelcontroller extends Controller
 
     public function update(Chanel $chanel, Request $request, $id)
     {
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'url' => 'required|url',
@@ -227,6 +228,7 @@ class Chanelcontroller extends Controller
                 'user_agent' => $request->user_agent,
                 'security_type' => $request->input('security_type'),
                 'security' => $request->security,
+                'is_active' => $request->is_active,
             ]);
 
             return redirect()->route('chanel')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Chanel!']);

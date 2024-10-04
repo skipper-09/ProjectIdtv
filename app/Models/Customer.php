@@ -59,10 +59,13 @@ class Customer extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults() ->useLogName('Customer')->logOnly(['name']);
+        
     }
-
+    
     public function getDescriptionForEvent(string $event): string
     {
         return "Customer has been {$event}"; // Mengembalikan deskripsi sesuai dengan event
+
     }
+    
 }

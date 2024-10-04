@@ -75,7 +75,7 @@ class CustomerController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->addColumn('is_active', function ($chanel) {
             $active = '';
-            $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            $chanel->is_active == true ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
             return $active;
         })->editColumn('stb', function (Customer $stb) {
             return $stb->stb->name;
@@ -112,7 +112,7 @@ class CustomerController extends Controller
             }
 
             return '<div class="d-flex">' . $button . '</div>';
-        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date'])->make(true);
+        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date','is_active'])->make(true);
     }
 
 
@@ -193,7 +193,7 @@ class CustomerController extends Controller
         $latestsub = Subscription::where('customer_id', $customer->id)->orderBy('created_at', 'asc')->first();
         $data = [
             'type_menu' => '',
-            'page_name' => 'Customer',
+            'page_name' => 'Update Customer',
             'customer' => $customer,
             'stb' => Stb::all(),
             'region' => Region::all(),
@@ -247,7 +247,7 @@ class CustomerController extends Controller
         //     'amount' => $paket[0]->price,
         //     'status' => 'paid'
         // ]);
-        return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Customer!']);
+        return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Customer!']);
     }
 
     public function destroy($id)

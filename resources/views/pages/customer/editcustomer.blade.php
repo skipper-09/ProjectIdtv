@@ -307,7 +307,7 @@
                 ]
             });
 
-            @if (Session::has('message'))
+            @if(Session::has('message'))
                 iziToast.success({
                     title: `{{ Session::get('status') }}`,
                     message: `{{ Session::get('message') }}`,

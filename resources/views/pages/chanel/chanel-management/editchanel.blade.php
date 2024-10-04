@@ -82,7 +82,7 @@
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label>Status</label>
-                                <select class="form-control select2" name="status">
+                                <select class="form-control select2" name="is_active">
                                     <option value="">Pilih Status</option>
                                     <option value="1" {{ $chanel->is_active == 1 ? 'selected' : '' }}>Aktif</option>
                                     <option value="0" {{ $chanel->is_active == 0 ? 'selected' : '' }}>Tidak Aktif

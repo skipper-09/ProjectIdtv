@@ -61,6 +61,7 @@
                                                 <th>Diperpanjang</th>
                                                 <th>Deadline</th>
                                                 <th>Perusahaan</th>
+                                                <th>Status</th>
                                                 <th>Renew|Print</th>
                                                 @canany(['read-customer', 'update-customer', 'delete-customer'])
                                                 <th>Action</th>
@@ -164,6 +165,12 @@
                         searchable: true,
                     },
                     {
+                        data: 'is_active',
+                        name: 'is_active',
+                        orderable: false,
+                        searchable: true,
+                    },
+                    {
                         data: 'renew',
                         name: 'renew',
                         orderable: false,
@@ -178,7 +185,7 @@
 
                         }
                     @endcanany
-                ]
+                ],
             });
 
             $('.filter').on('change',function(){
@@ -186,7 +193,7 @@
                 table.ajax.reload(false,null);
             })
 
-                    @if (Session::has('message'))
+                @if(Session::has('message'))
                 iziToast.success({
                     title: `{{ Session::get('status') }}`,
                     message: `{{ Session::get('message') }}`,
