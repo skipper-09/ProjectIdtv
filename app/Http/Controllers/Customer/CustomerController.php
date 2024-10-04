@@ -75,7 +75,7 @@ class CustomerController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->addColumn('is_active', function ($chanel) {
             $active = '';
-            $chanel->is_active == true ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
             return $active;
         })->editColumn('stb', function (Customer $stb) {
             return $stb->stb->name;
@@ -275,4 +275,36 @@ class CustomerController extends Controller
 
     // return response()->json($packages);
     // }
+
+    public function Tes(){
+        $today = Carbon::now()->toDateString();
+        $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
+
+        // Ambil data secara batch untuk menghindari beban besar pada database
+        Subscription::where('end_date', '<=', $threeDaysLater)
+            ->where('start_date', '>=', $today)
+            ->chunk(10, function ($subs) use ($today) {
+                foreach ($subs as $item) {
+                    // Cek apakah sudah ada perpanjangan sebelumnya
+                    $existingSubscription = Subscription::where('customer_id', $item->customer_id)
+                        ->where('end_date', '<', $today)
+                        ->exists();
+
+                    $paket = Package::find($item->packet_id);
+                    if (!$existingSubscription && $paket) {
+                        Subscription::create([
+                            'customer_id' => $item->customer_id,
+                            'packet_id' => $item->packet_id,
+                            'start_date' => null,
+                            'end_date' => Carbon::parse($today)->addMonth($paket->duration)->toDateString(),
+                            'status' => false,
+                        ]);
+                    }
+                }
+            });
+
+        Customer::whereHas('subcrib', function ($query) use ($today) {
+            $query->where('end_date', '<', $today);
+        })->update(['is_active' => 0]);
+    }
 }
