@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Categori;
 use App\Models\Chanel;
+use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 
@@ -64,7 +65,7 @@ class ApichanelController extends Controller
 
         $customerId = $request->input('customer_id');
         if ($customerId) {
-            $subs = Subscription::where('customer_id',$customerId)->get();
+             $subs = Payment::with(['subscrib'])->where('customer_id',$customerId)->get();
             if ($subs) {
                 return ResponseFormatter::success($subs, 'History Subscription berhasil diambil');
             } else {
@@ -72,6 +73,5 @@ class ApichanelController extends Controller
             }
         }
         return ResponseFormatter::error('data kosong', 'Inputkan Customer_id', 400);
-        
     }
 }
