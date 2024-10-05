@@ -62,7 +62,7 @@ class SubcriptionController extends Controller
         })->editColumn('nominal', function ($data) {
             return 'Rp' . ' ' . number_format($data->paket->price);
         })->editColumn('invoices', function ($data) {
-            return $data->status == true ? $data->invoices : $data->invoices . "<span class='badge badge-danger ml-1'>Unpaid</span>" ;
+            return $data->status == 1 ? $data->invoices : $data->invoices . "<span class='badge badge-danger ml-1'>Unpaid</span>" ;
         })->rawColumns(['action', 'company', 'paket', 'nominal', 'invoices'])->make(true);
     }
 
@@ -94,7 +94,7 @@ class SubcriptionController extends Controller
         
 
         if ($type === 'subscription') {
-            $sub = Subscription::find($id);
+            $sub = Subscription::with(['payment'])->find($id);
             $cus = Customer::find($sub->customer_id);
             $data = [
                 'page_name'=> $sub->invoices,
