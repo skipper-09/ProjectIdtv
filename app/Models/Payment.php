@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subcription_id',
+        'subscription_id',
         'customer_id',
         'amount',
         'fee',
@@ -20,7 +20,7 @@ class Payment extends Model
 
     public function subscrib()
     {
-        return $this->belongsTo(Subscription::class, 'subcription_id', 'id');
+        return $this->belongsTo(Subscription::class, 'subscription_id', 'id');
     }
 
     public function customer()

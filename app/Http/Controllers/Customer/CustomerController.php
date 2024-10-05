@@ -49,11 +49,11 @@ class CustomerController extends Controller
         } else { 
             
                 if ($request->has('filter') && !empty($request->input('filter'))) {
-                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $request->input('filter'))->orderBy('id', 'asc')->get();
+                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
 
                     // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
                 }else{
-                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'asc')->get();
+                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->groupBy('id')->get();
                 }
         }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
@@ -165,7 +165,7 @@ class CustomerController extends Controller
 
         //insert to payment table
         Payment::create([
-            'subcription_id' => $subs->id,
+            'subscription_id' => $subs->id,
             'customer_id' => $customer->id,
             'amount' => $amount,
             'fee'=> $customer->company->fee_reseller,

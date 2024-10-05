@@ -65,7 +65,7 @@ class ApichanelController extends Controller
 
         $customerId = $request->input('customer_id');
         if ($customerId) {
-             $subs = Payment::with(['subscrib'])->where('customer_id',$customerId)->get();
+             $subs = Subscription::with(['payment'])->where('customer_id',$customerId)->get();
             if ($subs) {
                 return ResponseFormatter::success($subs, 'History Subscription berhasil diambil');
             } else {

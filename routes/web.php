@@ -13,6 +13,7 @@ use App\Http\Controllers\Keuangan\PeriodeIncomeController;
 use App\Http\Controllers\Keuangan\FeeClaimController;
 use App\Http\Controllers\Keuangan\StatistikController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
+use App\Http\Controllers\Keuangan\TagihanController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
@@ -213,6 +214,12 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             function () {
                 Route::get('', [StatistikController::class, 'index'])->name('statistik')->middleware('can:read-statistik');
                 Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
+            }
+        );
+        Route::prefix('tagihan')->group(
+            function () {
+                Route::get('', [TagihanController::class, 'index'])->name('tagihan')->middleware('can:read-tagihan');
+                Route::get('getData', [TagihanController::class, 'getData'])->name('tagihan.getdata');
             }
         );
         Route::prefix('fee-claim')->group(

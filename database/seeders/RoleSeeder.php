@@ -65,11 +65,10 @@ class RoleSeeder extends Seeder
             'delete-paket',
             'delete-log',
             'read-income-harian',
-            'read-statustik',
+            'read-statistik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log',
-            'clean-log',
+            'read-log','clean-log','read-tagihan'
         ]);
 
         $administrator->givePermissionTo([
@@ -117,11 +116,10 @@ class RoleSeeder extends Seeder
             'delete-paket',
             'delete-log',
             'read-income-harian',
-            'read-statustik',
+           'read-statistik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log',
-            'clean-log',
+            'read-log','clean-log','read-tagihan'
         ]);
 
         $staff->givePermissionTo([

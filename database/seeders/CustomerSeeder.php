@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Customer;
+use App\Models\Package;
+use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -37,5 +39,18 @@ class CustomerSeeder extends Seeder
             'start_date' => now(),
             'end_date' => now()->addMonth(1),
         ]);
+
+        $paket = Package::find($subcription->packet_id);
+        $amount = $paket->price + $customer->company->fee_reseller;
+        if ($subcription != null) {
+            Payment::create([
+                'subscription_id' =>$subcription->id,
+            'customer_id' =>$customer->id,
+            'amount'=>$amount,
+            'fee' =>$customer->company->fee_reseller,
+            'status'=> 'paid',
+            'tanggal_bayar'=> now()
+            ]);
+        }
     }
 }

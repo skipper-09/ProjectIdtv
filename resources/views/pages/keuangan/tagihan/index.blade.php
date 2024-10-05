@@ -15,7 +15,7 @@
             <div class="section-header">
                 <div class="">
                     <h1>{{ $page_name }}</h1>
-                    <p>Tanggal {{ now()->format('d-m-Y') }}</p>
+                    
                 </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
@@ -24,54 +24,7 @@
             </div>
 
             <div class="section-body">
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-success ">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>FROFIT (IDR)</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ number_format($income) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-success ">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>FROFIT BERSIH (IDR)</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ number_format($incomeclean) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                        <div class="card card-statistic-1">
-                            <div class="card-icon bg-success ">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                            <div class="card-wrap">
-                                <div class="card-header">
-                                    <h4>FROFIT RESELLER (IDR)</h4>
-                                </div>
-                                <div class="card-body">
-                                    {{ number_format($reseller) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+               
                 {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
                 <div class="section-body">
@@ -91,11 +44,8 @@
                                                     <th>Harga Pokok</th>
                                                     <th>Fee Reseller</th>
                                                     <th>Status</th>
-                                                    <th>Tanggal Bayar</th>
+                                                    <th>Tagihan Dibuat</th>
                                                     <th>Owner</th>
-                                                    @canany(['update-owner', 'delete-owner'])
-                                                        <th>Action</th>
-                                                    @endcanany
                                                 </tr>
                                             </thead>
                                         </table>
@@ -132,7 +82,7 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('dailyincome.getdata') }}',
+                ajax: '{{ route('tagihan.getdata') }}',
                 columns: [{
                         name: 'nik',
                         data: 'nik',
@@ -173,14 +123,7 @@
                         name: 'owner',
                         data: 'owner',
                     },
-                    @canany(['update-owner', 'delete-owner'])
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                        searchable: false,
-                        }
-                    @endcanany
+                    
                 ]
             });
 

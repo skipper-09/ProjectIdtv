@@ -15,14 +15,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('subcription_id');
+            $table->unsignedBigInteger('subscription_id');
             $table->unsignedBigInteger('customer_id');
             $table->integer('amount');
             $table->integer('fee');
             $table->enum('status', ['paid', 'unpaid', 'pending']);
             $table->date('tanggal_bayar');
             $table->timestamps();
-            $table->foreign('subcription_id')->references('id')->on('subscriptions')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
         });
     }

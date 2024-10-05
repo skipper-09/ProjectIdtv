@@ -102,6 +102,11 @@
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
                         <span>Data Keuangan</span></a>
                     <ul class="dropdown-menu">
+                        @can('read-tagihan')
+                        <li class="{{ Request::is('admin/keuangan/tagihan') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('tagihan') }}">Tagihan Pelanggan</a>
+                        </li>
+                    @endcan
                         @can('read-owner')
                             <li class="{{ Request::is('admin/keuangan/income-harian') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('dailyincome') }}">Income Harian</a>

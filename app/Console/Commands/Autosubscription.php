@@ -30,7 +30,7 @@ class Autosubscription extends Command
 
 
         $today = Carbon::now()->toDateString();
-        $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
+        $threeDaysLater = Carbon::now()->addDays(3);
 
         // Ambil data secara batch untuk menghindari beban besar pada database
         $subs = Subscription::where('end_date', '<=', $threeDaysLater)
