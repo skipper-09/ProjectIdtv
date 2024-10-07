@@ -27,7 +27,10 @@ class CustomerController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Customer',
-            'company'=>Company::all()
+            'company'=>Company::all(),
+            'customer' => Customer::all()->count(),
+            'cusactive' =>Customer::where('is_active',1)->get()->count(),
+            'cusinactive' =>Customer::where('is_active',0)->get()->count(),
         ];
         return view('pages.customer.index', $data);
     }
@@ -190,7 +193,7 @@ class CustomerController extends Controller
     {
 
         $customer = Customer::find($id);
-        $latestsub = Subscription::where('customer_id', $customer->id)->orderBy('created_at', 'asc')->first();
+        $latestsub = Subscription::where('customer_id', $customer->id)->orderBy('created_at', 'desc')->first();
         $data = [
             'type_menu' => '',
             'page_name' => 'Update Customer',

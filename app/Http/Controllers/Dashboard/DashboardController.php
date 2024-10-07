@@ -24,7 +24,7 @@ class DashboardController extends Controller
       $data = [
         'chanel' => Chanel::all(),
         'company' => Company::all(),
-        'customer' => Customer::all(),
+        'customer' => Customer::whereMonth('created_at',now())->get(),
         'income' => Payment::all(),
         'log' =>  $lastactivity,
         'type_menu' => 'dashboard',

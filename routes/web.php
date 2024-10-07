@@ -17,6 +17,7 @@ use App\Http\Controllers\Keuangan\TagihanController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
+use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\RoleController;
@@ -47,6 +48,10 @@ Route::get('stream/{replaceurl}', [Chanelcontroller::class, 'stream'])->name('st
 Route::fallback(function () {
     return response()->view('pages.error-404', [], 404);
 });
+
+
+//handle redirect paymet gateway midtrans
+Route::get('payment/finish', [PaymentController::class, 'FinishPayment'])->name('finishpayment');
 
 
 //chanel management route

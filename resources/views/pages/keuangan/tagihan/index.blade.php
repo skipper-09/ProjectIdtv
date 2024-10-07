@@ -36,6 +36,7 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>INVOICE</th>
                                                     <th>Nik</th>
                                                     <th>Nama</th>
                                                     <th>Paket</th>
@@ -84,6 +85,12 @@
                 serverSide: true,
                 ajax: '{{ route('tagihan.getdata') }}',
                 columns: [{
+                        name: 'invoices',
+                        data: 'invoices',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
                         name: 'nik',
                         data: 'nik',
                     },
@@ -122,6 +129,8 @@
                     {
                         name: 'owner',
                         data: 'owner',
+                        orderable: false,
+                        searchable: false
                     },
                     
                 ]

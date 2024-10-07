@@ -14,7 +14,9 @@ class Payment extends Model
         'amount',
         'fee',
         'status',
-        'tanggal_bayar'
+        'tanggal_bayar',
+        'checkout_link',
+        'payment_type',
     ];
     protected $primaryKey = 'id';
 

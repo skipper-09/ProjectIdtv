@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('fee');
             $table->enum('status', ['paid', 'unpaid', 'pending']);
             $table->date('tanggal_bayar');
+            $table->string('checkout_link')->nullable();
+            $table->enum('payment_type',['manual','midtrans'])->default('manual');
             $table->timestamps();
             $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');

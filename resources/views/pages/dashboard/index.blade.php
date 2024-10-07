@@ -24,7 +24,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pelanggan</h4>
+                                <h4>PELANGGAN BULAN INI</h4>
                             </div>
                             <p class="font-weight-bold" style="font-size: 16px; color:black">
                                 {{ $customer->count() }}</p>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
-                                    <h4>Perusahaan</h4>
+                                    <h4>PERUSAHAAN</h4>
                                 </div>
                                 <p class="font-weight-bold" style="font-size: 16px; color:black">
                                     {{ $company->count() }}</p>
@@ -56,7 +56,7 @@
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
-                                    <h4>Total Chanel</h4>
+                                    <h4>JUMLAH CHANEL</h4>
                                 </div>
                                 <p class="font-weight-bold" style="font-size: 16px; color:black">
                                     {{ $chanel->count() }}</p>
@@ -72,7 +72,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pendapatan</h4>
+                                <h4>PENDAPATAN</h4>
                             </div>
 
                             <p class="font-weight-bold" style="font-size: 16px; color:black"> Rp.

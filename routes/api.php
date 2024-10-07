@@ -24,3 +24,7 @@ Route::post('/login', [ApiLoginController::class, 'login'])->middleware('guest')
 Route::get('/chanel', [ApichanelController::class, 'index']);
 Route::get('/category', [ApichanelController::class, 'category']);
 Route::get('/historysubscription', [ApichanelController::class, 'HistoryLangganan']);
+
+
+Route::post('/payment', [ApichanelController::class, 'createPayment']);
+Route::post('/midtrans/notification', [ApichanelController::class, 'handleNotification']);

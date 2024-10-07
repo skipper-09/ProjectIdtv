@@ -20,7 +20,55 @@
                 {{-- <div class="breadcrumb-item">Default Layout</div> --}}
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-primary">
+                        <i class="far fa-user"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>Pelanggan</h4>
+                        </div>
+                        <p class="font-weight-bold" style="font-size: 16px; color:black">
+                            {{ $customer }}</p>
 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-danger">
+                        <i class="far fa-building"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>PELANGGAN AKTIF</h4>
+                        </div>
+                        <p class="font-weight-bold" style="font-size: 16px; color:black">
+                            {{ $cusactive }}</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <div class="card card-statistic-1">
+                    <div class="card-icon bg-warning">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card-header">
+                            <h4>PELANGGAN TIDAK AKTIF</h4>
+                        </div>
+                        <p class="font-weight-bold" style="font-size: 16px; color:black">
+                            {{ $cusinactive }}</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="section-body">
             {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
@@ -34,20 +82,20 @@
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
-                          @if (!Auth::user()->hasRole('Reseller'))
-                          <div class="card-header row">
-                            <div class="form-group col-6 col-md-4">
-                                <label>Filter Perusahaan <span class="text-danger">*</span></label>
-                                <select class="form-control select2 filter" id="Filter" name="company_id">
-                                    <option value="">Filter Perusahaan</option>
-                                    @foreach ($company as $item)
-                                    <option value="{{ $item->id }}">
-                                        {{ $item->name }}</option>
-                                    @endforeach
-                                </select>
+                            @if (!Auth::user()->hasRole('Reseller'))
+                            <div class="card-header row">
+                                <div class="form-group col-6 col-md-4">
+                                    <label>Filter Perusahaan <span class="text-danger">*</span></label>
+                                    <select class="form-control select2 filter" id="Filter" name="company_id">
+                                        <option value="">Filter Perusahaan</option>
+                                        @foreach ($company as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                          @endif
+                            @endif
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">
