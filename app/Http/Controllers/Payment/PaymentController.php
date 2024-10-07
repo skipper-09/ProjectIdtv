@@ -7,15 +7,20 @@ use App\Models\Package;
 use App\Models\Payment;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function FinishPayment(Request $request){
-        $invoiceid = $request->query('order_id');
-        $subs = Subscription::where('invoices',$invoiceid);
+    public function FinishPayment($order_id,Request $request){
+        
+
+       
+
+
+        
+        $subs = Subscription::where('invoices',$order_id)->first();
         
         // Logika setelah pembayaran berhasil
-       
         // $order = Payment::where('subcription_id', $status)->first();
         // $order->status = 'paid';
         // $order->save();

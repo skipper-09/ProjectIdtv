@@ -83,23 +83,23 @@ class ApichanelController extends Controller
     public function createPayment(Request $request)
     {
         $invoiceid = $request->query('order_id');
-        $sub = Subscription::with(['customer','paket'])->where('invoices',$invoiceid)->first();
+        $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->first();
         if ($sub == null) {
-return response()->json([
-"message"=>'TIDAK ADA INVOICE TERSEBUT'
-]);
+            return response()->json([
+                "message" => 'TIDAK ADA INVOICE TERSEBUT'
+            ]);
         }
         $paket = Package::find($sub->packet_id);
 
 
-        $gross_amount =  $paket->price + $sub->customer->company->fee_reseller;
-        
+        $gross_amount = $paket->price + $sub->customer->company->fee_reseller;
+
         $params = array(
             'transaction_details' => array(
                 "order_id" => $invoiceid,
                 "gross_amount" => $gross_amount,
             ),
-            "customer_required"=> false,
+            'customer_required' => false,
             'item_details' => array(
                 array(
                     "name" => $paket->name,
@@ -107,7 +107,7 @@ return response()->json([
                     "quantity" => 1,
                 ),
             ),
-           
+
             'customer_details' => array(
                 "first_name" => $sub->customer->name . '-' . $sub->customer->address,
                 "phone" => $sub->customer->phone,
@@ -121,9 +121,12 @@ return response()->json([
                 "indomaret",
                 "shopeepay"
             ),
+            'callbacks' => [
+            'finish' => route('finishpayment',['order_id'=>$invoiceid]), // This is the URL to redirect to
+    ],
         );
 
-        $auth = base64_encode(env('MIDTRANS_SERVER_KEY').':');
+        $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
