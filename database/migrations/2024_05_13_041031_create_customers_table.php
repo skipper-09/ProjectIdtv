@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('showpassword');
             $table->string('password');
+            $table->string('device_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();

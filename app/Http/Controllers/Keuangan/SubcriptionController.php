@@ -20,7 +20,7 @@ class SubcriptionController extends Controller
         $subcription = Subscription::with(['customer', 'paket'])->where('customer_id', $customerId)->orderByDesc('id')->get();
 
         $hidedelete = $subcription->filter(function ($item) {
-            return $item->end_date < now();
+            return $item->end_date < now() || $item->status == 0;
         })->first();
         $highlightedData = $subcription->filter(function ($item) {
             return $item->end_date > now();
@@ -50,7 +50,7 @@ class SubcriptionController extends Controller
             }
 
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id,'type'=> 'subscription']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'subscription']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
 
@@ -62,7 +62,7 @@ class SubcriptionController extends Controller
         })->editColumn('nominal', function ($data) {
             return 'Rp' . ' ' . number_format($data->paket->price);
         })->editColumn('invoices', function ($data) {
-            return $data->status == 1 ? $data->invoices : $data->invoices . "<span class='badge badge-danger ml-1'>Unpaid</span>" ;
+            return $data->status == 1 ? $data->invoices : $data->invoices . "<span class='badge badge-danger ml-1'>Unpaid</span>";
         })->rawColumns(['action', 'company', 'paket', 'nominal', 'invoices'])->make(true);
     }
 
@@ -88,34 +88,32 @@ class SubcriptionController extends Controller
 
 
 
-    public function PrintStandart($id,$type)
+    public function PrintStandart($id, $type)
     {
 
-        
+
 
         if ($type === 'subscription') {
             $sub = Subscription::with(['payment'])->find($id);
-            $cus = Customer::find($sub->customer_id);
-            $data = [
-                'page_name'=> $sub->invoices,
-                'customer' => $cus,
-                'subcription' => $sub
-            ];    
-
-        
-        }elseif ($type === 'income') {
-            $paymen = Payment::find($id);
-            $sub = Subscription::find($paymen->subcription_id);
             $cus = Customer::find($sub->customer_id);
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,
                 'subcription' => $sub
             ];
-        }else{
+        } elseif ($type === 'income') {
+            $paymen = Payment::find($id);
+            $sub = Subscription::find($paymen->subscription_id);
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub
+            ];
+        } else {
             $cus = Customer::find($id);
-            $sub = Subscription::where('customer_id',$cus->id)->orderBy('created_at','asc')->first();
-            $paymen = Payment::where('subcription_id',$sub->id)->first();
+            $sub = Subscription::where('customer_id', $cus->id)->orderBy('created_at', 'asc')->first();
+            $paymen = Payment::where('subscription_id', $sub->id)->first();
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,

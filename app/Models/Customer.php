@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Customer extends Model
 {
-    use HasFactory, HasApiTokens,LogsActivity;
+    use HasFactory, HasApiTokens, LogsActivity;
     protected $guard = 'customer';
     protected $fillable = [
         'name',
@@ -25,7 +25,8 @@ class Customer extends Model
         'company_id',
         'stb_id',
         'region_id',
-        'is_active'
+        'is_active',
+        'device_id'
     ];
     protected $primaryKey = 'id';
 
@@ -36,15 +37,15 @@ class Customer extends Model
 
     public function stb()
     {
-        return $this->belongsTo(Stb::class,'stb_id','id');
+        return $this->belongsTo(Stb::class, 'stb_id', 'id');
     }
     public function company()
     {
-        return $this->belongsTo(Company::class,'company_id','id');
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
     public function region()
     {
-        return $this->belongsTo(Region::class,'region_id','id');
+        return $this->belongsTo(Region::class, 'region_id', 'id');
     }
     public function subcrib()
     {
@@ -55,17 +56,15 @@ class Customer extends Model
         return $this->hasMany(Payment::class);
     }
 
-//log automatyly created
+    //log automatyly created
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults() ->useLogName('Customer')->logOnly(['name']);
-        
+        return LogOptions::defaults()->useLogName('Customer')->logOnly(['name']);
     }
-    
+
     public function getDescriptionForEvent(string $event): string
     {
         return "Customer has been {$event}"; // Mengembalikan deskripsi sesuai dengan event
 
     }
-    
 }
