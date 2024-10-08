@@ -228,18 +228,13 @@ class CustomerController extends Controller
         ]);
 
         if ($customer->id != null) {
-
-            $subs = Subscription::where('customer_id', $customer->id)->first();
+            $subs = Subscription::where('customer_id', $customer->id)->orderBy('id','desc')->first();
             $subs->update([
                 'packet_id' => $request->paket_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
             ]);
         }
-
-
-
-
 
         // $paket = Package::where('id', $subs->packet_id)->get();
         // $paymentid = Payment::where('customer_id', $customer->id)->get();

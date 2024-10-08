@@ -12,42 +12,35 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function FinishPayment($order_id,Request $request){
-        
+    public function FinishPayment($order_id,Request $request){       
 
+        $subs = Subscription::where('invoices',$order_id)->first();
+        
        
 
 
-        
-        $subs = Subscription::where('invoices',$order_id)->first();
-        
-        // Logika setelah pembayaran berhasil
-        // $order = Payment::where('subcription_id', $status)->first();
-        // $order->status = 'paid';
-        // $order->save();
+//         $paket = Package::find($subs->packet_id);
 
 
-        $paket = Package::find($subs->packet_id);
+//         $amount = $paket->price + $subs->customer->company->fee_reseller;
 
-
-        $amount = $paket->price + $subs->customer->company->fee_reseller;
-
-        $subs->update([
-'status'=>1,
-'start_date'=>now(),
-'end_date'=>now()->addMonth($paket->duration)->toDateString(),
-        ]);
-        //insert to payment table
-        Payment::create([
-            'subscription_id' => $subs->id,
-            'customer_id' => $subs->customer->id,
-            'amount' => $amount,
-            'fee'=> $subs->customer->company->fee_reseller,
-            'tanggal_bayar' => now(),
-            'status' => 'paid',
-            'payment_type'=> 'midtrans',
-        ]);
+//         $subs->update([
+// 'status'=>1,
+// 'start_date'=>now(),
+// 'end_date'=>now()->addMonth($paket->duration)->toDateString(),
+//         ]);
+//         //insert to payment table
+//         Payment::create([
+//             'subscription_id' => $subs->id,
+//             'customer_id' => $subs->customer->id,
+//             'amount' => $amount,
+//             'fee'=> $subs->customer->company->fee_reseller,
+//             'tanggal_bayar' => now(),
+//             'status' => 'paid',
+//             'payment_type'=> 'midtrans',
+//         ]);
 
         return view('pages.payment.success');
     }
+
 }

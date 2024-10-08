@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Subscription extends Model
 {
@@ -16,7 +17,7 @@ class Subscription extends Model
         'end_date',
         'status',
         'fee',
-        'is_claim'
+        'is_claim',
     ];
     protected $primaryKey = 'id';
 
@@ -28,13 +29,14 @@ class Subscription extends Model
         static::creating(function ($invoice) {
             $invoice->invoices = $invoice->generateInvoiceNumber();
         });
+
     }
 
     // generate a random invoice number
     public function generateInvoiceNumber()
     {
         $prefix = 'INV-';
-        $randomNumber = rand(10000, 99999);
+        $randomNumber = rand(10000, 99999) * time();
         return $prefix . $randomNumber;
     }
 
