@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subscription_id');
             $table->unsignedBigInteger('customer_id');
             $table->integer('amount');
-            $table->integer('fee');
+            $table->integer('fee')->default(0);
             $table->enum('status', ['paid', 'unpaid', 'pending'])->default('pending');
             $table->date('tanggal_bayar')->nullable();
             $table->string('checkout_link')->nullable();
