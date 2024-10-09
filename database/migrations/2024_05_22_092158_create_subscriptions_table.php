@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('invoices');
             $table->date('start_date')->nullable();
             $table->date('end_date');
-            $table->integer('fee')->nullable();
+            $table->integer('fee')->nullable()->default(0);
             $table->string('midtras_random')->nullable();
             $table->boolean('is_claim')->default(false);
             $table->boolean('status')->default(true);
