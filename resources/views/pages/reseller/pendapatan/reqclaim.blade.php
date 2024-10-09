@@ -131,8 +131,8 @@
                     ajax: '{{ route('reseller.getdata') }}',
                     columns: [
                         { 
-                data: 'subcription_id', 
-                name: 'subcription_id',
+                data: 'subscription_id', 
+                name: 'subscription_id',
                 orderable: false,
                 searchable: false,
                 render: function(data, type, full, meta){

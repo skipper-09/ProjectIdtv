@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('name', length: 100);
             $table->string('phone', length: 13);
             $table->longText('address');
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('showpassword');
             $table->string('password');
             $table->string('device_id')->nullable();

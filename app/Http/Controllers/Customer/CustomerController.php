@@ -48,7 +48,7 @@ class CustomerController extends Controller
         
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
-            $customer =Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderBy('id', 'asc')->get();
+            $customer =Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderByDesc('id')->get();
         } else { 
             
                 if ($request->has('filter') && !empty($request->input('filter'))) {
@@ -56,7 +56,7 @@ class CustomerController extends Controller
 
                     // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
                 }else{
-                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderBy('id', 'desc')->get();
+                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderByDesc('id')->get();
                 }
         }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
@@ -90,10 +90,10 @@ class CustomerController extends Controller
             return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
             $cus = '';
-            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date < today()->format('Y-m-d')) {
+            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'desc')->first()->end_date < today()->format('Y-m-d')) {
                 $cus = '<span class="text-danger">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
             } else {
-                $cus = '<span class="text-success fw-bold">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
+                $cus = '<span class="text-success fw-bold">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'desc')->first()->end_date . '</span>';
             }
             return $cus;
         })->editColumn('created_at', function (Customer $date) {

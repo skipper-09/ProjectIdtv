@@ -112,7 +112,7 @@ class SubcriptionController extends Controller
             ];
         } else {
             $cus = Customer::find($id);
-            $sub = Subscription::where('customer_id', $cus->id)->orderBy('created_at', 'asc')->first();
+            $sub = Subscription::where('customer_id', $cus->id)->orderBy('created_at', 'desc')->first();
             $paymen = Payment::where('subscription_id', $sub->id)->first();
             $data = [
                 'page_name' => $sub->invoices,

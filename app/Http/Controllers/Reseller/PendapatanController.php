@@ -132,26 +132,25 @@ class PendapatanController extends Controller
                 return redirect()->back()->with(['status' => 'Error!', 'message' => 'Tidak Ada Data untuk di claim']);
             }
 
-            $company = Company::where('user_id', auth()->id())->first();
+            $company = Company::where('user_id', Auth::id())->first();
             $claim = Fee_claim::create([
                 'company_id' => $company->id,
-                'amount' => $request->amount,
+                'amount' => $request->amount ?? 0,
                 'status'=>'pending'
             ]);
-
 
             foreach ($subsid as $id) {
                 //inset in table detail claim
                 Subscription::findOrFail($id)->update([
-                    'is_claim'=>true,
+                    'is_claim'=>1,
                 ]);
 
                 DetailClaim::create([
-                   'subcription_id' => $id,
+                   'subscription_id' => $id,
                    'feeclaim_id' => $claim->id,
                 ]);
             }
-            return redirect()->route('dashboard')->with(['status' => 'Success!', 'message' => 'Request Claim Sedang di proses!']);
+            return redirect()->route('reseller.historyclaim')->with(['status' => 'Success!', 'message' => 'Request Claim Sedang di proses!']);
 
         } catch (Exception $e) {
             return response()->json([
