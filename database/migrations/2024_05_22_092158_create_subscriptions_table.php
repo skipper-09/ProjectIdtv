@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date');
             $table->integer('fee')->nullable();
+            $table->string('midtras_random')->nullable();
             $table->boolean('is_claim')->default(false);
             $table->boolean('status')->default(true);
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');

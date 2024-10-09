@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->integer('amount');
             $table->integer('fee');
-            $table->enum('status', ['paid', 'unpaid', 'pending']);
-            $table->date('tanggal_bayar');
+            $table->enum('status', ['paid', 'unpaid', 'pending'])->default('pending');
+            $table->date('tanggal_bayar')->nullable();
             $table->string('checkout_link')->nullable();
             $table->enum('payment_type',['manual','midtrans'])->default('manual');
             $table->timestamps();

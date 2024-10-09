@@ -18,6 +18,7 @@ class Subscription extends Model
         'status',
         'fee',
         'is_claim',
+        'midtras_random'
     ];
     protected $primaryKey = 'id';
 

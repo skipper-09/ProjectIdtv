@@ -133,10 +133,25 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(CustomerRequest $request,)
+    public function store(Request $request,)
     {
-        // dd($request);
-        $request->validated();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'mac' => 'required|string', // MAC address format
+            'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
+            'phone' => 'required|string|min:10|max:15|regex:/^[0-9]+$/', // Nomor telepon hanya angka dan panjang antara 10-15
+            'address' => 'required|string|max:500', // Maksimal 500 karakter
+            'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
+            'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
+            'company_id' => 'required', // Pastikan company_id ada di tabel companies
+            'username' => 'required|string|unique:customers,username|max:255', // username unik di tabel customers
+            'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
+            'password_confirmation' => 'required|string|min:6|max:255',
+            'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
+            'end_date' => 'required', 
+            'paket_id' => 'required', 
+        ]);
+        
         $customer = Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -210,7 +225,22 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        // $request->validated();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'mac' => 'required|string', // MAC address format
+            'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
+            'phone' => 'required|string|min:10|max:15|regex:/^[0-9]+$/', // Nomor telepon hanya angka dan panjang antara 10-15
+            'address' => 'required|string|max:500', // Maksimal 500 karakter
+            'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
+            'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
+            'company_id' => 'required', // Pastikan company_id ada di tabel companies
+            'username' => 'required|string|max:255|unique:customers,username,'.$id, // username unik di tabel customers
+            'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
+            'password_confirmation' => 'required|string|min:6|max:255',
+            'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
+            'end_date' => 'required', 
+            'paket_id' => 'required', 
+        ]);
         $customer = Customer::find($id);
         $customer->update([
             'name' => $request->name,
