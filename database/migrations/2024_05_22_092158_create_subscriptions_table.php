@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('fee')->nullable()->default(0);
             $table->integer('tagihan')->nullable()->default(0);
             $table->string('midtras_random')->nullable();
+            $table->string('midtras_link')->nullable();
             $table->boolean('is_claim')->default(false);
             $table->boolean('status')->default(true);
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');

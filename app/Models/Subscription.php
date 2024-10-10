@@ -19,6 +19,7 @@ class Subscription extends Model
         'fee',
         'is_claim',
         'midtras_random',
+        'midtras_link',
         'tagihan'
     ];
     protected $primaryKey = 'id';
