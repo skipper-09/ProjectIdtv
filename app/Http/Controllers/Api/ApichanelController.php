@@ -94,18 +94,18 @@ class ApichanelController extends Controller
         $paket = Package::find($sub->packet_id);
 
 
-        $gross_amount = $paket->price + $sub->customer->company->fee_reseller;
+        // $gross_amount = $paket->price + $sub->customer->company->fee_reseller;
         $random = str::uuid();
         $sub->update(['midtras_random' => $random]);
         $params = array(
             'transaction_details' => [
                 "order_id" => $random,
-                "gross_amount" => $gross_amount,  // Ensure this matches the sum of item details prices
+                "gross_amount" => $sub->tagihan,  // Ensure this matches the sum of item details prices
             ],
             'item_details' => array(
                 array(
                     "name" => $paket->name,
-                    "price" => $gross_amount,
+                    "price" => $sub->tagihan,
                     "quantity" => 1,
                     "merchant_name" => "IDTV",
                 ),

@@ -56,6 +56,7 @@ class Autosubscription extends Command
                     'start_date' => null,
                     'end_date' => Carbon::parse($item->end_date)->addMonth($paket->duration)->toDateString(),
                     'status' => false,
+                    'tagihan'=> $item->customer->company->fee_reseller + $paket->price
                 ]);
             }
         }
