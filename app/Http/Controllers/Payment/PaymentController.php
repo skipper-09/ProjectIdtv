@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Package;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -12,11 +13,16 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function FinishPayment($order_id,Request $request){       
+    public function FinishPayment(Request $request){       
 
-        $subs = Subscription::where('invoices',$order_id)->first();
-        
-       
+            $order_id = $request->query('order_id');
+            $sub = Subscription::with(['payment'])->where('midtras_random',$order_id)->first();
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub
+            ];
 
 
 //         $paket = Package::find($subs->packet_id);
@@ -40,7 +46,7 @@ class PaymentController extends Controller
 //             'payment_type'=> 'midtrans',
 //         ]);
 
-        return view('pages.payment.success');
+        return view('pages.payment.success',$data);
     }
 
 }

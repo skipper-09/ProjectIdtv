@@ -51,7 +51,7 @@ Route::fallback(function () {
 
 
 //handle redirect paymet gateway midtrans
-Route::get('payment/finish/{order_id}', [PaymentController::class, 'FinishPayment'])->name('finishpayment');
+Route::get('payment/finish', [PaymentController::class, 'FinishPayment'])->name('finishpayment');
 
 
 //chanel management route

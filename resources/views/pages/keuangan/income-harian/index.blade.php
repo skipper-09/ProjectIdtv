@@ -83,6 +83,7 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>Invoice</th>
                                                     <th>Nik</th>
                                                     <th>Nama</th>
                                                     <th>Paket</th>
@@ -91,6 +92,7 @@
                                                     <th>Harga Pokok</th>
                                                     <th>Fee Reseller</th>
                                                     <th>Status</th>
+                                                    <th>Metode Pembayaran</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
                                                     @canany(['update-owner', 'delete-owner'])
@@ -134,6 +136,10 @@
                 serverSide: true,
                 ajax: '{{ route('dailyincome.getdata') }}',
                 columns: [{
+                        name: 'invoice',
+                        data: 'invoice',
+                    },
+                    {
                         name: 'nik',
                         data: 'nik',
                     },
@@ -164,6 +170,10 @@
                     {
                         name: 'status',
                         data: 'status',
+                    },
+                    {
+                        name: 'payment_type',
+                        data: 'payment_type',
                     },
                     {
                         name: 'created_at',

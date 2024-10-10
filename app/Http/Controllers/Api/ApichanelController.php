@@ -85,7 +85,7 @@ class ApichanelController extends Controller
     public function createPayment(Request $request)
     {
         $invoiceid = $request->query('order_id');
-        $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->where('status',0)->first();
+        $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->where('status', 0)->first();
         if ($sub == null) {
             return response()->json([
                 "message" => 'TIDAK ADA INVOICE TERSEBUT'
@@ -104,16 +104,22 @@ class ApichanelController extends Controller
             ],
             'item_details' => array(
                 array(
-                    "name" => $paket->name,  // Make sure this value exists
-                    "price" => $gross_amount,  // This should be the price per item
-                    "quantity" => 1,  // Adjust quantity as needed
+                    "name" => $paket->name,
+                    "price" => $gross_amount,
+                    "quantity" => 1,
+                    "merchant_name" => "IDTV",
                 ),
             ),
             'customer_details' => [  // These details should be complete and correct
                 "first_name" => $sub->customer->name,  // Ensure $sub->customer->name exists
-                "last_name" => $sub->customer->address,  // If Midtrans expects last_name, pass an empty string if not applicable
                 "phone" => $sub->customer->phone,  // Ensure this field is not empty
-                "notes" => "Thank you for your purchase. Please follow the instructions to pay."
+
+                "billing_address" => [
+                    "first_name" => $sub->customer->name,  // Ensure $sub->customer->name exists
+                    "phone" => $sub->customer->phone,  // Ensure this field is not empty
+                    "address" => $sub->customer->address,
+                    "country_code" => "IDN"
+                ],
             ],
             'enabled_payments' => [
                 "bca_va",
@@ -126,9 +132,7 @@ class ApichanelController extends Controller
                 "duration" => 1,
                 "unit" => "day"
             ],
-            'callbacks' => [
-                'finish' => route('finishpayment', ['order_id' => $invoiceid])
-            ],
+
         );
 
         $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
@@ -137,7 +141,7 @@ class ApichanelController extends Controller
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => "Basic $auth"
-        ])->post('https://api.sandbox.midtrans.com/v1/payment-links', $params);
+        ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
         $response = json_decode($response->body());
         return ResponseFormatter::success($response, 'success');
     }
@@ -146,42 +150,36 @@ class ApichanelController extends Controller
 
     public function handleNotification(Request $request)
     {
-
-        // Dapatkan data notifikasi
-        // $payload = $request->getContent();
-        // $notification = json_decode($payload, true);
-
-        // Log notifikasi (untuk debugging)
-        // Log::info('Midtrans Notification:', $notification);
-
         // Ambil order_id dari request
         $orderId = $request->input('order_id');
+        $statuscode = $request->input('status_code');
+        $gross_amount = $request->input('gross_amount');
+        $calculated_signature_key = $request->input('signature_key');
+        $auth = env('MIDTRANS_SERVER_KEY');
+        // SHA512(order_id + status_code + gross_amount + serverkey);
+        $data = $orderId . $statuscode . $gross_amount . $auth;
+        $signature_key = hash('sha512', $data);
 
-        // Dapatkan invoice id
-        $lastDashPos = strrpos($orderId, '-');
+        if ($calculated_signature_key !== $signature_key) {
+            // Jika signature key tidak valid, tolak notifikasi
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
 
-        // Potong string sampai sebelum '-' terakhir
-        $newOrderId = ($lastDashPos !== false) ? substr($orderId, 0, $lastDashPos) : $orderId;
+        // // API call to get the transaction status
+        // $response = Http::withHeaders([
+        //     'Content-Type' => 'application/json',
+        //     'Authorization' => "Basic $auth"
+        // ])->get("https://api.sandbox.midtrans.com/v2/$orderId/status");
 
-        $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
+        // // Decode the response
+        // $responseData = json_decode($response->body(), true);
 
-        // API call to get the transaction status
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => "Basic $auth"
-        ])->get("https://api.sandbox.midtrans.com/v2/$orderId/status");
-
-        // Decode the response
-        $responseData = json_decode($response->body(), true);
-
-        // Log the response for debugging
-        // Log::info('Midtrans API Response:', $responseData);
 
         // Get the transaction status from the response
-        $transactionStatus = $responseData['transaction_status'] ?? null;
+        $transactionStatus = $request->input('transaction_status') ?? null;
 
         // Cari order berdasarkan ID
-        $subs = Subscription::where('midtras_random', $newOrderId)->first();
+        $subs = Subscription::where('midtras_random', $orderId)->first();
 
         if ($subs) {
             $paket = Package::find($subs->packet_id);
@@ -216,7 +214,7 @@ class ApichanelController extends Controller
                     break;
             }
         } else {
-            Log::warning('Subscription not found for invoice:', ['invoice' => $newOrderId]);
+            Log::warning('Subscription not found for invoice:', ['invoice' => $orderId]);
         }
 
         return response()->json(['status' => 'success']);

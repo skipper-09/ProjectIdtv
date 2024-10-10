@@ -35,7 +35,7 @@ class DailyincomeController extends Controller
     public function getData()
     {
 
-        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', now())->orderByDesc('id')->get();
+        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', now())->orderByDesc('created_at')->get();
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -56,6 +56,8 @@ class DailyincomeController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('nik', function ($data) {
             return $data->customer->nik;
+        })->editColumn('invoice', function ($data) {
+            return $data->subscrib->invoices;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
         })->editColumn('owner', function ($data) {
@@ -64,6 +66,8 @@ class DailyincomeController extends Controller
             return $data->subscrib->paket->name;
         })->editColumn('pokok', function ($data) {
             return number_format($data->subscrib->paket->price);
+        })->editColumn('payment_type', function ($data) {
+            return $data->payment_type;
         })->editColumn('fee', function ($data) {
             return number_format($data->customer->company->fee_reseller);
         })->editColumn('start_date', function ($data) {
@@ -87,7 +91,7 @@ class DailyincomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner','pokok','fee'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner','pokok','fee','payment_type','invoice'])->make(true);
     }
 
 
