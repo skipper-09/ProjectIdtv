@@ -34,7 +34,7 @@ class SubcriptionController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-            if ($hidedelete && $item->id == $hidedelete->id) {
+            if ($hidedelete && $item->id == $hidedelete->id || !$highlightedData == $item->id) {
                 if ($userauth->can('delete-customer')) {
                     $button .= ' <button class="btn btn-sm btn-danger action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('keuangan.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
                                                             class="fa-solid fa-trash"></i></button>';

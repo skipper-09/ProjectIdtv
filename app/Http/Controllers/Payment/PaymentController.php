@@ -13,24 +13,30 @@ use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
-    public function FinishPayment(Request $request){       
+    public function FinishPayment(Request $request)
+    {
 
-            $order_id = $request->query('order_id');
-            $sub = Subscription::with(['payment'])->where('midtras_random',$order_id)->first();
-            $cus = Customer::find($sub->customer_id);
-            $data = [
-                'page_name' => $sub->invoices,
-                'customer' => $cus,
-                'subcription' => $sub
-            ];
+        $order_id = $request->query('order_id');
+        if (empty($order_id)) {
+            return view('pages.error-404');
+        }
+
+        $sub = Subscription::with(['payment'])->where('midtras_random', $order_id)->first();
+        $cus = Customer::find($sub->customer_id);
+        $data = [
+            'page_name' => $sub->invoices,
+            'customer' => $cus,
+            'subcription' => $sub
+        ];
+        return view('pages.payment.success', $data);
 
 
-//         $paket = Package::find($subs->packet_id);
+        //         $paket = Package::find($subs->packet_id);
 
 
-//         $amount = $paket->price + $subs->customer->company->fee_reseller;
+        //         $amount = $paket->price + $subs->customer->company->fee_reseller;
 
-//         $subs->update([
+        //         $subs->update([
 // 'status'=>1,
 // 'start_date'=>now(),
 // 'end_date'=>now()->addMonth($paket->duration)->toDateString(),
@@ -46,7 +52,7 @@ class PaymentController extends Controller
 //             'payment_type'=> 'midtrans',
 //         ]);
 
-        return view('pages.payment.success',$data);
+
     }
 
 }

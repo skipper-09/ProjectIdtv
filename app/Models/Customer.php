@@ -24,6 +24,7 @@ class Customer extends Model
         'nik',
         'company_id',
         'stb_id',
+        'packet_id',
         'region_id',
         'is_active',
         'device_id'
@@ -38,6 +39,10 @@ class Customer extends Model
     public function stb()
     {
         return $this->belongsTo(Stb::class, 'stb_id', 'id');
+    }
+    public function paket()
+    {
+        return $this->belongsTo(Package::class, 'packet_id', 'id');
     }
     public function company()
     {

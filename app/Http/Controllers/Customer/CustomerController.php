@@ -27,10 +27,10 @@ class CustomerController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Customer',
-            'company'=>Company::all(),
+            'company' => Company::all(),
             'customer' => Customer::all()->count(),
-            'cusactive' =>Customer::where('is_active',1)->get()->count(),
-            'cusinactive' =>Customer::where('is_active',0)->get()->count(),
+            'cusactive' => Customer::where('is_active', 1)->get()->count(),
+            'cusinactive' => Customer::where('is_active', 0)->get()->count(),
         ];
         return view('pages.customer.index', $data);
     }
@@ -45,19 +45,19 @@ class CustomerController extends Controller
 
     public function getData(Request $request)
     {
-        
+
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
-            $customer =Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderByDesc('id')->get();
-        } else { 
-            
-                if ($request->has('filter') && !empty($request->input('filter'))) {
-                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $request->input('filter'))->orderBy('id','desc')->get();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderByDesc('id')->get();
+        } else {
 
-                    // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
-                }else{
-                    $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderByDesc('id')->get();
-                }
+            if ($request->has('filter') && !empty($request->input('filter'))) {
+                $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+
+                // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+            } else {
+                $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->orderByDesc('id')->get();
+            }
         }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -115,7 +115,7 @@ class CustomerController extends Controller
             }
 
             return '<div class="d-flex">' . $button . '</div>';
-        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date','is_active'])->make(true);
+        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active'])->make(true);
     }
 
 
@@ -133,7 +133,7 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request,)
+    public function store(Request $request, )
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -148,10 +148,10 @@ class CustomerController extends Controller
             'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
             'password_confirmation' => 'required|string|min:6|max:255',
             'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
-            'end_date' => 'required', 
-            'paket_id' => 'required', 
+            'end_date' => 'required',
+            'paket_id' => 'required',
         ]);
-        
+
         $customer = Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -165,9 +165,10 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
+            'packet_id'=>$request->paket_id
         ]);
         $company = Company::find($request->company_id);
-        
+
         $subs = Subscription::create([
             'customer_id' => $customer->id,
             'packet_id' => $request->paket_id,
@@ -175,18 +176,18 @@ class CustomerController extends Controller
             'end_date' => $request->end_date,
             'fee' => $company->fee_reseller ?? 0,
         ]);
-
         $paket = Package::find($subs->packet_id);
-
-
         $amount = $paket->price + $customer->company->fee_reseller;
+        Subscription::find($subs->id)->update(['tagihan' => $amount]);
+
+
 
         //insert to payment table
         Payment::create([
             'subscription_id' => $subs->id,
             'customer_id' => $customer->id,
             'amount' => $amount,
-            'fee'=> $customer->company->fee_reseller,
+            'fee' => $customer->company->fee_reseller,
             'tanggal_bayar' => now(),
             'status' => 'paid'
         ]);
@@ -234,12 +235,12 @@ class CustomerController extends Controller
             'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
             'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
             'company_id' => 'required', // Pastikan company_id ada di tabel companies
-            'username' => 'required|string|max:255|unique:customers,username,'.$id, // username unik di tabel customers
+            'username' => 'required|string|max:255|unique:customers,username,' . $id, // username unik di tabel customers
             'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
             'password_confirmation' => 'required|string|min:6|max:255',
             'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
-            'end_date' => 'required', 
-            'paket_id' => 'required', 
+            'end_date' => 'required',
+            'paket_id' => 'required',
         ]);
         $customer = Customer::find($id);
         $customer->update([
@@ -255,10 +256,11 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
+            'packet_id'=> $request->paket_id,
         ]);
 
         if ($customer->id != null) {
-            $subs = Subscription::where('customer_id', $customer->id)->orderBy('id','desc')->first();
+            $subs = Subscription::where('customer_id', $customer->id)->orderBy('id', 'desc')->first();
             $subs->update([
                 'packet_id' => $request->paket_id,
                 'start_date' => $request->start_date,
@@ -304,7 +306,8 @@ class CustomerController extends Controller
     // return response()->json($packages);
     // }
 
-    public function Tes(){
+    public function Tes()
+    {
         $today = Carbon::now()->toDateString();
         $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
 

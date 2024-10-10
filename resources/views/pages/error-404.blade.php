@@ -13,9 +13,9 @@
             <div class="page-description">
                 The page you were looking for could not be found.
             </div>
-            <div class="mt-3">
+            {{-- <div class="mt-3">
                 <a href="{{ route('dashboard') }}">Back to Home</a>
-            </div>
+            </div> --}}
         </div>
     </div>
 @endsection
