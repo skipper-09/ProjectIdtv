@@ -143,7 +143,7 @@ class ApichanelController extends Controller
             'Authorization' => "Basic $auth"
         ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
         $response = json_decode($response->body());
-        $sub->update(['midtras_link'=>$response['redirect_url']]);
+        $sub->update(['midtras_link'=>$response->redirect_url]);
         return ResponseFormatter::success($response, 'success');
     }
 
