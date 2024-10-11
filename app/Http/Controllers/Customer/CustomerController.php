@@ -62,6 +62,10 @@ class CustomerController extends Controller
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
+            if ($userauth->can(['reset-device'])) {
+                $button .= ' <button  class="btn btn-sm btn-warning mr-1 action" data-id=' . $customer->id . ' data-type="reset" data-route="' . route('customer.reset', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Rset Device"><i
+                                                            class="fas fa-power-off"></i></button>';
+            }
             if ($userauth->can(['read-customer'])) {
                 $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
                                                             class="fas fa-eye"></i></button>';
@@ -306,36 +310,18 @@ class CustomerController extends Controller
     // return response()->json($packages);
     // }
 
-    public function Tes()
-    {
-        $today = Carbon::now()->toDateString();
-        $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
+   public function resetDevice($id){
+    $customer = Customer::findOrFail($id);
+    $customer->update(['device_id'=>null]);
+    //return response
+    return response()->json([
+        'status' => 'success',
+        'success' => true,
+        'message' => 'Device Berhasil Direset!.',
+    ]);
+   }
 
-        // Ambil data secara batch untuk menghindari beban besar pada database
-        Subscription::where('end_date', '<=', $threeDaysLater)
-            ->where('start_date', '>=', $today)
-            ->chunk(10, function ($subs) use ($today) {
-                foreach ($subs as $item) {
-                    // Cek apakah sudah ada perpanjangan sebelumnya
-                    $existingSubscription = Subscription::where('customer_id', $item->customer_id)
-                        ->where('end_date', '<', $today)
-                        ->exists();
 
-                    $paket = Package::find($item->packet_id);
-                    if (!$existingSubscription && $paket) {
-                        Subscription::create([
-                            'customer_id' => $item->customer_id,
-                            'packet_id' => $item->packet_id,
-                            'start_date' => null,
-                            'end_date' => Carbon::parse($today)->addMonth($paket->duration)->toDateString(),
-                            'status' => false,
-                        ]);
-                    }
-                }
-            });
 
-        Customer::whereHas('subcrib', function ($query) use ($today) {
-            $query->where('end_date', '<', $today);
-        })->update(['is_active' => 0]);
-    }
+
 }

@@ -161,6 +161,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');
             Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
             Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
+            Route::put('/reset/{id}', [CustomerController::class, 'resetDevice'])->name('customer.reset')->middleware('can:reset-device');
         }
     );
 

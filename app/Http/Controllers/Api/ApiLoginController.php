@@ -66,24 +66,48 @@ class ApiLoginController extends Controller
 
 
     public function logout(Request $request)
+{
+    // Get the authenticated user from the request
+    $user = $request->user();
+
+    if ($user) {
+        // Reset device_id to allow login on another device
+        $user->update(['device_id' => null]);
+
+        // Delete the current access token (Sanctum token)
+        $user->currentAccessToken()->delete();
+
+        // Return a successful logout response
+        return response()->json([
+            'message' => 'Successfully logged out',
+        ], 200);
+    }
+
+    // Return error response if the user was not found
+    return response()->json([
+        'error' => 'Unable to logout, user not found',
+    ], 404);
+}
+
+
+
+public function checkDevice(Request $request)
     {
-        // get user sacntum
+
         $user = $request->user();
 
-        if ($user) {
-            // Reset device_id sehingga user dapat login di perangkat lain
-            $user->update(['device_id' => null]);
+    
 
-            // delete token
-            $request->user()->currentAccessToken()->delete();
+        if ($request->device_id == null) {
+            return response()->json(['message'=>'error device_id tidak ada']);
+        }
+    
 
-            return response()->json([
-                'message' => 'Successfully logged out',
-            ], 200);
+        // Cek apakah device_id sesuai dengan yang tersimpan di database
+        if ($user->device_id !== $request->device_id) {
+            return response()->json(['message' => 'Unauthorized device.'], 401);
         }
 
-        return response()->json([
-            'error' => 'Unable to logout, user not found',
-        ], 404);
+        return response()->json(['message' => 'Device is valid.'],200);
     }
 }

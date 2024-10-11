@@ -59,6 +59,41 @@ $("#dataTable").on("click", ".action", function () {
             },
         });
     }
+    if (type == "reset") {
+        swal({
+            title: "Apakah Kamu Yakin?",
+            text: "Reset Device dapat melogout customer dari perangkat",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: route,
+                    method: "PUT",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+                    success: function (res) {
+                        //reload table
+                        $("#dataTable").DataTable().ajax.reload();
+                        // Do something with the result
+                        if (res.status === "success") {
+                            swal("Berhasil!", res.message, {
+                                icon: "success",
+                            });
+                        } else {
+                            swal("Error!", res.message, {
+                                icon: "error",
+                            });
+                        }
+                    },
+                });
+            }
+        });
+    }
     // if (type == "print") {
     //     $("#showmodal").find(".modal-content").html(`
     //               <div class="modal-header">
