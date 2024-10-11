@@ -17,6 +17,7 @@ use App\Http\Controllers\Keuangan\TagihanController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
+use App\Http\Controllers\Monitor\monitoringcustomercontroller;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
@@ -162,6 +163,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
             Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
             Route::put('/reset/{id}', [CustomerController::class, 'resetDevice'])->name('customer.reset')->middleware('can:reset-device');
+        }
+    );
+
+    //monitoring route
+    Route::prefix('curentstream')->group(
+        function () {
+            Route::get('', [monitoringcustomercontroller::class,  'index'])->name('curentstream')->middleware('can:read-curentstream');
+            Route::get('getData', [monitoringcustomercontroller::class,  'getData'])->name('curentstream.getdata');
         }
     );
 

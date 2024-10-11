@@ -61,6 +61,10 @@ class Customer extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function curentstream(){
+        return $this->hasMany(CurentStream::class);
+    }
+
     //log automatyly created
     public function getActivitylogOptions(): LogOptions
     {

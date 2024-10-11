@@ -31,6 +31,10 @@ class Chanel extends Model
         return $this->belongsTo(Categori::class,'categori_id','id');
     }
 
+    public function curentstream(){
+        return $this->hasMany(CurentStream::class);
+    }
+
     public static function boot()
     {
         parent::boot();

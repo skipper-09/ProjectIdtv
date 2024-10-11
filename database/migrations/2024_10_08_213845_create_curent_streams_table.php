@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('chanel_id');
-            $table->timestamp('started_at');
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('chanel_id')->references('id')->on('chanels')->onDelete('cascade')->onUpdate('cascade');

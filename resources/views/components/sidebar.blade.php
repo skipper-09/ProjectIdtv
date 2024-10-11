@@ -86,6 +86,13 @@
                         </a>
                     </li>
                 @endcan
+                @can('read-curentstream')
+                    <li class="{{ Request::is('admin/curentstream') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('curentstream') }}"><i class="fas fa-video">
+                            </i> <span>Curent Stream Customer</span>
+                        </a>
+                    </li>
+                @endcan
                 @if (Auth::user()->hasRole('Reseller'))
                 <li class="{{ Request::is('admin/pendapatan') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('pendapatan.reseller') }}"><i class="fas fa-hourglass">

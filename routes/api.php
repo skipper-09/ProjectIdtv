@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ApichanelController;
+use App\Http\Controllers\Api\ApiCurentStream;
 use App\Http\Controllers\Api\ApiLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [ApiLoginController::class, 'login'])->middleware('guest');
 Route::post('/logout', [ApiLoginController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/check-device', [ApiLoginController::class, 'checkDevice'])->middleware('auth:sanctum');
+Route::post('/curentstream', [ApiCurentStream::class, 'Tambah'])->middleware('auth:sanctum');
 Route::get('/chanel', [ApichanelController::class, 'index']);
 Route::get('/category', [ApichanelController::class, 'category']);
 Route::get('/historysubscription', [ApichanelController::class, 'HistoryLangganan']);

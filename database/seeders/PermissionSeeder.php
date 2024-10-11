@@ -64,7 +64,8 @@ class PermissionSeeder extends Seeder
             'read-statistik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log','clean-log','read-tagihan'
+            'read-log','clean-log','read-tagihan',
+            'read-curentstream'
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];
