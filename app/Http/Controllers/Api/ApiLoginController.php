@@ -42,8 +42,8 @@ class ApiLoginController extends Controller
                 })
                 ->with([
                     'subcrib' => function ($query) {
-                        $query->orderBy('end_date', 'desc')
-                            ->limit(1); // Get only the latest subscription
+                        $query->where('start_date','!=',null)->orderBy('end_date', 'desc')
+                            ->first(); // Get only the latest subscription
                     }
                 ])->first();
 

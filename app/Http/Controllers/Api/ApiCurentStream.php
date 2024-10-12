@@ -15,6 +15,7 @@ class ApiCurentStream extends Controller
 
         CurentStream::create([
             'customer_id'=>$user->id,
+            'device_id'=>$user->device_id,
             'chanel_id'=>$request->chanel_id,
         ]);
 

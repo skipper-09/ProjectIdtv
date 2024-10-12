@@ -11,7 +11,8 @@ class CurentStream extends Model
     protected $fillable = [
         'customer_id',
         'chanel_id',
-        'started_at'
+        'started_at',
+        'device_id',
 
     ];
     protected $primaryKey = 'id';

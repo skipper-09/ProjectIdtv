@@ -86,66 +86,73 @@ class ApichanelController extends Controller
     {
         $invoiceid = $request->query('order_id');
         $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->where('status', 0)->first();
+    
         if ($sub == null) {
             return response()->json([
                 "message" => 'TIDAK ADA INVOICE TERSEBUT'
-            ]);
+            ], 404);
         }
+    
         $paket = Package::find($sub->packet_id);
-
-
-        // $gross_amount = $paket->price + $sub->customer->company->fee_reseller;
-        $random = str::uuid();
+        $random = Str::uuid();  // UUID for unique order_id
         $sub->update(['midtras_random' => $random]);
-        $params = array(
+    
+        $params = [
             'transaction_details' => [
                 "order_id" => $random,
-                "gross_amount" => $sub->tagihan,  // Ensure this matches the sum of item details prices
+                "gross_amount" => $sub->tagihan,
             ],
-            'item_details' => array(
-                array(
+            'item_details' => [
+                [
                     "name" => $paket->name,
                     "price" => $sub->tagihan,
                     "quantity" => 1,
                     "merchant_name" => "IDTV",
-                ),
-            ),
-            'customer_details' => [  // These details should be complete and correct
-                "first_name" => $sub->customer->name,  // Ensure $sub->customer->name exists
-                "phone" => $sub->customer->phone,  // Ensure this field is not empty
-
+                ],
+            ],
+            'customer_details' => [
+                "first_name" => $sub->customer->name,
+                "phone" => $sub->customer->phone,
                 "billing_address" => [
-                    "first_name" => $sub->customer->name,  // Ensure $sub->customer->name exists
-                    "phone" => $sub->customer->phone,  // Ensure this field is not empty
+                    "first_name" => $sub->customer->name,
+                    "phone" => $sub->customer->phone,
                     "address" => $sub->customer->address,
-                    "country_code" => "IDN"
+                    "country_code" => "IDN",
                 ],
             ],
             'enabled_payments' => [
-                "bca_va",
-                "bri_va",
-                "bni_va",
-                "shopeepay"
+                "bca_va", "bri_va", "bni_va", "gopay"
             ],
-            "usage_limit" => 1,
-            "page_expiry" => [
-                "duration" => 1,
-                "unit" => "day"
+            // Set expiry to 5 minutes (5 * 60 seconds)
+            'expiry' => [
+                "start_time" => date("Y-m-d H:i:s T"),  // Current time in ISO 8601 format with timezone
+                "unit" => "minute",
+                "duration" => 5  // Set to 5 minutes
             ],
-
-        );
-
+        ];
+    
+        // Authorization using Base64 encoding of Server Key
         $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
-
+    
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => "Basic $auth"
         ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
-        $response = json_decode($response->body());
-        $sub->update(['midtras_link'=>$response->redirect_url]);
-        return ResponseFormatter::success($response, 'success');
+    
+        $responseBody = json_decode($response->body());
+    
+        if ($response->failed()) {
+            Log::error('Midtrans Error: ' . $response->body());
+            return response()->json(['message' => 'Terjadi kesalahan pada transaksi'], 500);
+        }
+    
+        $sub->update(['midtras_link' => $responseBody->redirect_url]);
+    
+        return ResponseFormatter::success($responseBody, 'Success');
     }
+    
+
 
 
 
@@ -211,7 +218,7 @@ class ApichanelController extends Controller
                 case 'deny':
                 case 'cancel':
                 case 'expire':
-                    $subs->update(['status' => 0]);
+                    $subs->update(['status' => 0,'midtras_link'=>null]);
                     break;
             }
         } else {

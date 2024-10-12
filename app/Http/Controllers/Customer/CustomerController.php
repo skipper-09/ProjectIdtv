@@ -94,11 +94,25 @@ class CustomerController extends Controller
             return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
         })->editColumn('end_date', function (Customer $sub) {
             $cus = '';
-            if ($sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'desc')->first()->end_date < today()->format('Y-m-d')) {
-                $cus = '<span class="text-danger">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->end_date . '</span>';
-            } else {
-                $cus = '<span class="text-success fw-bold">' . $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'desc')->first()->end_date . '</span>';
+
+            // Ambil subscription berdasarkan customer_id dan pastikan start_date tidak null
+            $activeSubscription = $sub->subcrib()
+                ->where('customer_id', $sub->id)
+                ->whereNotNull('start_date')
+                ->orderBy('created_at', 'desc')  // Ambil yang terbaru berdasarkan waktu pembuatan
+                ->first();
+
+            if ($activeSubscription) {
+                // Cek apakah end_date sudah lebih kecil dari hari ini
+                if ($activeSubscription->end_date < today()->format('Y-m-d')) {
+                    // Jika tanggal sudah lewat, tampilkan dengan teks merah
+                    $cus = '<span class="text-danger">' . $activeSubscription->end_date . '</span>';
+                } else {
+                    // Jika tanggal masih valid, tampilkan dengan teks hijau tebal
+                    $cus = '<span class="text-success fw-bold">' . $activeSubscription->end_date . '</span>';
+                }
             }
+
             return $cus;
         })->editColumn('created_at', function (Customer $date) {
             return date('d-m-Y', strtotime($date->created_at));
@@ -169,7 +183,7 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'packet_id'=>$request->paket_id
+            'packet_id' => $request->paket_id
         ]);
         $company = Company::find($request->company_id);
 
@@ -260,7 +274,7 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'packet_id'=> $request->paket_id,
+            'packet_id' => $request->paket_id,
         ]);
 
         if ($customer->id != null) {
@@ -310,16 +324,17 @@ class CustomerController extends Controller
     // return response()->json($packages);
     // }
 
-   public function resetDevice($id){
-    $customer = Customer::findOrFail($id);
-    $customer->update(['device_id'=>null]);
-    //return response
-    return response()->json([
-        'status' => 'success',
-        'success' => true,
-        'message' => 'Device Berhasil Direset!.',
-    ]);
-   }
+    public function resetDevice($id)
+    {
+        $customer = Customer::findOrFail($id);
+        $customer->update(['device_id' => null]);
+        //return response
+        return response()->json([
+            'status' => 'success',
+            'success' => true,
+            'message' => 'Device Berhasil Direset!.',
+        ]);
+    }
 
 
 
