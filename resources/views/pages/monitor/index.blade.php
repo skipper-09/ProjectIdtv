@@ -31,12 +31,11 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            {{-- @can('create-categori')
-                            <div class="card-header">
-                                <a href="{{ route('categori-chanel.add') }}" class="btn btn-primary">Tambah
-                                    {{ $page_name }}</a>
-                            </div>
-                            @endcan --}}
+                          
+                            {{-- <div class="card-header">
+                          <h5>Curent Stream Akan Otomatis Terhapus setiap 30 hari</h5>
+                            </div> --}}
+                          
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table-striped table" id="dataTable">
@@ -80,7 +79,7 @@
 
 <script>
     $(document).ready(function() {
-            $('#dataTable').DataTable({
+           var table =  $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('curentstream.getdata') }}',
@@ -122,7 +121,9 @@
                 ]
             });
 
-
+            setInterval(function(){
+            table.ajax.reload(null, false); 
+        }, 5000); // 5000 ms = 5 detik
 
             @if (Session::has('message'))
             iziToast.success({

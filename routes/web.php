@@ -23,6 +23,7 @@ use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
+use App\Http\Controllers\Settings\VersionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -271,6 +272,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('', [LogController::class, 'index'])->name('log')->middleware('can:read-log');
             Route::get('getData', [LogController::class, 'getData'])->name('log.getdata');
             Route::delete('clear-log', [LogController::class, 'cleanlog'])->name('log.clear')->middleware('can:clean-log');
+        });
+        Route::prefix('version-control')->group(function () {
+            Route::get('', [VersionController::class, 'index'])->name('versioncontrol')->middleware('can:read-version_control');
+            Route::get('getData', [VersionController::class, 'getData'])->name('versioncontrol.getdata');
+            Route::get('/tambah', [VersionController::class, 'create'])->name('versioncontrol.add')->middleware('can:create-version_control');
+            Route::post('store', [VersionController::class, 'store'])->name('versioncontrol.store');
+            Route::get('/edit/{id}', [VersionController::class, 'show'])->name('versioncontrol.edit')->middleware('can:update-version_control');
+            Route::put('/update/{id}', [VersionController::class, 'update'])->name('versioncontrol.update');
+            Route::delete('/delete/{id}', [VersionController::class, 'destroy'])->name('versioncontrol.delete')->middleware('can:delete-version_control');
         });
     });
 });

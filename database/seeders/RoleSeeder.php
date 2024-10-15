@@ -69,7 +69,8 @@ class RoleSeeder extends Seeder
             'read-statistik',
             'read-feeclaim',
             'read-income-periode',
-            'read-log','clean-log','read-tagihan','read-curentstream'
+            'read-log','clean-log','read-tagihan','read-curentstream',
+            'read-version_control','create-version_control','update-version_control','delete-version_control'
         ]);
 
         $administrator->givePermissionTo([

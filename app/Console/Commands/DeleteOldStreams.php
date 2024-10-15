@@ -25,7 +25,7 @@ class DeleteOldStreams extends Command
         $date = Carbon::now()->subDays(30);
 
         // Hapus data yang lebih lama dari 30 hari
-        DB::table('current_stream')
+        DB::table('curent_streams')
             ->where('created_at', '<', $date)
             ->delete();
 
