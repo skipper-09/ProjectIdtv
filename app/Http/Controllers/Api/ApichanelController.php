@@ -6,6 +6,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Models\Categori;
 use App\Models\Chanel;
+use App\Models\Customer;
 use App\Models\Package;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -173,14 +174,6 @@ class ApichanelController extends Controller
             return response()->json(['message' => 'Invalid signature'], 403);
         }
 
-        // // API call to get the transaction status
-        // $response = Http::withHeaders([
-        //     'Content-Type' => 'application/json',
-        //     'Authorization' => "Basic $auth"
-        // ])->get("https://api.sandbox.midtrans.com/v2/$orderId/status");
-
-        // // Decode the response
-        // $responseData = json_decode($response->body(), true);
 
 
         // Get the transaction status from the response
@@ -201,6 +194,7 @@ class ApichanelController extends Controller
                         'start_date' => now(),
                         'end_date' => now()->addMonth($paket->duration)->toDateString(),
                     ]);
+                    Customer::where('id',$subs->customer_id)->update(['is_active'=>1]);
 
                     // Insert to payment table
                     Payment::create([

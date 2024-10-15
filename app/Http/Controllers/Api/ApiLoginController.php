@@ -96,18 +96,20 @@ public function checkDevice(Request $request)
 
         $user = $request->user();
 
-    
-
         if ($request->device_id == null) {
-            return response()->json(['message'=>'error device_id tidak ada']);
+            return response()->json(['message' => 'error device_id tidak ada'], 400);
         }
     
-
+        // Jika device_id pengguna di database telah direset ke null
+        if ($user->device_id === null) {
+            return response()->json(['message' => 'Device has been reset. Please login again.'], 401); // 401 berarti unauthorized
+        }
+    
         // Cek apakah device_id sesuai dengan yang tersimpan di database
         if ($user->device_id !== $request->device_id) {
             return response()->json(['message' => 'Unauthorized device.'], 401);
         }
-
-        return response()->json(['message' => 'Device is valid.'],200);
+    
+        return response()->json(['message' => 'Device is valid.'], 200);
     }
 }

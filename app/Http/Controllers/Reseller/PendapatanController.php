@@ -22,7 +22,7 @@ class PendapatanController extends Controller
         $company = Company::where('user_id', auth()->id())->first();
         $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
-        })->where('is_claim',false)->sum('fee');
+        })->where('is_claim',0)->sum('fee');
 
         $data = [
             'type_menu' => 'layout',
@@ -111,7 +111,7 @@ class PendapatanController extends Controller
         })->whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
         })->whereHas('subscrib', function ($query) {
-            $query->where('is_claim', false);
+            $query->where('is_claim', 0);
         })->sum('fee');
         $data = [
             'categori' => null,

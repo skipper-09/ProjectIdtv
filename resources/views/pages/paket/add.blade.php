@@ -23,7 +23,6 @@
             <div class="card">
                 <form action="{{ route('paket.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
                     <div class="card-body">
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
@@ -46,9 +45,9 @@
                                     </div>
                                 @enderror
                             </div>
-                            </div>
+                            
                             <div class="form-group col-12 col-md-6">
-                                <label>Durasi Paket <span class="text-danger">*</span></label>
+                                <label>Durasi Paket (Bulan) <span class="text-danger">*</span></label>
                                 <input type="number" name="duration"
                                     class="form-control @error('duration') is-invalid @enderror"
                                     value="{{ old('duration') }}">
