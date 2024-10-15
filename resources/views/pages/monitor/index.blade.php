@@ -43,7 +43,10 @@
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
+                                                <th>Device Id</th>
+                                                <th>Device Brand</th>
                                                 <th>Device</th>
+                                                <th>Device Model</th>
                                                 <th>Mac</th>
                                                 <th>Chanel</th>
                                                 <th>Tanggal</th>
@@ -89,6 +92,18 @@
                     {
                         data: 'device_id',
                         name: 'device_id'
+                    },
+                    {
+                        data: 'device_brand',
+                        name: 'device_brand'
+                    },
+                    {
+                        data: 'device',
+                        name: 'device'
+                    },
+                    {
+                        data: 'device_model',
+                        name: 'device_model'
                     },
                     {
                         data: 'mac',

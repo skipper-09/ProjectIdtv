@@ -13,6 +13,9 @@ class CurentStream extends Model
         'chanel_id',
         'started_at',
         'device_id',
+        'device_brand',
+        'device',
+        'device_model',
 
     ];
     protected $primaryKey = 'id';

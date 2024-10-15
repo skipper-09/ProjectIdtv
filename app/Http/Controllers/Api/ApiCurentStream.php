@@ -16,11 +16,14 @@ class ApiCurentStream extends Controller
         CurentStream::create([
             'customer_id'=>$user->id,
             'device_id'=>$user->device_id,
+            'device'=>$request->device,
+            'device_brand'=>$request->device_brand,
+            'device_model'=>$request->device_model,
             'chanel_id'=>$request->chanel_id,
         ]);
 
         return response()->json([
-'status'=>200,
+            'status'=>200,
             'message'=>'Success Menambahkan',
         ],200);
 

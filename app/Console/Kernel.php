@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
          // Jalankan perintah setiap 30 menit
          
     $schedule->command('subscription:renew')->everyMinute();
+    $schedule->command('streams:delete-old')->everyFiveMinutes();
    
         
     }

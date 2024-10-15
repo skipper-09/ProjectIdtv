@@ -38,7 +38,7 @@ class monitoringcustomercontroller extends Controller
             }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('device_id',function($data){
-            return $data->customer->device_id;
+            return $data->device_id;
         })->editColumn('name',function($data){
             return $data->customer->name;
         })->editColumn('chanel',function($data){

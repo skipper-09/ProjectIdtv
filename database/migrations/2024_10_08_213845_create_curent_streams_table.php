@@ -18,6 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('chanel_id');
             $table->string('device_id')->nullable();
+            $table->string('device_brand')->nullable();
+            $table->string('device')->nullable();
+            $table->string('device_model')->nullable();
             $table->timestamps();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('chanel_id')->references('id')->on('chanels')->onDelete('cascade')->onUpdate('cascade');
