@@ -62,9 +62,26 @@ class Autosubscription extends Command
         }
 
 
-        Customer::whereHas('subcrib', function ($query) use ($today) {
-            $query->where('end_date', '<', $today);
-        })->update(['is_active' => 0]);
+        // Customer::whereHas('subcrib', function ($query) use ($today) {
+        //     $query->where('end_date', '<', $today);
+        //     $query->oderByDesc();
+        // })->update(['is_active' => 0]);
+
+        $customers = Customer::whereHas('subcrib',function ($query) {
+            $query->where('status', 1) // Ambil langganan yang aktif
+                  ->orderBy('created_at', 'desc'); // Mengurutkan berdasarkan tanggal terbaru
+        })->get();
+        
+        foreach ($customers as $customer) {
+            // Periksa apakah ada langganan aktif
+            if ($customer->subcrib->isNotEmpty()) {
+                // Jika ada langganan aktif, set is_active menjadi 1
+                $customer->update(['is_active' => 1]);
+            } else {
+                // Jika tidak ada langganan aktif, set is_active menjadi 0
+                $customer->update(['is_active' => 0]);
+            }
+        }
 
 
 

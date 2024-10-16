@@ -112,4 +112,41 @@ public function checkDevice(Request $request)
     
         return response()->json(['message' => 'Device is valid.'], 200);
     }
+
+
+    public function getLatestSubscription(Request $request)
+    {
+        
+        $user = $request->user();
+        // $customer = Customer::find($user->id);
+    
+    
+        $latestSubscription = Customer::where('id', $user->id)
+                ->whereHas('subcrib', function ($query) {
+                    $query->orderBy('end_date', 'asc');
+                })
+                ->with([
+                    'subcrib' => function ($query) {
+                        $query->where('start_date','!=',null)->orderBy('end_date', 'desc')
+                            ->first(); // Get only the latest subscription
+                    }
+                ])->first();
+    
+        // Cek apakah subscription ditemukan
+        if (!$latestSubscription) {
+            return response()->json([
+                'message' => 'No active subscription found',
+            ], 404);
+        }
+    
+        // Kembalikan data subscription terbaru
+        return response()->json([
+            'message' => 'Latest subscription retrieved successfully',
+            'data' => $latestSubscription,
+        ]);
+    }
 }
+
+
+
+

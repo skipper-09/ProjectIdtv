@@ -30,6 +30,7 @@ Route::get('/chanel', [ApichanelController::class, 'index'])->middleware('auth:s
 Route::get('/category', [ApichanelController::class, 'category'])->middleware('auth:sanctum');
 Route::get('/historysubscription', [ApichanelController::class, 'HistoryLangganan'])->middleware('auth:sanctum');
 Route::get('/check-version', [VersionAplication::class, 'VersionLatest'])->middleware('auth:sanctum');
+Route::get('/latestsubscription', [ApiLoginController::class, 'getLatestSubscription'])->middleware('auth:sanctum');
 
 
 Route::post('/payment', [ApichanelController::class, 'createPayment']);
