@@ -87,17 +87,17 @@ class ApichanelController extends Controller
     {
         $invoiceid = $request->query('order_id');
         $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->where('status', 0)->first();
-    
+
         if ($sub == null) {
             return response()->json([
                 "message" => 'TIDAK ADA INVOICE TERSEBUT'
             ], 404);
         }
-    
+
         $paket = Package::find($sub->packet_id);
         $random = Str::uuid();  // UUID for unique order_id
         $sub->update(['midtras_random' => $random]);
-    
+
         $params = [
             'transaction_details' => [
                 "order_id" => $random,
@@ -122,7 +122,10 @@ class ApichanelController extends Controller
                 ],
             ],
             'enabled_payments' => [
-                "bca_va", "bri_va", "bni_va", "gopay"
+                "bca_va",
+                "bri_va",
+                "bni_va",
+                "gopay"
             ],
             // Set expiry to 5 minutes (5 * 60 seconds)
             'expiry' => [
@@ -131,28 +134,28 @@ class ApichanelController extends Controller
                 "duration" => 5  // Set to 5 minutes
             ],
         ];
-    
+
         // Authorization using Base64 encoding of Server Key
         $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
-    
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => "Basic $auth"
         ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
-    
+
         $responseBody = json_decode($response->body());
-    
+
         if ($response->failed()) {
             Log::error('Midtrans Error: ' . $response->body());
             return response()->json(['message' => 'Terjadi kesalahan pada transaksi'], 500);
         }
-    
+
         $sub->update(['midtras_link' => $responseBody->redirect_url]);
-    
+
         return ResponseFormatter::success($responseBody, 'Success');
     }
-    
+
 
 
 
@@ -184,7 +187,7 @@ class ApichanelController extends Controller
 
         if ($subs) {
             $paket = Package::find($subs->packet_id);
-            $amount = $paket->price + $subs->customer->company->fee_reseller;
+            $amount = $subs->tagihan;
 
             switch ($transactionStatus) {
                 case 'capture':
@@ -194,10 +197,10 @@ class ApichanelController extends Controller
                         'start_date' => now(),
                         'end_date' => now()->addMonth($paket->duration)->toDateString(),
                     ]);
-                    Customer::where('id',$subs->customer_id)->update(['is_active'=>1]);
+                    Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
 
                     // Insert to payment table
-                    Payment::create([
+                    $paymnet = Payment::create([
                         'subscription_id' => $subs->id,
                         'customer_id' => $subs->customer->id,
                         'amount' => $amount,
@@ -206,13 +209,42 @@ class ApichanelController extends Controller
                         'status' => 'paid',
                         'payment_type' => 'midtrans',
                     ]);
+
+                    $name = $subs->customer->name;
+                    $phone = $subs->customer->phone;
+                    //send to wa
+                    $pesan = "Halo, *$name*!\n\nPembayaran Anda telah berhasil.\n\nDetail pembayaran:\nNama: *$name*\nJumlah Pembayaran: *Rp $amount*\nTanggal Pembayaran: *$paymnet->created_at*\n\nTerima kasih telah melakukan pembayaran. Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.";
+
+
+
+                    $params = [
+                        [
+                            'name' => 'phone',
+                            'contents' => $phone
+                        ],
+                        [
+                            'name' => 'message',
+                            'contents' => $pesan
+                        ]
+                    ];
+
+
+                    $auth = env('WABLAS_TOKEN');
+                    $url = env('WABLAS_URL');
+
+                    $response = Http::withHeaders([
+                        'Authorization' => $auth,
+                    ])->asMultipart()->post("$url/api/send-message", $params);
+
+                    $responseBody = json_decode($response->body());
+
                     break;
 
                 case 'pending':
                 case 'deny':
                 case 'cancel':
                 case 'expire':
-                    $subs->update(['status' => 0,'midtras_link'=>null]);
+                    $subs->update(['status' => 0, 'midtras_link' => null]);
                     break;
             }
         } else {

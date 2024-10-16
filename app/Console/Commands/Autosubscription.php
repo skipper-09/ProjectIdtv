@@ -7,6 +7,7 @@ use App\Models\Package;
 use App\Models\Subscription;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class Autosubscription extends Command
 {
@@ -40,13 +41,15 @@ class Autosubscription extends Command
             // Cek apakah sudah ada perpanjangan sebelumnya
             $existingSubscription = Subscription::where('customer_id', $item->customer_id)
                 ->where('packet_id', $item->packet_id)
-                ->where(function ($query) use ($today,$item) {
+                ->where(function ($query) use ($today, $item) {
                     $query->where('end_date', '>', $item->end_date);
-//                           ->orWhere('status', 0)->whereHas('payment',function($query) use($item){
+                    //                           ->orWhere('status', 0)->whereHas('payment',function($query) use($item){
 // $query->where('subscribetion_id',$item->id);
 //                           });
                 })
                 ->exists();
+
+
 
             $paket = Package::find($item->packet_id);
             if (!$existingSubscription && $paket) {
@@ -56,8 +59,39 @@ class Autosubscription extends Command
                     'start_date' => null,
                     'end_date' => Carbon::parse($item->end_date)->addMonth($paket->duration)->toDateString(),
                     'status' => false,
-                    'tagihan'=> $item->customer->company->fee_reseller + $paket->price
+                    'tagihan' => $item->customer->company->fee_reseller + $paket->price
                 ]);
+
+
+                //send to wa after succes registration
+                $name = $item->customer->name;
+                $phone = $item->customer->phone;
+                $tagihan = number_format($item->customer->company->fee_reseller + $paket->price);
+                $end_date = $item->end_date;
+                $pesan =
+                    "Halo, $name!\n\nKami ingin menginformasikan bahwa tagihan Anda telah diterbitkan. Berikut adalah rincian tagihan Anda:\n\nNama: $name\nJumlah Tagihan: Rp. $tagihan\nTanggal Jatuh Tempo: $end_date\n\nSilakan lakukan pembayaran sebelum tanggal jatuh tempo\nTerima kasih.";
+
+
+                $params = [
+                    [
+                        'name' => 'phone',
+                        'contents' => $phone
+                    ],
+                    [
+                        'name' => 'message',
+                        'contents' => $pesan
+                    ]
+                ];
+
+
+                $auth = env('WABLAS_TOKEN');
+                $url = env('WABLAS_URL');
+
+                $response = Http::withHeaders([
+                    'Authorization' => $auth,
+                ])->asMultipart()->post("$url/api/send-message", $params);
+
+                $responseBody = json_decode($response->body());
             }
         }
 
@@ -67,11 +101,11 @@ class Autosubscription extends Command
         //     $query->oderByDesc();
         // })->update(['is_active' => 0]);
 
-        $customers = Customer::whereHas('subcrib',function ($query) {
+        $customers = Customer::whereHas('subcrib', function ($query) {
             $query->where('status', 1) // Ambil langganan yang aktif
-                  ->orderBy('created_at', 'desc'); // Mengurutkan berdasarkan tanggal terbaru
+                ->orderBy('created_at', 'desc'); // Mengurutkan berdasarkan tanggal terbaru
         })->get();
-        
+
         foreach ($customers as $customer) {
             // Periksa apakah ada langganan aktif
             if ($customer->subcrib->isNotEmpty()) {

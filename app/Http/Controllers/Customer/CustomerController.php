@@ -13,10 +13,12 @@ use App\Models\Stb;
 use App\Models\Subscription;
 use App\Models\User;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
@@ -209,6 +211,36 @@ class CustomerController extends Controller
             'tanggal_bayar' => now(),
             'status' => 'paid'
         ]);
+
+
+
+
+        //send to wa after succes registration
+        // $pesan =
+        //     "Halo, $request->name!\n\nPendaftaran Anda telah berhasil.\nBerikut adalah detail akun Anda:\n\nNama: $request->name\nAlamat: $request->address\nUsername: $request->username\nPassword: $request->password\n\nSilakan gunakan username dan password ini untuk login ke sistem kami. Pastikan untuk menjaga kerahasiaan informasi akun Anda.";
+
+
+        // $params = [
+        //     [
+        //         'name' => 'phone',
+        //         'contents' => $request->phone
+        //     ],
+        //     [
+        //         'name' => 'message',
+        //         'contents' => $pesan
+        //     ]
+        // ];
+
+
+        // $auth = env('WABLAS_TOKEN');
+        // $url = env('WABLAS_URL');
+
+        // $response = Http::withHeaders([
+        //     'Authorization' => $auth,
+        // ])->asMultipart()->post("$url/api/send-message", $params);
+
+        // $responseBody = json_decode($response->body());
+
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 
