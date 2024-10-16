@@ -153,13 +153,13 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request, )
+    public function store(Request $request,)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'mac' => 'required|string', // MAC address format
             'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
-            'phone' => 'required|string|min:10|max:15|regex:/^[0-9]+$/', // Nomor telepon hanya angka dan panjang antara 10-15
+            'phone' => 'required|regex:/^\+?[1-9]\d{1,14}$/', // Nomor telepon hanya angka dan panjang antara 10-15
             'address' => 'required|string|max:500', // Maksimal 500 karakter
             'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
             'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
@@ -216,30 +216,30 @@ class CustomerController extends Controller
 
 
         //send to wa after succes registration
-        // $pesan =
-        //     "Halo, $request->name!\n\nPendaftaran Anda telah berhasil.\nBerikut adalah detail akun Anda:\n\nNama: $request->name\nAlamat: $request->address\nUsername: $request->username\nPassword: $request->password\n\nSilakan gunakan username dan password ini untuk login ke sistem kami. Pastikan untuk menjaga kerahasiaan informasi akun Anda.";
+        $pesan =
+            "Halo, *$request->name*!\n\nPendaftaran Anda telah berhasil.\nBerikut adalah detail akun Anda:\n\nNama: *$request->name*\nAlamat: *$request->address*\nUsername: *$request->username*\nPassword: *$request->password*\n\nSilakan gunakan username dan password ini untuk login ke sistem kami.\nPastikan untuk menjaga kerahasiaan informasi akun Anda.";
 
 
-        // $params = [
-        //     [
-        //         'name' => 'phone',
-        //         'contents' => $request->phone
-        //     ],
-        //     [
-        //         'name' => 'message',
-        //         'contents' => $pesan
-        //     ]
-        // ];
+        $params = [
+            [
+                'name' => 'phone',
+                'contents' => $request->phone
+            ],
+            [
+                'name' => 'message',
+                'contents' => $pesan
+            ]
+        ];
 
 
-        // $auth = env('WABLAS_TOKEN');
-        // $url = env('WABLAS_URL');
+        $auth = env('WABLAS_TOKEN');
+        $url = env('WABLAS_URL');
 
-        // $response = Http::withHeaders([
-        //     'Authorization' => $auth,
-        // ])->asMultipart()->post("$url/api/send-message", $params);
+        $response = Http::withHeaders([
+            'Authorization' => $auth,
+        ])->asMultipart()->post("$url/api/send-message", $params);
 
-        // $responseBody = json_decode($response->body());
+        $responseBody = json_decode($response->body());
 
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
@@ -280,7 +280,7 @@ class CustomerController extends Controller
             'name' => 'required|string|max:255',
             'mac' => 'required|string', // MAC address format
             'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
-            'phone' => 'required|string|min:10|max:15|regex:/^[0-9]+$/', // Nomor telepon hanya angka dan panjang antara 10-15
+            'phone' => 'required|regex:/^\+?[1-9]\d{1,14}$/', // Nomor telepon hanya angka dan panjang antara 10-15
             'address' => 'required|string|max:500', // Maksimal 500 karakter
             'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
             'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
@@ -367,8 +367,4 @@ class CustomerController extends Controller
             'message' => 'Device Berhasil Direset!.',
         ]);
     }
-
-
-
-
 }
