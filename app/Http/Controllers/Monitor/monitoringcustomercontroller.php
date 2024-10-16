@@ -24,7 +24,7 @@ class monitoringcustomercontroller extends Controller
 
     public function getData()
     {
-        $curentstream = CurentStream::with(['chanel','customer'])->orderByDesc('created_at')->get();
+        $curentstream = CurentStream::with(['chanel','customer'])->orderBy('created_at','desc')->get();
         return DataTables::of($curentstream)->addIndexColumn()->addColumn('action', function ($categori) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
