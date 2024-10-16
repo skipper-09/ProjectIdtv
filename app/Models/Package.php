@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Package extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory, LogsActivity;
     protected $fillable = [
         'name',
         'price',
@@ -18,7 +18,7 @@ class Package extends Model
     protected $primaryKey = 'id';
 
 
-   
+
     public function paket()
     {
         return $this->hasMany(Package::class);
@@ -28,7 +28,7 @@ class Package extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults() ->useLogName('Paket')->logOnly(['name','price']);
+        return LogOptions::defaults()->useLogName('Paket')->logOnly(['name', 'price', 'duration'])->logOnlyDirty();
     }
 
     public function getDescriptionForEvent(string $event): string

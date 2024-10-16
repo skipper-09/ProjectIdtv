@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Region extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory, LogsActivity;
     protected $fillable = [
         'name'
     ];
@@ -17,7 +17,7 @@ class Region extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults() ->useLogName('Area')->logOnly(['name']);
+        return LogOptions::defaults()->useLogName('Area')->logOnly(['name'])->logOnlyDirty();
     }
 
     public function getDescriptionForEvent(string $event): string

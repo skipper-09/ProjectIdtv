@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Chanel extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory, LogsActivity;
     protected $fillable = [
         'name',
         'categori_id',
@@ -28,10 +28,11 @@ class Chanel extends Model
 
     public function categori()
     {
-        return $this->belongsTo(Categori::class,'categori_id','id');
+        return $this->belongsTo(Categori::class, 'categori_id', 'id');
     }
 
-    public function curentstream(){
+    public function curentstream()
+    {
         return $this->hasMany(CurentStream::class);
     }
 
@@ -47,8 +48,16 @@ class Chanel extends Model
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults() ->useLogName('Chanel')->logOnly(['name']);
+        return LogOptions::defaults()->useLogName('Chanel')->logOnly([
+            'name',
+            'categori.name',
+            'url',
+            'replacement_url',
+            'type',
+            'security_type',
+        ])->logOnlyDirty();
     }
+
 
     public function getDescriptionForEvent(string $event): string
     {

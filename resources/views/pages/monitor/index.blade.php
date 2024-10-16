@@ -3,88 +3,87 @@
 @section('title', $page_name)
 
 @push('style')
-<!-- CSS Libraries -->
-<link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
-<link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
-<link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
 @endpush
 
 @section('main')
 
-<div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1>{{ $page_name }}</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">{{ $page_name }}</div>
-                {{-- <div class="breadcrumb-item">Default Layout</div> --}}
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>{{ $page_name }}</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item">{{ $page_name }}</div>
+                    {{-- <div class="breadcrumb-item">Default Layout</div> --}}
+                </div>
             </div>
-        </div>
 
 
-        <div class="section-body">
-            {{-- <h2 class="section-title">This is Example Page</h2>
-            <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
             <div class="section-body">
+                {{-- <h2 class="section-title">This is Example Page</h2>
+            <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
+                <div class="section-body">
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                          
-                            {{-- <div class="card-header">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+
+                                {{-- <div class="card-header">
                           <h5>Curent Stream Akan Otomatis Terhapus setiap 30 hari</h5>
                             </div> --}}
-                          
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table-striped table" id="dataTable">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama</th>
-                                                <th>Device Id</th>
-                                                <th>Device Brand</th>
-                                                <th>Device</th>
-                                                <th>Device Model</th>
-                                                <th>Mac</th>
-                                                <th>Chanel</th>
-                                                <th>Tanggal</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table-striped table" id="dataTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nama</th>
+                                                    <th>Device Id</th>
+                                                    <th>Device Brand</th>
+                                                    <th>Device</th>
+                                                    <th>Device Model</th>
+                                                    <th>Mac</th>
+                                                    <th>Chanel</th>
+                                                    <th>Tanggal</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 @endsection
 
 @push('scripts')
-<!-- JS Libraies -->
-<script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
-<script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
-<script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
-<script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    <!-- JS Libraies -->
+    <script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
 
-<!-- Page Specific JS File -->
-<script src="{{ asset('js/custom.js') }}"></script>
-<!-- Page Specific JS File -->
+    <!-- Page Specific JS File -->
+    <script src="{{ asset('js/custom.js') }}"></script>
+    <!-- Page Specific JS File -->
 
 
-<script>
-    $(document).ready(function() {
-           var table =  $('#dataTable').DataTable({
+    <script>
+        $(document).ready(function() {
+            var table = $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('curentstream.getdata') }}',
-                columns: [
-                    {
+                columns: [{
                         data: 'name',
                         name: 'name'
                     },
@@ -115,24 +114,23 @@
                     {
                         data: 'created_at',
                         name: 'created_at',
-                        
                     },
-                    
+
                 ]
             });
 
-            setInterval(function(){
-            table.ajax.reload(null, false); 
-        }, 5000); // 5000 ms = 5 detik
+            setInterval(function() {
+                table.ajax.reload(null, false);
+            }, 5000); // 5000 ms = 5 detik
 
             @if (Session::has('message'))
-            iziToast.success({
-            title: `{{Session::get('status')}}`,
-            message: `{{Session::get('message')}}`,
-            position: 'topRight'
-            });
+                iziToast.success({
+                    title: `{{ Session::get('status') }}`,
+                    message: `{{ Session::get('message') }}`,
+                    position: 'topRight'
+                });
             @endif
 
         });
-</script>
+    </script>
 @endpush

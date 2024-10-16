@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles,LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +55,7 @@ class User extends Authenticatable
 
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults() ->useLogName('User')->logOnly(['name','username','email']);
+        return LogOptions::defaults()->useLogName('User')->logOnly(['name', 'username', 'email', 'password'])->logOnlyDirty();
     }
 
     public function getDescriptionForEvent(string $event): string

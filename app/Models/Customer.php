@@ -61,14 +61,25 @@ class Customer extends Model
         return $this->hasMany(Payment::class);
     }
 
-    public function curentstream(){
+    public function curentstream()
+    {
         return $this->hasMany(CurentStream::class);
     }
 
     //log automatyly created
     public function getActivitylogOptions(): LogOptions
     {
-        return LogOptions::defaults()->useLogName('Customer')->logOnly(['name']);
+        return LogOptions::defaults()->useLogName('Customer')->logOnly([
+            'name',
+            'address',
+            'phone',
+            'mac',
+            'username',
+            'nik',
+            'company.name',
+            'stb.name',
+            'region.name',
+        ])->logOnlyDirty();
     }
 
     public function getDescriptionForEvent(string $event): string
