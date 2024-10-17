@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('genre_id');
             $table->string('title');
-            $table->decimal('rating');
+            $table->decimal('rating', 3, 1)->default(0);
             $table->longText('cover_image');
-            $table->enum('type',['movie','series'])->default('movie');
+            $table->enum('type', ['movie', 'series'])->default('movie');
             $table->longText('url')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
