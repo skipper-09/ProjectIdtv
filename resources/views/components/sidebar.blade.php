@@ -41,7 +41,7 @@
                 </li>
             @endcanany
 
-            @canany(['read-chanel', 'read-categori', 'read-company', 'read-owner', 'read-customer'])
+            @canany(['read-chanel', 'read-categori', 'read-company', 'read-owner', 'read-customer','read-genre', 'read-movie'])
                 <li class="menu-header">MANAGEMENT</li>
                 @canany(['read-chanel', 'read-categori'])
                     <li class="nav-item dropdown {{ $type_menu === 'layout' ? 'active' : '' }}">
@@ -56,6 +56,24 @@
                             @can('read-categori')
                                 <li class="{{ Request::is('admin/chanel-management/categori') ? 'active' : '' }}">
                                     <a class="nav-link" href="{{ route('categori-chanel') }}">Kategori</a>
+                                </li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcanany
+                @canany(['read-genre', 'read-movie'])
+                    <li class="nav-item dropdown {{ $type_menu === 'movie' ? 'active' : '' }}">
+                        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-film"></i>
+                            <span>Movie Management</span></a>
+                        <ul class="dropdown-menu">
+                            @can('read-movie')
+                                <li class="{{ Request::is('admin/movie') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('movie') }}">Movie</a>
+                                </li>
+                            @endcan
+                            @can('read-genre')
+                                <li class="{{ Request::is('admin/movie/genre') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('genre') }}">Genre</a>
                                 </li>
                             @endcan
                         </ul>

@@ -13,24 +13,25 @@
     <div class="section-header">
       <h1>{{$page_name}}</h1>
       <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="{{route('categori-chanel')}}">Kategori</a></div>
+        <div class="breadcrumb-item active"><a href="{{route('categori-chanel')}}">Movie</a></div>
         <div class="breadcrumb-item">{{$page_name}}</div>
       </div>
     </div>
 
 
     <div class="card">
-      <form action="{{ route('categori-chanel.update',['id'=>$categori->id]) }}" method="POST"
-        enctype="multipart/form-data">
-        {{ csrf_field() }}
-        {{ method_field('PUT') }}
-        {{-- <div class="card-header">
-          <h4>Default Validation</h4>
-        </div> --}}
+      <form action="{{ route('genre.update',['id'=>$genre->id]) }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
         <div class="card-body">
           <div class="form-group">
-            <label>Nama Kategori <span class="text-danger">*</span></label>
-            <input type="text" name="name" class="form-control" value="{{$categori->name}}">
+            <label>Nama <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $genre->name }}">
+            @error('name') 
+            <div class="invalid-feedback">
+                {{$message}}
+            </div>
+            @enderror
           </div>
         </div>
         <div class="card-footer text-left">

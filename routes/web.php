@@ -18,6 +18,8 @@ use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
 use App\Http\Controllers\Monitor\monitoringcustomercontroller;
+use App\Http\Controllers\Movie\GenreController;
+use App\Http\Controllers\Movie\MovieController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
@@ -130,6 +132,35 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
         });
     });
+
+
+
+
+
+//chanel management route
+Route::prefix('movie')->group(function () {
+    //movie
+    Route::prefix('')->group(function () {
+        Route::get('/', [MovieController::class,'index'])->name('movie')->middleware('can:read-movie');
+        Route::get('getData', [MovieController::class,'getData'])->name('movie.getdata');
+        Route::get('/tambah', [MovieController::class,'create'])->name('movie.add')->middleware('can:create-movie');
+        Route::post('store', [MovieController::class,'store'])->name('movie.store');
+        Route::get('/edit/{id}', [MovieController::class,'show'])->name('movie.edit')->middleware('can:update-movie');
+        Route::put('/update/{id}', [MovieController::class,'update'])->name('movie.update');
+        Route::delete('/delete/{id}', [MovieController::class,'destroy'])->name('movie.delete')->middleware('can:delete-movie');
+    });
+
+    //genre route
+    Route::prefix('genre')->group(function () {
+        Route::get('', [GenreController::class, 'index'])->name('genre')->middleware('can:read-genre');
+        Route::get('getData', [GenreController::class, 'getData'])->name('genre.getdata');
+        Route::get('/tambah', [GenreController::class, 'create'])->name('genre.add')->middleware('can:create-genre');
+        Route::post('store', [GenreController::class, 'store'])->name('genre.store');
+        Route::get('/edit/{id}', [GenreController::class, 'show'])->name('genre.edit')->middleware('can:update-genre');
+        Route::put('/update/{id}', [GenreController::class, 'update'])->name('genre.update');
+        Route::delete('/delete/{id}', [GenreController::class, 'destroy'])->name('genre.delete')->middleware('can:delete-genre');
+    });
+});
 
 
     //reseler

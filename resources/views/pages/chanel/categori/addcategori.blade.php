@@ -27,7 +27,7 @@
         </div> --}}
         <div class="card-body">
           <div class="form-group">
-            <label>Nama Kategori</label>
+            <label>Nama Kategori <span class="text-danger">*</span></label>
             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror">
             @error('name') 
             <div class="invalid-feedback">

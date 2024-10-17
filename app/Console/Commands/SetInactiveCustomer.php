@@ -50,8 +50,7 @@ class SetInactiveCustomer extends Command
 $batchSize = 500; // Adjust batch size based on your system capacity
 
 // Use chunking to process records in batches
-Subscription::where('end_date', '<=', $today)
-    ->orWhereDoesntHave('payment')
+Subscription::whereDoesntHave('payment')->where('end_date','>=',$today)->where('status',0)
     ->chunk($batchSize, function ($subs) {
         // Collect customer IDs to update in bulk
         $customerIds = [];
