@@ -203,4 +203,25 @@ class EpisodeController extends Controller
         }
     }
 
+
+
+    public function Player($movie_id,$id)
+    {
+        try {
+            $movie = Episode::find($id);
+            
+            $data = [
+                'type_menu' => 'movie',
+                'page_name' => $movie->title,
+                'player' => $movie->url,
+            ];
+
+            return view('pages.movie.episode.player', $data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
+    }
 }
