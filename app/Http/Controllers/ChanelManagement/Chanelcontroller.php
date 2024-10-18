@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\File;
@@ -30,14 +31,26 @@ class Chanelcontroller extends Controller
     }
 
 
-    public function stream($replaceurl)
+
+    public function stream(Request $request, $replaceurl, $path = null)
     {
         $channel = Chanel::where('replacement_url', $replaceurl)->firstOrFail();
 
-        return redirect($channel->url)->withHeaders([
-            'Access-Control-Allow-Origin' => '*',
-        ]);
+        // URL asli yang ingin kita redirect
+        $originalUrl = $channel->url;
+
+        // Logging untuk debugging
+        \Log::info('Redirecting to URL: ' . $originalUrl);
+
+        // Kirimkan redirect dengan CORS headers untuk memastikan player tidak diblokir
+        return redirect($originalUrl)
+            ->withHeaders([
+                'Access-Control-Allow-Origin' => '*', // Mengizinkan semua domain
+                'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+                'Access-Control-Allow-Headers' => 'Origin, Content-Type, X-Auth-Token',
+            ]);
     }
+
 
     public function getData()
     {
@@ -80,10 +93,11 @@ class Chanelcontroller extends Controller
     public function vidiochanel($id)
     {
         try {
+            $film = Chanel::find($id);
             $data = [
                 'type_menu' => 'layout',
-                'page_name' => 'Chanel',
-                'player' => Chanel::find($id),
+                'page_name' => $film->name,
+                'player' => url("/stream/$film->replacement_url"),
             ];
 
             return view('pages.chanel.chanel-management.detailplayer', $data);
@@ -194,7 +208,7 @@ class Chanelcontroller extends Controller
 
     public function update(Chanel $chanel, Request $request, $id)
     {
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'url' => 'required|url',

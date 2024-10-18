@@ -28,7 +28,11 @@ Route::post('/logout', [ApiLoginController::class, 'logout'])->middleware('auth:
 Route::post('/check-device', [ApiLoginController::class, 'checkDevice'])->middleware('auth:sanctum');
 Route::post('/curentstream', [ApiCurentStream::class, 'Tambah'])->middleware('auth:sanctum');
 Route::get('/chanel', [ApichanelController::class, 'index'])->middleware('auth:sanctum');
+//route api movie
 Route::get('/movie', [MovieApiController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/genre', [MovieApiController::class, 'getgenre']);
+
+
 Route::get('/category', [ApichanelController::class, 'category'])->middleware('auth:sanctum');
 Route::get('/historysubscription', [ApichanelController::class, 'HistoryLangganan'])->middleware('auth:sanctum');
 Route::get('/check-version', [VersionAplication::class, 'VersionLatest'])->middleware('auth:sanctum');

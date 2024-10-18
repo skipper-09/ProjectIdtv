@@ -32,4 +32,30 @@ class MovieApiController extends Controller
 
         return ResponseFormatter::success($movie->get(), 'Movie berhasil diambil');
     }
+
+
+
+    //get genre
+    public function getgenre(Request $request)
+    {
+
+        $id = $request->input('id');
+        $name = $request->input('name');
+
+        if ($id) {
+            $movie = Genre::with('movie')->find($id);
+            if ($movie) {
+                return ResponseFormatter::success($movie, 'Genre berhasil diambil');
+            } else {
+                return ResponseFormatter::error($movie, 'Genre tidak ada', 400);
+            }
+        }
+
+        $movie = Genre::with('movie');
+        if ($name) {
+            $movie->where('name', 'like', '%' . $name . '%');
+        }
+
+        return ResponseFormatter::success($movie->get(), 'Genre berhasil diambil');
+    }
 }
