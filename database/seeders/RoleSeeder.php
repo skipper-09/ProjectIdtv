@@ -85,7 +85,12 @@ class RoleSeeder extends Seeder
             'create-movie',
             'update-movie',
             'delete-movie',
-            'read-movie-player'
+            'read-movie-player',
+            'read-episode',
+            'create-episode',
+            'update-episode',
+            'delete-episode',
+            'read-episode-player'
         ]);
 
         $administrator->givePermissionTo([

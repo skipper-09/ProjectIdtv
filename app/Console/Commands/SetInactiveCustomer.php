@@ -46,14 +46,15 @@ class SetInactiveCustomer extends Command
         // }
         
         // \Log::info('Subscriptions processed: ' . $subs->count());
-        $today = Carbon::now()->toDateString();
+        $today = Carbon::now()->toDateString(); // Get today's date
 $batchSize = 500; // Adjust batch size based on your system capacity
 
-// Use chunking to process records in batches
-Subscription::whereDoesntHave('payment')->where('end_date','>=',$today)->where('status',0)
+
+Subscription::whereDoesntHave('payment') 
+    ->where('end_date', '<=', $today) 
+    ->where('status', 1) 
     ->chunk($batchSize, function ($subs) {
-        // Collect customer IDs to update in bulk
-        $customerIds = [];
+        $customerIds = []; 
 
         foreach ($subs as $subscription) {
             if ($subscription->customer) {
@@ -61,11 +62,12 @@ Subscription::whereDoesntHave('payment')->where('end_date','>=',$today)->where('
             }
         }
 
-        // Update customers in bulk to avoid multiple queries
+        // Bulk update to set customers as inactive
         if (!empty($customerIds)) {
             Customer::whereIn('id', $customerIds)->update(['is_active' => 0]);
         }
 
+        // Log the number of customers updated in each batch
         \Log::info('Processed batch of subscriptions, updated customers: ' . count($customerIds));
     });
     }

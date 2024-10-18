@@ -14,10 +14,11 @@ class Episode extends Model
         'episode_number',
         'cover_image',
         'url',
+        'status'
     ];
     protected $primaryKey = 'id';
 
     public function movie(){
-        return $this->hasMany(Movie::class);
+        return $this->belongsTo(Movie::class);
     }
 }

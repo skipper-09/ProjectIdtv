@@ -18,6 +18,7 @@ use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
 use App\Http\Controllers\Monitor\monitoringcustomercontroller;
+use App\Http\Controllers\Movie\EpisodeController;
 use App\Http\Controllers\Movie\GenreController;
 use App\Http\Controllers\Movie\MovieController;
 use App\Http\Controllers\Payment\PaymentController;
@@ -160,6 +161,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [GenreController::class, 'show'])->name('genre.edit')->middleware('can:update-genre');
             Route::put('/update/{id}', [GenreController::class, 'update'])->name('genre.update');
             Route::delete('/delete/{id}', [GenreController::class, 'destroy'])->name('genre.delete')->middleware('can:delete-genre');
+        });
+
+        Route::prefix('/{movie_id}/episode')->group(function () {
+            Route::get('/', [EpisodeController::class, 'index'])->name('episode')->middleware('can:read-episode');
+            Route::get('getData', [EpisodeController::class, 'getData'])->name('episode.getdata');
+            Route::get('/player/{id}', [EpisodeController::class, 'Player'])->name('episode.player')->middleware('can:read-episode-player');
+            Route::get('/tambah', [EpisodeController::class, 'create'])->name('episode.add')->middleware('can:create-episode');
+            Route::post('store', [EpisodeController::class, 'store'])->name('episode.store');
+            Route::get('/edit/{id}', [EpisodeController::class, 'show'])->name('episode.edit')->middleware('can:update-episode');
+            Route::put('/update/{id}', [EpisodeController::class, 'update'])->name('episode.update');
+            Route::delete('/delete/{id}', [EpisodeController::class, 'destroy'])->name('episode.delete')->middleware('can:delete-episode');
         });
     });
 

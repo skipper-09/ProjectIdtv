@@ -37,8 +37,13 @@ class MovieController extends Controller
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('read-movie-player')) {
-                $button .= ' <a href="' . route('movie.player', ['id' => $data->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $data->id . ' data-type="edit"><i
-                                                            class="fa-solid fa-eye"></i></a>';
+                if ($data->type == 'movie') {
+                    $button .= ' <a href="' . route('movie.player', ['id' => $data->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $data->id . ' data-type="edit"><i
+                    class="fa-solid fa-eye"></i></a>';    
+                }else{
+                    $button .= ' <a href="' . route('episode', ['movie_id' => $data->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $data->id . ' data-type="Episode"><i
+                                                                class="fa-solid fa-eye"></i></a>';
+                }
             }
             if ($userauth->can('delete-movie')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $data->id . ' data-type="delete" data-route="' . route('movie.delete', ['id' => $data->id]) . '"><i

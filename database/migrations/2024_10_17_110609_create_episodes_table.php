@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('title');
             $table->longText('cover_image');
             $table->longText('url');
+            $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade')->onUpdate('cascade');
         });
