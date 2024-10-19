@@ -42,22 +42,33 @@ class SetInactiveCustomer extends Command
         })
         ->chunk($batchSize, function ($customers) use (&$processedCount, $today) {
             foreach ($customers as $customer) {
-                // Cek subscription sebelumnya yang sudah jatuh tempo
-                $expiredSubscription = $customer->subcrib()
-                    ->where('end_date', '<=', $today)
+                // Cek langganan terbaru yang masih aktif
+                $activeSubscription = $customer->subcrib()
+                    ->where('end_date', '>', $today)
                     ->where('status', 1)
                     ->orderBy('end_date', 'desc')
                     ->first();
         
-                if ($expiredSubscription) {
-                    // Set customer ke inactive
-                    $customer->update(['is_active' => 0]);
-                    
-                    // // Optional: Update status subscription menjadi tidak aktif
-                    //  $expiredSubscription->update(['status' => 1]);
+                // Jika tidak ada langganan aktif, cek langganan yang sudah kedaluwarsa
+                if (!$activeSubscription) {
+                    $expiredSubscription = $customer->subcrib()
+                        ->where('end_date', '<=', $today)
+                        ->where('status', 1)
+                        ->orderBy('end_date', 'desc')
+                        ->first();
         
-                    $processedCount++;
-                    \Log::info("Customer {$customer->id} set to inactive. Expired subscription: {$expiredSubscription->id}");
+                    if ($expiredSubscription) {
+                        // Set customer ke inactive
+                        $customer->update(['is_active' => 0]);
+                        
+                        // Optional: Update status subscription menjadi tidak aktif
+                        // $expiredSubscription->update(['status' => 0]);
+        
+                        $processedCount++;
+                        \Log::info("Customer {$customer->id} set to inactive. Expired subscription: {$expiredSubscription->id}");
+                    }
+                } else {
+                    \Log::info("Customer {$customer->id} remains active. Active subscription: {$activeSubscription->id}");
                 }
             }
         });
