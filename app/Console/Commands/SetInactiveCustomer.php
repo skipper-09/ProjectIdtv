@@ -30,45 +30,42 @@ class SetInactiveCustomer extends Command
      */
     public function handle()
     {
-        // $today = Carbon::now()->toDateString();
-        // $threeDaysLater = Carbon::now()->addDays(3)->toDateString();
-        
-        // // Fetch subscriptions that are expired or have no payment
-        // $subs = Subscription::where('end_date', '<=', $today)
-        //     ->orWhereDoesntHave('payment')
-        //     ->get();
-        
-        // foreach ($subs as $subscription) {
-        //     $customer = $subscription->customer; // Assuming Subscription has a relationship to Customer
-        //     if ($customer) {
-        //         $customer->update(['is_active' => 0]);
-        //     }
-        // }
-        
-        // \Log::info('Subscriptions processed: ' . $subs->count());
-        $today = Carbon::now()->toDateString(); // Get today's date
-$batchSize = 500; // Adjust batch size based on your system capacity
 
-
-Subscription::whereDoesntHave('payment') 
-    ->where('end_date', '<=', $today) 
-    ->where('status', 1) 
-    ->chunk($batchSize, function ($subs) {
-        $customerIds = []; 
-
-        foreach ($subs as $subscription) {
-            if ($subscription->customer) {
-                $customerIds[] = $subscription->customer->id;
+        $today = Carbon::now()->toDateString();
+        $batchSize = 500;
+        
+        $processedCount = 0;
+        
+        Customer::whereHas('subcrib', function ($query) use ($today) {
+            $query->where('end_date', '<=', $today)
+                ->where('is_active', 1);
+        })
+        ->chunk($batchSize, function ($customers) use (&$processedCount, $today) {
+            foreach ($customers as $customer) {
+                // Cek subscription sebelumnya yang sudah jatuh tempo
+                $expiredSubscription = $customer->subcrib()
+                    ->where('end_date', '<=', $today)
+                    ->where('status', 1)
+                    ->orderBy('end_date', 'desc')
+                    ->first();
+        
+                if ($expiredSubscription) {
+                    // Set customer ke inactive
+                    $customer->update(['is_active' => 0]);
+                    
+                    // // Optional: Update status subscription menjadi tidak aktif
+                    //  $expiredSubscription->update(['status' => 1]);
+        
+                    $processedCount++;
+                    \Log::info("Customer {$customer->id} set to inactive. Expired subscription: {$expiredSubscription->id}");
+                }
             }
-        }
+        });
+        
+        \Log::info("Total customers set to inactive: {$processedCount}");
 
-        // Bulk update to set customers as inactive
-        if (!empty($customerIds)) {
-            Customer::whereIn('id', $customerIds)->update(['is_active' => 0]);
-        }
 
-        // Log the number of customers updated in each batch
-        \Log::info('Processed batch of subscriptions, updated customers: ' . count($customerIds));
-    });
+
+
     }
 }
