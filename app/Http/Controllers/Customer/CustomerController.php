@@ -126,7 +126,7 @@ class CustomerController extends Controller
             //                                                 class="fas fa-eye"></i></button>';
             // }
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
+                $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
                                                             class="fa-solid fa-bolt"></i></a>';
             }
             if ($userauth->can('read-customer')) {
@@ -153,7 +153,7 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request,)
+    public function store(Request $request, )
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -366,5 +366,47 @@ class CustomerController extends Controller
             'success' => true,
             'message' => 'Device Berhasil Direset!.',
         ]);
+    }
+
+
+
+
+    public function RenewSubscription($id)
+    {
+        $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
+        $data = [
+            'type_menu' => '',
+            'page_name' => 'Perpanjang Layanan Customer',
+            'paket' => Package::all(),
+            'subs' => $subs,
+
+        ];
+        return view('pages.customer.renew', $data);
+    }
+
+
+    public function RenewSubscriptionAdd($id, Request $request)
+    {
+        $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
+        if ($subs) {
+            $subs->update([
+                'status' => 1,
+                'start_date' => now(),
+                'end_date' => $request->end_date
+            ]);
+
+            $payment = Payment::create([
+                'subscription_id' => $subs->id,
+                'customer_id' => $subs->customer_id,
+                'amount' => $subs->tagihan,
+                'fee' => $subs->fee,
+                'status' => 1,
+                'tanggal_bayar' => now(),
+                'payment_type' => 'manual',
+            ]);
+        }
+
+        return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Perpanjang Layanan Customer!']);
+
     }
 }
