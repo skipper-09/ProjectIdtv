@@ -387,14 +387,36 @@ class CustomerController extends Controller
 
     public function RenewSubscriptionAdd($id, Request $request)
     {
-        $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
-        if ($subs) {
+        // Coba untuk mencari langganan pelanggan
+        try {
+            // Log permintaan masuk
+            \Log::info('Memulai proses memperpanjang langganan untuk customer_id: ' . $id);
+
+            // Mencari langganan terakhir untuk customer_id yang diberikan
+            $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
+
+            // Pastikan langganan ditemukan
+            if (!$subs) {
+                // Jika langganan tidak ditemukan, cetak pesan kesalahan dan redirect
+                \Log::error('Langganan tidak ditemukan untuk customer_id: ' . $id);
+                return redirect()->back()->withErrors(['message' => 'Langganan tidak ditemukan.']);
+            }
+
+            // Log informasi langganan yang ditemukan
+            \Log::info('Langganan ditemukan: ' . json_encode($subs));
+
+            // Update status dan tanggal langganan
             $subs->update([
+                'packet_id' => $request->paket_id,  // Paket yang dipilih
                 'status' => 1,
                 'start_date' => now(),
-                'end_date' => $request->end_date
+                'end_date' => $request->end_date,
             ]);
 
+            // Log tindakan pembaruan langganan
+            \Log::info('Langganan diperbarui: ' . json_encode($subs));
+
+            // Simpan data pembayaran
             $payment = Payment::create([
                 'subscription_id' => $subs->id,
                 'customer_id' => $subs->customer_id,
@@ -404,9 +426,23 @@ class CustomerController extends Controller
                 'tanggal_bayar' => now(),
                 'payment_type' => 'manual',
             ]);
+
+            // Update status pelanggan menjadi aktif
+            Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
+
+            // Log informasi pembayaran yang berhasil
+            \Log::info('Pembayaran berhasil disimpan: ' . json_encode($payment));
+
+            // Redirect dengan pesan sukses
+            return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Perpanjang Layanan Customer!']);
+
+        } catch (Exception $e) {
+            // Tangkap kesalahan dan catat ke log
+            \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
+
+            // Redirect dengan pesan kesalahan
+            return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan saat memperpanjang layanan.']);
         }
-
-        return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Perpanjang Layanan Customer!']);
-
     }
+
 }
