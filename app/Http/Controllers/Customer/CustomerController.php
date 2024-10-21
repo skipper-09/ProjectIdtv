@@ -121,17 +121,41 @@ class CustomerController extends Controller
         })->addColumn('renew', function ($customer) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
-            // if ($userauth->can(['read-customer'])) {
-            //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
-            //                                                 class="fas fa-eye"></i></button>';
-            // }
-            if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
-                                                            class="fa-solid fa-bolt"></i></a>';
+
+            // Retrieve the latest subscription for the customer
+            $latestSubscription = $customer->subcrib()
+                ->whereNotNull('start_date') // Ensure the subscription has started
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latestSubscription) {
+                // Calculate if today is within 3 days of the end_date
+                $endDate = Carbon::parse($latestSubscription->end_date);
+                $threeDaysBeforeEnd = $endDate->subDays(3);
+                $today = Carbon::now();
+
+                // Determine if the renew button should be active or disabled
+                $isPaid = $latestSubscription->is_paid; // Assuming there is an 'is_paid' field
+
+                if ($isPaid) {
+                    // If the subscription is paid, disable the renew button
+                    $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
+                } else {
+                    if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
+                        // Enable the renew button if within 3 days of the end date
+                        if ($userauth->can('update-customer')) {
+                            $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
+                        }
+                    } else {
+                        // Otherwise, disable the renew button
+                        $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                    }
+                }
             }
+
+            // Add print button if the user has permission
             if ($userauth->can('read-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="ReNew"><i
-                class="fa-solid fa-print"></i></a>';
+                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa-solid fa-print"></i></a>';
             }
 
             return '<div class="d-flex">' . $button . '</div>';
@@ -389,8 +413,6 @@ class CustomerController extends Controller
     {
         // Coba untuk mencari langganan pelanggan
         try {
-            // Log permintaan masuk
-            \Log::info('Memulai proses memperpanjang langganan untuk customer_id: ' . $id);
 
             // Mencari langganan terakhir untuk customer_id yang diberikan
             $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
@@ -413,8 +435,6 @@ class CustomerController extends Controller
                 'end_date' => $request->end_date,
             ]);
 
-            // Log tindakan pembaruan langganan
-            \Log::info('Langganan diperbarui: ' . json_encode($subs));
 
             // Simpan data pembayaran
             $payment = Payment::create([
@@ -430,15 +450,46 @@ class CustomerController extends Controller
             // Update status pelanggan menjadi aktif
             Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
 
-            // Log informasi pembayaran yang berhasil
-            \Log::info('Pembayaran berhasil disimpan: ' . json_encode($payment));
+
+            //send wa
+            $name = $subs->customer->name;
+            $phone = $subs->customer->phone;
+            $amount = $subs->tagihan;
+            //send to wa
+            $pesan = "Halo, *$name*!\n\nPembayaran Anda telah berhasil.\n\nDetail pembayaran:\nNama: *$name*\nJumlah Pembayaran: *Rp $amount*\nTanggal Pembayaran: *$payment->created_at*\n\nTerima kasih telah melakukan pembayaran. Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.";
+
+            $params = [
+                [
+                    'name' => 'phone',
+                    'contents' => $phone
+                ],
+                [
+                    'name' => 'message',
+                    'contents' => $pesan
+                ]
+            ];
+
+
+            $auth = env('WABLAS_TOKEN');
+            $url = env('WABLAS_URL');
+
+            $response = Http::withHeaders([
+                'Authorization' => $auth,
+            ])->asMultipart()->post("$url/api/send-message", $params);
+
+            $responseBody = json_decode($response->body());
 
             // Redirect dengan pesan sukses
-            return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Perpanjang Layanan Customer!']);
+            return redirect()->route('customer')
+                ->with([
+                    'status' => 'Success!',
+                    'message' => 'Berhasil Perpanjang Layanan Customer!',
+                    'new_tab_url' => route('print.standart', ['id' => $subs->id, 'type' => 'subscription'])
+                ]);
 
         } catch (Exception $e) {
             // Tangkap kesalahan dan catat ke log
-            \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
+            // \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
 
             // Redirect dengan pesan kesalahan
             return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan saat memperpanjang layanan.']);

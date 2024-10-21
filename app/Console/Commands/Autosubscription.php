@@ -59,6 +59,7 @@ class Autosubscription extends Command
                     'start_date' => null,
                     'end_date' => Carbon::parse($item->end_date)->addMonth($paket->duration)->toDateString(),
                     'status' => false,
+                    'fee'=>$item->customer->company->fee_reseller,
                     'tagihan' => $item->customer->company->fee_reseller + $paket->price
                 ]);
 
@@ -69,7 +70,7 @@ class Autosubscription extends Command
                 $tagihan = number_format($item->customer->company->fee_reseller + $paket->price);
                 $end_date = $item->end_date;
                 $pesan =
-                    "Halo, $name!\n\nKami ingin menginformasikan bahwa tagihan Anda telah diterbitkan. Berikut adalah rincian tagihan Anda:\n\nNama: $name\nJumlah Tagihan: Rp. $tagihan\nTanggal Jatuh Tempo: $end_date\n\nSilakan lakukan pembayaran sebelum tanggal jatuh tempo\nTerima kasih.";
+                    "Halo, *$name*!\n\nKami ingin menginformasikan bahwa tagihan Anda telah diterbitkan. Berikut adalah rincian tagihan Anda:\n\nNama: *$name*\nJumlah Tagihan: Rp. *$tagihan*\nTanggal Jatuh Tempo: *$end_date*\n\nSilakan lakukan pembayaran sebelum tanggal jatuh tempo\nTerima kasih.";
 
 
                 $params = [

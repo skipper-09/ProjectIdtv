@@ -90,9 +90,6 @@ class SubcriptionController extends Controller
 
     public function PrintStandart($id, $type)
     {
-
-
-
         if ($type === 'subscription') {
             $sub = Subscription::with(['payment'])->find($id);
             $cus = Customer::find($sub->customer_id);

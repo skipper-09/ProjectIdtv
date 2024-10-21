@@ -146,8 +146,15 @@
 <!-- Page Specific JS File -->
 
 
-
+@if(session('new_tab_url'))
+    <script>
+        // Buka tab baru dengan URL yang diberikan dari session
+        window.open("{{ session('new_tab_url') }}", '_blank');
+    </script>
+@endif
 <script>
+
+
     $(document).ready(function() {
         
 
