@@ -27,7 +27,8 @@ class Customer extends Model
         'packet_id',
         'region_id',
         'is_active',
-        'device_id'
+        'device_id',
+        'is_active',
     ];
     protected $primaryKey = 'id';
 
@@ -79,6 +80,8 @@ class Customer extends Model
             'company.name',
             'stb.name',
             'region.name',
+            'device_id',
+            'is_active'
         ])->logOnlyDirty();
     }
 

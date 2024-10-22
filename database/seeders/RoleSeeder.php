@@ -19,6 +19,7 @@ class RoleSeeder extends Seeder
         $staff = Role::create(['name' => 'Staff']);
         $administrator = Role::create(['name' => 'Administrator']);
         $reseler = Role::create(['name' => 'Reseller']);
+        $customerservice = Role::create(['name'=>'CS']);
         //give permission role
         $developer->givePermissionTo([
             'read-dashboard',
@@ -47,6 +48,7 @@ class RoleSeeder extends Seeder
             'create-customer',
             'update-customer',
             'delete-customer',
+            'renew-customer',
             'reset-device',
             'read-company',
             'create-company',
@@ -156,6 +158,10 @@ class RoleSeeder extends Seeder
         ]);
 
         $reseler->givePermissionTo([
+            'read-dashboard',
+            'read-customer',
+        ]);
+        $customerservice->givePermissionTo([
             'read-dashboard',
             'read-customer',
         ]);

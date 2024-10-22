@@ -24,6 +24,7 @@ use App\Http\Controllers\Movie\MovieController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Settings\LogController;
+use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
 use App\Http\Controllers\Settings\VersionController;
@@ -198,13 +199,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('', [CustomerController::class, 'index'])->name('customer')->middleware('can:read-customer');
             Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
             Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
-            
+
             // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
             // Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');
             Route::get('/tambah', [CustomerController::class, 'create'])->name('customer.add')->middleware('can:create-customer');
             Route::post('store', [CustomerController::class, 'store'])->name('customer.store');
             Route::get('/edit/{id}', [CustomerController::class, 'show'])->name('customer.edit')->middleware('can:update-customer');
-            Route::get('/renewsubscription/{id}', [CustomerController::class, 'RenewSubscription'])->name('customer.renew');
+            Route::get('/renewsubscription/{id}', [CustomerController::class, 'RenewSubscription'])->name('customer.renew')->middleware('can:renew-customer');
             Route::post('/renewsubscription/add/{id}', [CustomerController::class, 'RenewSubscriptionAdd'])->name('customer.renewadd');
             Route::put('/update/{id}', [CustomerController::class, 'update'])->name('customer.update');
             Route::delete('/delete/{id}', [CustomerController::class, 'destroy'])->name('customer.delete')->middleware('can:delete-customer');
@@ -215,8 +216,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     //monitoring route
     Route::prefix('curentstream')->group(
         function () {
-            Route::get('', [monitoringcustomercontroller::class,  'index'])->name('curentstream')->middleware('can:read-curentstream');
-            Route::get('getData', [monitoringcustomercontroller::class,  'getData'])->name('curentstream.getdata');
+            Route::get('', [monitoringcustomercontroller::class, 'index'])->name('curentstream')->middleware('can:read-curentstream');
+            Route::get('getData', [monitoringcustomercontroller::class, 'getData'])->name('curentstream.getdata');
         }
     );
 
@@ -326,6 +327,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [VersionController::class, 'show'])->name('versioncontrol.edit')->middleware('can:update-version_control');
             Route::put('/update/{id}', [VersionController::class, 'update'])->name('versioncontrol.update');
             Route::delete('/delete/{id}', [VersionController::class, 'destroy'])->name('versioncontrol.delete')->middleware('can:delete-version_control');
+        });
+        //profile update
+        Route::prefix('profile')->group(function () {
+            Route::get('/edit/{id}', [ProfileController::class, 'index'])->name('profile.edit');
+            Route::put('/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
         });
     });
 });

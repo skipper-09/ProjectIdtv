@@ -137,20 +137,23 @@ class CustomerController extends Controller
                 // Determine if the renew button should be active or disabled
                 $isPaid = $latestSubscription->is_paid; // Assuming there is an 'is_paid' field
 
-                if ($isPaid) {
-                    // If the subscription is paid, disable the renew button
-                    $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
-                } else {
-                    if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
-                        // Enable the renew button if within 3 days of the end date
-                        if ($userauth->can('update-customer')) {
-                            $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
-                        }
+                if($userauth->can(['renew-customer'])){
+                    if ($isPaid) {
+                        // If the subscription is paid, disable the renew button
+                        $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
                     } else {
-                        // Otherwise, disable the renew button
-                        $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                        if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
+                            // Enable the renew button if within 3 days of the end date
+                            if ($userauth->can('update-customer')) {
+                                $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
+                            }
+                        } else {
+                            // Otherwise, disable the renew button
+                            $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                        }
                     }
                 }
+
             }
 
             // Add print button if the user has permission

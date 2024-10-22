@@ -110,7 +110,9 @@
                                                 <th>Deadline</th>
                                                 <th>Perusahaan</th>
                                                 <th>Status</th>
-                                                <th>Renew|Print</th>
+                                                <th>@can('renew-customer')
+                                                    Renew|
+                                                @endcan Print</th>
                                                 @canany(['read-customer', 'update-customer', 'delete-customer'])
                                                 <th>Action</th>
                                                 @endcanany

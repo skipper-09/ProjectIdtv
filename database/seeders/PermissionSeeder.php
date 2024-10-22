@@ -38,6 +38,7 @@ class PermissionSeeder extends Seeder
             'create-customer',
             'update-customer',
             'delete-customer',
+            'renew-customer',
             'reset-device',
             'read-company',
             'create-company',
