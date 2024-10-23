@@ -135,7 +135,7 @@ class CustomerController extends Controller
                 $today = Carbon::now();
 
                 // Determine if the renew button should be active or disabled
-                $isPaid = $latestSubscription->is_paid; // Assuming there is an 'is_paid' field
+                $isPaid = $latestSubscription->status == 0; // Assuming there is an 'is_paid' field
 
                 if($userauth->can(['renew-customer'])){
                     if ($isPaid) {

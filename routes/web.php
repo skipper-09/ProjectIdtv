@@ -246,7 +246,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 
     Route::get('print-standart/{id}/{type}', [SubcriptionController::class, 'PrintStandart'])->name('print.standart');
-    // Route::get('print-standart/{id}', [DailyincomeController::class, 'PrintStandart'])->name('print.standart');
+    Route::get('print-thermal/{id}/{type}', [SubcriptionController::class, 'PrintThermal'])->name('print.thermal');
+   
     //route keuangan
     Route::prefix('keuangan')->group(function () {
         Route::prefix('subcription')->group(

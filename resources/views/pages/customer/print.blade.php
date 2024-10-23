@@ -10,10 +10,10 @@
                 <div class="btn-group btn-group-sm d-print-none"><a style="width: 120px;font-weight: bold"
                         href="javascript:window.print()" class="btn btn-default border text-black-50 shadow-none"><i
                             class="fa fa-print"></i> A4 Print</a>
-                    {{-- <a style="font-weight: bold;width: 120px;"
-                        href="https://billing.csnet.id:1805/rad-customers/print-invoice/3682/thermal"
+                    <a style="font-weight: bold;width: 120px;"
+                        href="{{ route('print.thermal', ['id'=>$id,'type'=>$type]) }}"
                         class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-print"></i> POS
-                        Print</a> --}}
+                        Print</a>
                     <a id="finish_btn" href="javascript:window.close()" style="width: 120px;font-weight: bold" href=""
                         class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-check"></i> Selesai</a>
                 </div>

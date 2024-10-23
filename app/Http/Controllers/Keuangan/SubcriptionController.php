@@ -9,6 +9,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
@@ -20,7 +21,7 @@ class SubcriptionController extends Controller
         $subcription = Subscription::with(['customer', 'paket'])->where('customer_id', $customerId)->orderByDesc('id')->get();
 
         $hidedelete = $subcription->filter(function ($item) {
-            return $item->end_date < now() || $item->status == 0;
+            return $item->end_date < now();
         })->first();
         $highlightedData = $subcription->filter(function ($item) {
             return $item->end_date > now();
@@ -43,11 +44,37 @@ class SubcriptionController extends Controller
 
 
             if ($highlightedData && $item->id == $highlightedData->id) {
-                if ($userauth->can('delete-customer')) {
-                    $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
-                                                     class="fa-solid fa-bolt"></i></button>';
+                $latestSubscription = Subscription::find($item->id)
+                ->whereNotNull('start_date') // Ensure the subscription has started
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latestSubscription) {
+                // Calculate if today is within 3 days of the end_date
+                $endDate = Carbon::parse($latestSubscription->end_date);
+                $threeDaysBeforeEnd = $endDate->subDays(3);
+                $today = Carbon::now();
+
+                // Determine if the renew button should be active or disabled
+                $isPaid = $latestSubscription->status == 0; // Assuming there is an 'is_paid' field
+
+                if($userauth->can(['renew-customer'])){
+                    if ($isPaid) {
+                        // If the subscription is paid, disable the renew button
+                        $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $item->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
+                    } else {
+                        if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
+                            // Enable the renew button if within 3 days of the end date
+                            if ($userauth->can('update-customer')) {
+                                $button .= ' <a href="' . route('customer.renew', ['id' => $item->customer_id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
+                            }
+                        } else {
+                            // Otherwise, disable the renew button
+                            $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $item->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                        }
+                    }
                 }
-            }
+            }}
 
             if ($userauth->can('update-customer')) {
                 $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'subscription']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
@@ -96,6 +123,46 @@ class SubcriptionController extends Controller
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,
+                'subcription' => $sub,
+                'type'=> 'subscription',
+                'id'=>$id
+            ];
+        } elseif ($type === 'income') {
+            $paymen = Payment::find($id);
+            $sub = Subscription::find($paymen->subscription_id);
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub,
+                'type'=> 'income',
+                'id'=>$id
+            ];
+        } else {
+            $cus = Customer::find($id);
+            $sub = Subscription::where('customer_id', $cus->id)->orderBy('created_at', 'desc')->first();
+            $paymen = Payment::where('subscription_id', $sub->id)->first();
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
+                'subcription' => $sub,
+                'type' =>'customer',
+                'id'=>$id
+            ];
+        }
+        return view('pages.customer.print', $data);
+    }
+
+
+
+    public function PrintThermal($id, $type)
+    {
+        if ($type === 'subscription') {
+            $sub = Subscription::with(['payment'])->find($id);
+            $cus = Customer::find($sub->customer_id);
+            $data = [
+                'page_name' => $sub->invoices,
+                'customer' => $cus,
                 'subcription' => $sub
             ];
         } elseif ($type === 'income') {
@@ -117,6 +184,6 @@ class SubcriptionController extends Controller
                 'subcription' => $sub
             ];
         }
-        return view('pages.customer.print', $data);
+        return view('pages.customer.printthermal', $data);
     }
 }
