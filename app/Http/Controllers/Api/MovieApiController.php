@@ -51,7 +51,7 @@ class MovieApiController extends Controller
             }
         }
 
-        $movie = Genre::with('movie');
+        $movie = Genre::with('movie.episode');
         if ($name) {
             $movie->where('name', 'like', '%' . $name . '%');
         }
