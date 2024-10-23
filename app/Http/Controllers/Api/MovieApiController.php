@@ -17,7 +17,7 @@ class MovieApiController extends Controller
         $title = $request->input('title');
 
         if ($id) {
-            $movie = Movie::with('genre')->find($id);
+            $movie = Movie::with(['genre','episode'])->find($id);
             if ($movie) {
                 return ResponseFormatter::success($movie, 'Movie berhasil diambil');
             } else {
@@ -25,7 +25,7 @@ class MovieApiController extends Controller
             }
         }
 
-        $movie = Movie::with('genre');
+        $movie = Movie::with(['genre','episode']);
         if ($title) {
             $movie->where('name', 'like', '%' . $title . '%');
         }
@@ -51,7 +51,7 @@ class MovieApiController extends Controller
             }
         }
 
-        $movie = Genre::with('movie.episode');
+        $movie = Genre::with('movie');
         if ($name) {
             $movie->where('name', 'like', '%' . $name . '%');
         }
