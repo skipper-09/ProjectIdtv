@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    {{-- <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport"> --}}
+    <meta name="viewport" content="width=80mm, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>@yield('title')</title>
@@ -15,107 +16,24 @@
 
     @stack('style')
 
+    <style type="text/css" media="print">
+        @page {
+            size: 80mm;
+            /* auto is the initial value */
+            margin: 0mm;
+            /* this affects the margin in the printer settings */
+        }
+    </style>
+
     <!-- Template CSS -->
     {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('css/components.css') }}"> --}}
 
-    <style>
-        .text-right {
-            text-align: right;
-        }
-
-        .card {
-            border-radius: 0;
-            border: none;
-        }
-
-        .table {
-            border-bottom-width: none;
-        }
-
-        .table> :not(caption)>*>* {
-            padding-top: 0;
-            padding-bottom: 0
-        }
-
-        .btn {
-            border: solid 1px #ccc;
-        }
-
-        .left-col {
-            max-width: 75px;
-        }
-
-        @media print {
-            @page {
-                size: auto;
-                margin: 0;
-            }
-
-            @media all and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
-                body {
-                    size: auto;
-                    background: transparent;
-                    border: none;
-                    padding: 0;
-                    margin-top: -0.4cm;
-                    margin-left: -0.22cm;
-                    margin-right: 1.1cm;
-                    max-width: 100%;
-                }
-
-                .container-fluid {
-                    margin-top: 18px;
-                }
-            }
-
-            @-moz-document url-prefix() {
-                body {
-                    size: auto;
-                    background: transparent;
-                    border: none;
-                    padding: 0;
-                    margin-top: -0.4cm;
-                    margin-left: -0.22cm;
-                    margin-right: 0.9cm;
-                    max-width: 100%;
-                }
-            }
-
-            .table> :not(caption)>*>* {
-                padding-top: 0;
-                padding-bottom: 0
-            }
-
-            .container-fluid,
-            .footer {
-                border: none;
-                font-size: 10px;
-            }
-
-            .page-break {
-                display: block;
-                page-break-before: always;
-            }
-
-            .no-print,
-            .no-print * {
-                display: none !important;
-            }
-        }
-
-        * {
-            line-height: 1.5;
-            font-family: 'Arial Narrow';
-            color: black;
-            -webkit-print-color-adjust: exact !important;
-            color-adjust: exact !important;
-        }
-    </style>
+    
 
 </head>
 
-<body>
+<body >
 
 
     @yield('print')
