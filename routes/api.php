@@ -30,7 +30,7 @@ Route::post('/curentstream', [ApiCurentStream::class, 'Tambah'])->middleware('au
 Route::get('/chanel', [ApichanelController::class, 'index'])->middleware('auth:sanctum');
 //route api movie
 Route::get('/movie', [MovieApiController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/genre', [MovieApiController::class, 'getgenre']);
+Route::get('/genre', [MovieApiController::class, 'getgenre'])->middleware('auth:sanctum');
 
 
 Route::get('/category', [ApichanelController::class, 'category'])->middleware('auth:sanctum');
