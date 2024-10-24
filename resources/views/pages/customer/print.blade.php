@@ -78,7 +78,7 @@
                                     {{ $subcription->paket->duration }} Bulan
                                 </td>
                                 <td class="text-end">Rp.
-                                    {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                                    {{ number_format($subcription->tagihan) }}
                                 </td>
                             </tr>
 
@@ -95,7 +95,7 @@
                                 <td colspan="3" class="text-end border-bottom-0"><strong>Total :</strong></td>
                                 <td class="text-end border-bottom-0">
                                     Rp.
-                                    {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                                    {{ number_format($subcription->tagihan) }}
                                 </td>
                             </tr>
                         </tfoot>

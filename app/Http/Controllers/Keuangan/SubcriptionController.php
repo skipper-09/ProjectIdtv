@@ -163,7 +163,8 @@ class SubcriptionController extends Controller
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,
-                'subcription' => $sub
+                'subcription' => $sub,
+                'payment'=> $sub->payment[0]->created_at,
             ];
         } elseif ($type === 'income') {
             $paymen = Payment::find($id);
@@ -172,7 +173,8 @@ class SubcriptionController extends Controller
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,
-                'subcription' => $sub
+                'subcription' => $sub,
+                'payment'=> $paymen->created_at,
             ];
         } else {
             $cus = Customer::find($id);
@@ -181,7 +183,8 @@ class SubcriptionController extends Controller
             $data = [
                 'page_name' => $sub->invoices,
                 'customer' => $cus,
-                'subcription' => $sub
+                'subcription' => $sub,
+                'payment'=> $paymen->created_at
             ];
         }
         return view('pages.customer.printthermal', $data);

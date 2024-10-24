@@ -38,7 +38,7 @@
 
     @media print {
         @page {
-            size: 44mm auto;
+            size: auto;
             /* Set the page size to 44mm width with auto height */
             margin: 0;
             /* Remove all margins */
@@ -48,15 +48,15 @@
         html {
             margin: 0;
             padding: 0;
-            width: 44mm;
+            width: 50mm;
             /* Set the content width to match the paper width */
             background: transparent;
-            font-size: 40px;
+            font-size: 50px;
             /* Set a suitable font size */
         }
 
         .company {
-            font-size: 45px;
+            font-size: 55px;
             font-weight: 700;
         }
 
@@ -75,7 +75,7 @@
         table td {
             padding: 2px 2px;
             /* Minimum padding for thermal printers */
-            font-size: 40px;
+            font-size: 50px;
             /* Ensure font size is readable */
             word-wrap: break-word;
             /* Ensure text wraps within the table cells */
@@ -120,7 +120,7 @@
                     <table class="table mb-0">
                         <tr>
                             <td>Tanggal</td>
-                            <td class="text-right">{{ \Carbon\Carbon::now()->format('M/d/Y H:i:s') }}</td>
+                            <td class="text-right">{{ $payment->format('M/d/Y H:i:s') }}</td>
                         </tr>
                         <tr>
                             <td>Kasir</td>
@@ -175,7 +175,7 @@
             </div>
         </div>
     </main>
-    <footer class="text-center footer" style="font-style: italic; padding: 10px; padding-top: 0;">
+    <footer class="text-center footer" style="font-style: italic; padding: 10px; padding-top: 5px;">
         Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda!
     </footer>
 </div>
