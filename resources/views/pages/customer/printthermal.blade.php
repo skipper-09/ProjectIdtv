@@ -32,35 +32,58 @@
         padding-bottom: 0;
     }
 
+    .container-fluid {
+        width: max-content;
+    }
+
     @media print {
         @page {
-            size:  58mm 210mm; /* Set the page size to 80mm */
-            margin: 0; /* Remove all margins */
+            size: 44mm auto;
+            /* Set the page size to 44mm width with auto height */
+            margin: 0;
+            /* Remove all margins */
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
-            width: auto; /* Ensure body width matches the page size */
-            height: auto;
+            width: 44mm;
+            /* Set the content width to match the paper width */
             background: transparent;
-            font-size: 50px; /* Set a suitable font size */
+            font-size: 40px;
+            /* Set a suitable font size */
+        }
+
+        .company {
+            font-size: 45px;
+            font-weight: 700;
         }
 
         .container-fluid {
             width: 100%;
-            max-width: auto;
-            margin: 0 auto; /* Center the content */
+            margin: 0 auto;
+            /* Center the content */
             padding: 0;
         }
 
-        .table th, .table td {
-            padding: 2px 5px; /* Minimum padding for thermal printers */
-            font-size: 50px; /* Ensure font size is readable */
+        table {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        table td {
+            padding: 2px 2px;
+            /* Minimum padding for thermal printers */
+            font-size: 40px;
+            /* Ensure font size is readable */
+            word-wrap: break-word;
+            /* Ensure text wraps within the table cells */
         }
 
         .no-print {
-            display: none !important; /* Hide non-printable elements */
+            display: none !important;
+            /* Hide non-printable elements */
         }
     }
 </style>
@@ -71,10 +94,12 @@
     <header>
         <div class="row align-items-center no-print d-flex justify-content-center">
             <center>
-                <a href="javascript:window.print()" class="btn btn-default no-print" style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
+                <a href="javascript:window.print()" class="btn btn-default no-print"
+                    style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
                     <i class="fa fa-print"></i> Print
                 </a>
-                <a onclick="window.close();" class="btn btn-default no-print" style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
+                <a onclick="window.close();" class="btn btn-default no-print"
+                    style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
                     <i class="fa fa-close"></i> Close
                 </a>
             </center>
@@ -82,11 +107,11 @@
         <hr class="no-print" style="margin-bottom: 10px;">
         <div class="row align-items-center d-flex justify-content-center">
             <center>
-                <b>{{ $customer->company->name }}</b><br>
+                <b class="company">{{ $customer->company->name }}</b><br>
                 {{ $customer->company->address }}<br>
             </center>
         </div>
-        <hr style="margin: 10px;">
+        <div style="margin: 10px;"></div>
     </header>
     <main>
         <div class="card">
@@ -131,13 +156,15 @@
                         </tr>
                         <tr>
                             <td style="padding-top: 10px;padding-bottom: 5px">Jatuh Tempo<br class=" w-full">
-                                &nbsp;&nbsp;&nbsp;&nbsp; ## {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
+                                &nbsp;&nbsp;&nbsp;&nbsp; ## {{ \Carbon\Carbon::parse($subcription->end_date)->format('F
+                                j, Y') }}
                             </td>
                             <td class="text-right"></td>
                         </tr>
                         <tr>
                             <td class="text-right left-col" style="padding-top: 5px">Sub Total:</td>
-                            <td class="text-right" style="padding-top: 5px">Rp. {{ number_format($subcription->tagihan) }}</td>
+                            <td class="text-right" style="padding-top: 5px">Rp. {{ number_format($subcription->tagihan)
+                                }}</td>
                         </tr>
                         <tr>
                             <td class="text-right left-col">Total:</td>
