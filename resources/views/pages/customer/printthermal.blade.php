@@ -38,8 +38,10 @@
 
     @media print {
     @page {
-        size: auto;
-        margin: 0; /* Menghilangkan margin untuk memaksimalkan area cetak */
+        size: 58mm auto;
+        margin: 0;
+        padding: 0
+       
     }
 
     body, html {
@@ -47,20 +49,19 @@
         padding: 0;
         width: 100%;
         background: transparent;
-        font-size: 30px;
-        transform: scale(0.8); /* Skala 80% */
-        transform-origin: top left; /* Titik awal skala dari atas kiri */
+        font-size: 30px; /* Sesuaikan ukuran font agar proporsional */
+      
     }
 
     .container-fluid {
         width: 100%;
-        max-width: 100%;
-        margin: 0 auto;
+        max-width: 90%; /* Pastikan lebar konten tidak melebihi area cetakan */
+        margin: 0 ; /* Pusatkan konten */
         padding: 0;
     }
 
     .company {
-        font-size: 40px;
+        font-size: 30px; /* Ukuran font untuk judul perusahaan */
         font-weight: 700;
         text-align: center;
     }
@@ -68,19 +69,24 @@
     table {
         width: 100%;
         margin: 0 auto;
-        border-collapse: collapse;
+        border-collapse: collapse; /* Menghilangkan jarak antar border */
     }
 
     table td {
-        padding: 2px 5px;
-        font-size: 30px; /* Disesuaikan agar tetap proporsional */
-        word-wrap: break-word;
+        padding: 2px ; /* Sesuaikan padding agar hasil cetakan tetap rapi */
+        font-size: 30px; /* Ukuran font yang proporsional agar tetap terbaca */
+        word-wrap: break-word; /* Pastikan teks tidak keluar dari sel tabel */
+    }
+
+    .text-right {
+        text-align: right;
     }
 
     .no-print {
-        display: none !important;
+        display: none !important; /* Sembunyikan elemen non-cetak */
     }
 }
+
 </style>
 @endpush
 
