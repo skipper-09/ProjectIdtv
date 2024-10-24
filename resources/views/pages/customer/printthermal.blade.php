@@ -44,19 +44,19 @@
             width: auto; /* Ensure body width matches the page size */
             height: auto;
             background: transparent;
-            font-size: 10px; /* Set a suitable font size */
+            font-size: 25px; /* Set a suitable font size */
         }
 
         .container-fluid {
             width: 100%;
-            max-width: 80mm;
+            max-width: auto;
             margin: 0 auto; /* Center the content */
             padding: 0;
         }
 
         .table th, .table td {
             padding: 2px 5px; /* Minimum padding for thermal printers */
-            font-size: 10px; /* Ensure font size is readable */
+            font-size: 25px; /* Ensure font size is readable */
         }
 
         .no-print {
