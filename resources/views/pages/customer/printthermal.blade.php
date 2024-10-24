@@ -3,231 +3,254 @@
 @section('title', $page_name)
 
 @push('style')
-<style>
-   /* Base styles */
-* {
-    margin: 0;
-    padding: 0;
-    line-height: 1.2;
-    font-family: 'Arial Narrow', sans-serif;
-    color: black;
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-}
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            line-height: 1.3;
+            font-family: 'Arial Narrow', sans-serif;
+            color: black;
+            -webkit-print-color-adjust: exact !important;
+            color-adjust: exact !important;
+        }
 
-/* Print-specific styles */
-@media print {
-    /* Default 58mm thermal paper */
-    @page {
-        size: 58mm auto;
-        margin: 2mm;
-    }
+        /* Print-specific styles */
+        @media print {
 
-    /* Responsive container */
-    .container-fluid {
-        width: 100%;
-        max-width: 54mm; /* 58mm - 4mm margins */
-        margin: 0 auto;
-        padding: 0;
-    }
+            /* Default 58mm thermal paper */
+            @page {
+                size: 58mm auto;
+                margin: 1mm;
+            }
 
-    /* Typography */
-    body {
-        font-size: 10pt;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
+            /* Responsive container */
+            .container-fluid {
+                width: 56mm;
+                margin: 0 auto;
+                padding: 0;
+            }
 
-    .company {
-        font-size: 12pt;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 2mm;
-    }
+            /* Logo styles */
+            .logo-container {
+                text-align: center;
+                margin-bottom: 2mm;
+            }
 
-    /* Table styles */
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 0;
-    }
+            .logo-container img {
+                max-width: 40mm;
+                /* Adjust based on your logo */
+                height: auto;
+                margin: 0 auto;
+            }
 
-    .table td {
-        padding: 0.5mm 0;
-        line-height: 1.2;
-        white-space: normal;
-        word-wrap: break-word;
-    }
+            /* Typography */
+            body {
+                font-size: 12pt;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
 
-    .text-right {
-        text-align: right;
-    }
+            .company {
+                font-size: 14pt;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 1mm;
+            }
 
-    .text-bold {
-        font-weight: bold;
-    }
+            .company-address {
+                font-size: 11pt;
+                text-align: center;
+                margin-bottom: 3mm;
+            }
 
-    /* Hide non-print elements */
-    .no-print {
-        display: none !important;
-    }
+            /* Table styles */
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 0;
+            }
 
-    /* Footer */
-    .footer {
-        margin-top: 3mm;
-        font-size: 9pt;
-        text-align: center;
-        padding: 2mm 0;
-    }
-}
+            .table td {
+                padding: 1mm 0;
+                line-height: 1.3;
+                white-space: normal;
+                word-wrap: break-word;
+                font-size: 12pt;
+            }
 
-/* 80mm thermal paper */
-@media print and (min-width: 80mm) {
-    @page {
-        size: 80mm auto;
-        margin: 2mm;
-    }
+            .text-right {
+                text-align: right;
+            }
 
-    .container-fluid {
-        max-width: 76mm;
-    }
+            .text-bold {
+                font-weight: 600;
+            }
 
-    body {
-        font-size: 11pt;
-    }
+            /* Footer */
+            .footer {
+                margin-top: 4mm;
+                font-size: 11pt;
+                text-align: center;
+                padding: 2mm 0;
+                font-style: italic;
+            }
 
-    .company {
-        font-size: 14pt;
-    }
-}
+            /* Hide non-print elements */
+            .no-print {
+                display: none !important;
+            }
+        }
 
-/* Generic styles for screen preview */
-@media screen {
-    .container-fluid {
-        width: 58mm;
-        margin: 20px auto;
-        padding: 10px;
-        border: 1px solid #ccc;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+        /* Generic styles for screen preview */
+        @media screen {
+            .container-fluid {
+                width: 88mm;
+                margin: 20px auto;
+                padding: 10px;
+                border: 1px solid #ccc;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
 
-    body {
-        background: #f5f5f5;
-        font-size: 10pt;
-    }
+            body {
+                background: #f5f5f5;
+                font-size: 12pt;
+            }
 
-    .table {
-        margin-bottom: 10px;
-    }
+            .logo-container img {
+                max-width: 150px;
+                height: auto;
+                margin: 0 auto;
+            }
 
-    .table td {
-        padding: 2px 0;
-    }
-}
+            .table {
+                margin-bottom: 10px;
+            }
 
-/* Card styles */
-.card {
-    border: none;
-    margin-bottom: 2mm;
-}
+            .table td {
+                padding: 3px 0;
+                font-size: 12pt;
+            }
+        }
 
-.card-body {
-    padding: 0;
-}
+        /* Card styles */
+        .card {
+            border: none;
+            margin-bottom: 3mm;
+        }
 
+        .card-body {
+            padding: 0;
+        }
 
-</style>
+        /* Additional styles for better spacing */
+        .section-separator {
+            border-top: 1px dashed #000;
+            margin: 2mm 0;
+        }
+    </style>
 @endpush
 
 @section('print')
-<div class="container-fluid">
-    <header>
-        <div class="row align-items-center no-print d-flex justify-content-center">
-            <center>
-                <a href="javascript:window.print()" class="btn btn-default no-print"
-                    style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
-                    <i class="fa fa-print"></i> Print
-                </a>
-                <a onclick="window.close();" class="btn btn-default no-print"
-                    style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
-                    <i class="fa fa-close"></i> Close
-                </a>
-            </center>
-        </div>
-        <hr class="no-print" style="margin-bottom: 10px;">
-        <div class="row align-items-center d-flex justify-content-center">
-            <center>
-                <b class="company">{{ $customer->company->name }}</b><br>
-                {{ $customer->company->address }}<br>
-            </center>
-        </div>
-        <div style="margin: 10px;"></div>
-    </header>
-    <main>
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table">
-                    <table class="table mb-0">
-                        <tr>
-                            <td>Tanggal</td>
-                            <td class="text-right">{{ $payment->format('M/d/Y H:i:s') }}</td>
-                        </tr>
-                        <tr>
-                            <td>Kasir</td>
-                            <td class="text-right">{{ Auth::user()->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>Invoice</td>
-                            <td class="text-right">{{ $subcription->invoices }}</td>
-                        </tr>
-                        <tr>
-                            <td>Nama</td>
-                            <td class="text-right">{{ $customer->name }}</td>
-                        </tr>
-                        <tr>
-                            <td>ID Pelanggan</td>
-                            <td class="text-right">{{ $customer->nik }}</td>
-                        </tr>
-                    </table>
+    <div class="container-fluid">
+        <header>
+            <!-- Print/Close buttons for preview -->
+            <div class="row align-items-center no-print d-flex justify-content-center">
+                <center>
+                    <a href="javascript:window.print()" class="btn btn-default no-print"
+                        style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
+                        <i class="fa fa-print"></i> Print
+                    </a>
+                    <a onclick="window.close();" class="btn btn-default no-print"
+                        style="width: 80px; font-weight: bold; padding: 1px 5px; color: #333; font-size: 14px;">
+                        <i class="fa fa-close"></i> Close
+                    </a>
+                </center>
+            </div>
+            <hr class="no-print" style="margin-bottom: 10px;">
+
+            <!-- Logo and Company Info -->
+            <div class="logo-container mb-3  d-flex justify-content-center">
+                <img src="{{ asset('img/IDTV.png') }}" alt="Company Logo">
+            </div>
+            <div class="company text-center font-weight-bold">{{ $customer->company->name }}</div>
+            <div class="company-address text-center">{{ $customer->company->address }}</div>
+        </header>
+
+        <main>
+            <!-- Customer Info Section -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table">
+                        <table class="table mb-0">
+                            <tr>
+                                <td>Tanggal</td>
+                                <td class="text-right">{{ $payment->format('M/d/Y H:i:s') }}</td>
+                            </tr>
+                            <tr>
+                                <td>Kasir</td>
+                                <td class="text-right">{{ Auth::user()->name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Invoice</td>
+                                <td class="text-right">{{ $subcription->invoices }}</td>
+                            </tr>
+                            <tr>
+                                <td>Nama</td>
+                                <td class="text-right">{{ $customer->name }}</td>
+                            </tr>
+                            <tr>
+                                <td>ID Pelanggan</td>
+                                <td class="text-right">{{ $customer->nik }}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div style="margin-top: 10px" class="card">
-            <div class="card-body p-0">
-                <div class="table">
-                    <table class="table mb-0">
-                        <tr>
-                            <td class="text-bold ">Item</td>
-                            <td class="text-right text-bold">Jumlah</td>
-                        </tr>
-                        <tr>
-                            <td class="">{{ $subcription->paket->name }}</td>
-                            <td class="text-right">Rp. {{ number_format($subcription->tagihan) }}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding-top: 10px;padding-bottom: 5px">Jatuh Tempo<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp; ## {{ \Carbon\Carbon::parse($subcription->end_date)->format('F
-                                j, Y') }}
-                            </td>
-                            <td class="text-right"></td>
-                        </tr>
-                        <tr>
-                            <td class="text-right " style="padding-top: 5px">Sub Total:</td>
-                            <td class="text-right" style="padding-top: 5px">Rp. {{ number_format($subcription->tagihan)
-                                }}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right ">Total:</td>
-                            <td class="text-right">Rp. {{ number_format($subcription->tagihan) }}</td>
-                        </tr>
-                    </table>
+
+            <div class="section-separator"></div>
+
+            <!-- Item Details Section -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table">
+                        <table class="table mb-0">
+                            <tr>
+                                <td class="text-bold">Item</td>
+                                <td class="text-right text-bold">Jumlah</td>
+                            </tr>
+                            <tr>
+                                <td>{{ $subcription->paket->name }}</td>
+                                <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 3mm; padding-bottom: 2mm">
+                                    Jatuh Tempo<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;##
+                                    {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
+                                </td>
+                                <td class="text-right"></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right text-bold">Sub Total:</td>
+                                <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right text-bold">Total:</td>
+                                <td class="text-right text-bold">Rp.{{ number_format($subcription->tagihan) }}</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
-    <footer class="text-center footer" style="font-style: italic; padding: 10px; padding-top: 5px;">
-        Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda!
-    </footer>
-</div>
+        </main>
+
+        <div class="section-separator"></div>
+
+        <!-- Footer -->
+        <footer class="footer text-center">
+            Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda!
+        </footer>
+    </div>
 @endsection
