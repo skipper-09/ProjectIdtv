@@ -13,6 +13,7 @@ class Movie extends Model
         'title',
         'rating',
         'cover_image',
+        'description',
         'type',
         'url',
         'status'

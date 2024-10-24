@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('cover_image');
             $table->enum('type', ['movie', 'series'])->default('movie');
             $table->longText('url')->nullable();
+            $table->longText('description')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->foreign('genre_id')->references('id')->on('genres')->onDelete('cascade')->onUpdate('cascade');

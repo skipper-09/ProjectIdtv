@@ -46,6 +46,7 @@
                                                     <th>Genre</th>
                                                     <th>Cover</th>
                                                     <th>Type</th>
+                                                    <th>Deskripsi</th>
                                                     @canany(['update-movie', 'delete-movie'])
                                                         <th>Action</th>
                                                     @endcanany
@@ -99,10 +100,16 @@
                         data: 'type',
                         name: 'type'
                     },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
                     @canany(['update-movie', 'delete-movie'])
                         {
                             data: 'action',
-                            name: 'action'
+                            name: 'action',
+                            orderable: false,
+                            searchable: false,
                         }
                     @endcanany
                 ]

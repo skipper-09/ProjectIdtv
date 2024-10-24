@@ -76,6 +76,10 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group col-12 col-md-12">
+                                <label>Deskripsi</label>
+                                <textarea name="description" class="form-control" cols="30" rows="10"></textarea>
+                            </div>
                             <div class="form-group col-12 col-md-12 d-none" id="security">
                                 <label>Url</label>
                                 <input type="text" name="url" class="form-control">

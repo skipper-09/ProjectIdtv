@@ -79,7 +79,7 @@ class MovieController extends Controller
             'title' => 'required|string',
             'rating' => 'required|numeric|min:0|max:10|regex:/^\d+(\.\d{1})?$/',
             'cover_image' => 'required', // Validate file is an image
-            'type' => 'required'
+            'type' => 'required',
         ]);
 
 
@@ -97,7 +97,8 @@ class MovieController extends Controller
                 'cover_image' => $filename,
                 'type' => $request->type,
                 'url' => $request->url,
-                'status' => $request->status
+                'status' => $request->status,
+                'description'=>$request->description
             ]
         );
 
@@ -147,7 +148,8 @@ class MovieController extends Controller
                 'cover_image' => $filename,
                 'type' => $request->type,
                 'url' => $request->url,
-                'status' => $request->status
+                'status' => $request->status,
+                'description'=>$request->description
             ]);
 
             return redirect()->route('movie')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Movie!']);
