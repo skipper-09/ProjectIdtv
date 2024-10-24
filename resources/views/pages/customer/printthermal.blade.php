@@ -38,9 +38,10 @@
 
     @media print {
         @page {
-            size: auto;
+            size: 30mm auto;
             /* Set the page size to 44mm width with auto height */
             margin: 0;
+            padding: 0
             /* Remove all margins */
         }
 
@@ -48,15 +49,15 @@
         html {
             margin: 0;
             padding: 0;
-            width: 50mm;
+            width: 0mm;
             /* Set the content width to match the paper width */
             background: transparent;
-            font-size: 50px;
+            font-size: 40px;
             /* Set a suitable font size */
         }
 
         .company {
-            font-size: 55px;
+            font-size: 45px;
             font-weight: 700;
         }
 
@@ -67,19 +68,9 @@
             padding: 0;
         }
 
-        table {
-            width: 100%;
-            margin: 0 auto;
-        }
+        
 
-        table td {
-            padding: 2px 2px;
-            /* Minimum padding for thermal printers */
-            font-size: 50px;
-            /* Ensure font size is readable */
-            word-wrap: break-word;
-            /* Ensure text wraps within the table cells */
-        }
+      
 
         .no-print {
             display: none !important;
@@ -116,7 +107,7 @@
     <main>
         <div class="card">
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table">
                     <table class="table mb-0">
                         <tr>
                             <td>Tanggal</td>
@@ -144,30 +135,30 @@
         </div>
         <div style="margin-top: 10px" class="card">
             <div class="card-body p-0">
-                <div class="table-responsive">
+                <div class="table">
                     <table class="table mb-0">
                         <tr>
-                            <td class="text-bold left-col">Item</td>
+                            <td class="text-bold ">Item</td>
                             <td class="text-right text-bold">Jumlah</td>
                         </tr>
                         <tr>
-                            <td class="left-col">{{ $subcription->paket->name }}</td>
+                            <td class="">{{ $subcription->paket->name }}</td>
                             <td class="text-right">Rp. {{ number_format($subcription->tagihan) }}</td>
                         </tr>
                         <tr>
-                            <td style="padding-top: 10px;padding-bottom: 5px">Jatuh Tempo<br class=" w-full">
+                            <td style="padding-top: 10px;padding-bottom: 5px">Jatuh Tempo<br>
                                 &nbsp;&nbsp;&nbsp;&nbsp; ## {{ \Carbon\Carbon::parse($subcription->end_date)->format('F
                                 j, Y') }}
                             </td>
                             <td class="text-right"></td>
                         </tr>
                         <tr>
-                            <td class="text-right left-col" style="padding-top: 5px">Sub Total:</td>
+                            <td class="text-right " style="padding-top: 5px">Sub Total:</td>
                             <td class="text-right" style="padding-top: 5px">Rp. {{ number_format($subcription->tagihan)
                                 }}</td>
                         </tr>
                         <tr>
-                            <td class="text-right left-col">Total:</td>
+                            <td class="text-right ">Total:</td>
                             <td class="text-right">Rp. {{ number_format($subcription->tagihan) }}</td>
                         </tr>
                     </table>
