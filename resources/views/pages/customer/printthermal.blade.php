@@ -4,88 +4,138 @@
 
 @push('style')
 <style>
-    /* General styling for all devices */
-    * {
-        line-height: 1.5;
-        font-family: 'Arial Narrow', sans-serif;
-        color: black;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
-    }
+   /* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    font-family: 'Arial Narrow', sans-serif;
+    color: black;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+}
 
-    .text-right {
-        text-align: right;
-    }
-
-    .card {
-        border-radius: 0;
-        border: none;
-    }
-
-    .table {
-        width: 100%;
-        border-bottom-width: none;
-    }
-
-    .table> :not(caption)>*>* {
-        padding-top: 0;
-        padding-bottom: 0;
-    }
-
-    .container-fluid {
-        width: max-content;
-    }
-
-    @media print {
+/* Print-specific styles */
+@media print {
+    /* Default 58mm thermal paper */
     @page {
         size: 58mm auto;
-        margin: 0;
-        padding: 0
-       
+        margin: 2mm;
     }
 
-    body, html {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        background: transparent;
-        font-size: 30px; /* Sesuaikan ukuran font agar proporsional */
-      
-    }
-
+    /* Responsive container */
     .container-fluid {
         width: 100%;
-        max-width: 90%; /* Pastikan lebar konten tidak melebihi area cetakan */
-        margin: 0 ; /* Pusatkan konten */
+        max-width: 54mm; /* 58mm - 4mm margins */
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    /* Typography */
+    body {
+        font-size: 10pt;
+        width: 100%;
+        margin: 0;
         padding: 0;
     }
 
     .company {
-        font-size: 30px; /* Ukuran font untuk judul perusahaan */
+        font-size: 12pt;
         font-weight: 700;
         text-align: center;
+        margin-bottom: 2mm;
     }
 
-    table {
+    /* Table styles */
+    .table {
         width: 100%;
-        margin: 0 auto;
-        border-collapse: collapse; /* Menghilangkan jarak antar border */
+        border-collapse: collapse;
+        margin: 0;
     }
 
-    table td {
-        padding: 2px ; /* Sesuaikan padding agar hasil cetakan tetap rapi */
-        font-size: 30px; /* Ukuran font yang proporsional agar tetap terbaca */
-        word-wrap: break-word; /* Pastikan teks tidak keluar dari sel tabel */
+    .table td {
+        padding: 0.5mm 0;
+        line-height: 1.2;
+        white-space: normal;
+        word-wrap: break-word;
     }
 
     .text-right {
         text-align: right;
     }
 
+    .text-bold {
+        font-weight: bold;
+    }
+
+    /* Hide non-print elements */
     .no-print {
-        display: none !important; /* Sembunyikan elemen non-cetak */
+        display: none !important;
+    }
+
+    /* Footer */
+    .footer {
+        margin-top: 3mm;
+        font-size: 9pt;
+        text-align: center;
+        padding: 2mm 0;
     }
 }
+
+/* 80mm thermal paper */
+@media print and (min-width: 80mm) {
+    @page {
+        size: 80mm auto;
+        margin: 2mm;
+    }
+
+    .container-fluid {
+        max-width: 76mm;
+    }
+
+    body {
+        font-size: 11pt;
+    }
+
+    .company {
+        font-size: 14pt;
+    }
+}
+
+/* Generic styles for screen preview */
+@media screen {
+    .container-fluid {
+        width: 58mm;
+        margin: 20px auto;
+        padding: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    body {
+        background: #f5f5f5;
+        font-size: 10pt;
+    }
+
+    .table {
+        margin-bottom: 10px;
+    }
+
+    .table td {
+        padding: 2px 0;
+    }
+}
+
+/* Card styles */
+.card {
+    border: none;
+    margin-bottom: 2mm;
+}
+
+.card-body {
+    padding: 0;
+}
+
 
 </style>
 @endpush
