@@ -64,10 +64,10 @@ class PeriodeIncomeController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-            if ($userauth->can('delete-customer')) {
-                $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
-                                                     class="fa-solid fa-bolt"></i></button>';
-            }
+            // if ($userauth->can('delete-customer')) {
+            //     $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
+            //                                          class="fa-solid fa-bolt"></i></button>';
+            // }
 
 
             if ($userauth->can('update-customer')) {

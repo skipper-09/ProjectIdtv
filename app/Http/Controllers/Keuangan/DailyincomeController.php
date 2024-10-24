@@ -26,8 +26,8 @@ class DailyincomeController extends Controller
             'type_menu' => 'Keuangan',
             'page_name' => 'Pendapatan Harian',
             'income' => $payment->sum('amount'),
-            'incomeclean'=>$payment->sum('amount') - $payment->sum('fee'),
-            'reseller'=> $payment->sum('fee')
+            'incomeclean' => $payment->sum('amount') - $payment->sum('fee'),
+            'reseller' => $payment->sum('fee')
 
         ];
         return view('pages.keuangan.income-harian.index', $data);
@@ -45,12 +45,12 @@ class DailyincomeController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-            if ($userauth->can('delete-customer')) {
-                $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
-                                                     class="fa-solid fa-bolt"></i></button>';
-            }
+            // if ($userauth->can('delete-customer')) {
+            //     $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
+            //                                          class="fa-solid fa-bolt"></i></button>';
+            // }
             if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id,'type'=>'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+                $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
             return '<div class="d-flex">' . $button . '</div>';
@@ -91,7 +91,7 @@ class DailyincomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date','owner','pokok','fee','payment_type','invoice'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee', 'payment_type', 'invoice'])->make(true);
     }
 
 
