@@ -34,7 +34,7 @@
 
     @media print {
         @page {
-            size:  auto; /* Set the page size to 80mm */
+            size:  58mm 210mm; /* Set the page size to 80mm */
             margin: 0; /* Remove all margins */
         }
 
@@ -44,7 +44,7 @@
             width: auto; /* Ensure body width matches the page size */
             height: auto;
             background: transparent;
-            font-size: 25px; /* Set a suitable font size */
+            font-size: 50px; /* Set a suitable font size */
         }
 
         .container-fluid {
@@ -56,7 +56,7 @@
 
         .table th, .table td {
             padding: 2px 5px; /* Minimum padding for thermal printers */
-            font-size: 25px; /* Ensure font size is readable */
+            font-size: 50px; /* Ensure font size is readable */
         }
 
         .no-print {
