@@ -38,41 +38,43 @@
 
     @media print {
     @page {
-        size: 50mm auto; /* Sesuaikan lebar kertas dengan ukuran thermal */
-        margin: 0; /* Hilangkan margin */
+        size: auto;
+        margin: 0; /* Menghilangkan margin untuk memaksimalkan area cetak */
     }
 
     body, html {
         margin: 0;
         padding: 0;
-        width: 50mm; /* Pastikan lebar sesuai dengan kertas thermal */
+        width: 100%;
         background: transparent;
-        font-size: 14px; /* Sesuaikan ukuran font agar tidak terlalu besar */
+        font-size: 30px;
+        transform: scale(0.8); /* Skala 80% */
+        transform-origin: top left; /* Titik awal skala dari atas kiri */
     }
 
     .container-fluid {
-        width: 100%
-        max-width: 50mm; /* Batasi lebar konten agar sesuai dengan kertas */
-        margin: 0 auto; /* Pusatkan konten */
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
         padding: 0;
+    }
+
+    .company {
+        font-size: 40px;
+        font-weight: 700;
+        text-align: center;
     }
 
     table {
         width: 100%;
-        max-width: 58mm;
         margin: 0 auto;
-        border-collapse: collapse; /* Hilangkan jarak antar border */
+        border-collapse: collapse;
     }
 
     table td {
-        padding: 2px 5px; /* Sesuaikan padding untuk hasil cetakan yang rapi */
-        font-size: 18px; /* Sesuaikan agar mudah terbaca namun tidak terlalu besar */
-        word-wrap: break-word; /* Pastikan teks tidak melampaui batas sel */
-    }
-
-    .company {
-        font-size: 20px; /* Sesuaikan ukuran untuk nama perusahaan */
-        font-weight: 700;
+        padding: 2px 5px;
+        font-size: 30px; /* Disesuaikan agar tetap proporsional */
+        word-wrap: break-word;
     }
 
     .no-print {
@@ -98,7 +100,7 @@
             </center>
         </div>
         <hr class="no-print" style="margin-bottom: 10px;">
-        <div class="row align-items-center d-flex justify-content-center aligncon">
+        <div class="row align-items-center d-flex justify-content-center">
             <center>
                 <b class="company">{{ $customer->company->name }}</b><br>
                 {{ $customer->company->address }}<br>
