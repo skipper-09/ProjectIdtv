@@ -37,46 +37,53 @@
     }
 
     @media print {
-        @page {
-            size: 30mm auto;
-            /* Set the page size to 44mm width with auto height */
-            margin: 0;
-            padding: 0
-            /* Remove all margins */
-        }
-
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            width: 0mm;
-            /* Set the content width to match the paper width */
-            background: transparent;
-            font-size: 40px;
-            /* Set a suitable font size */
-        }
-
-        .company {
-            font-size: 45px;
-            font-weight: 700;
-        }
-
-        .container-fluid {
-            width: 100%;
-            margin: 0 auto;
-            /* Center the content */
-            padding: 0;
-        }
-
-        
-
-      
-
-        .no-print {
-            display: none !important;
-            /* Hide non-printable elements */
-        }
+    @page {
+        size: auto; /* Mengatur agar halaman sesuai dengan ukuran kertas */
+        margin: 0; /* Menghilangkan margin untuk memaksimalkan area cetak */
     }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background: transparent;
+        font-size: 5vw; /* Menggunakan vw agar ukuran font menyesuaikan lebar kertas */
+    }
+
+    .container-fluid {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .company {
+        font-size: 6vw; /* Menggunakan vw agar ukuran font perusahaan menyesuaikan */
+        font-weight: 700;
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        margin: 0 auto;
+        border-collapse: collapse;
+    }
+
+    table td {
+        padding: 0.5vw 1vw; /* Padding menggunakan vw agar menyesuaikan */
+        font-size: 5vw; /* Font size menggunakan vw untuk responsivitas */
+        word-wrap: break-word;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .no-print {
+        display: none !important; /* Menyembunyikan elemen non-cetak */
+    }
+}
+
 </style>
 @endpush
 
@@ -96,7 +103,7 @@
             </center>
         </div>
         <hr class="no-print" style="margin-bottom: 10px;">
-        <div class="row align-items-center d-flex justify-content-center">
+        <div class="row align-items-center d-flex justify-content-center align-content-center">
             <center>
                 <b class="company">{{ $customer->company->name }}</b><br>
                 {{ $customer->company->address }}<br>
