@@ -21,13 +21,13 @@
             /* Default 58mm thermal paper */
             @page {
                 size: auto;
-                margin: 10px;
+                margin-right: 50px;
             }
 
             /* Responsive container */
             .container-fluid {
                 width: auto;
-                margin: 20px auto;
+                margin:  10px auto;
                 padding: 30px;
             }
 
@@ -38,7 +38,7 @@
             }
 
             .logo-container img {
-                max-width: 40mm;
+                max-width: 100px;
                 /* Adjust based on your logo */
                 height: auto;
                 margin: 0 auto;
@@ -46,21 +46,21 @@
 
             /* Typography */
             body {
-                font-size: 35px;
+                font-size: 20px;
                 width: 100%;
                 margin: 0;
                 padding: 0;
             }
 
             .company {
-                font-size: 35px;
+                font-size: 20px;
                 font-weight: 700;
                 text-align: center;
                 margin-bottom: 1mm;
             }
 
             .company-address {
-                font-size: 35px;
+                font-size: 20px;
                 text-align: center;
                 margin-bottom: 3mm;
             }
@@ -73,11 +73,11 @@
             }
 
             .table td {
-                padding: 1mm 0;
+                padding: 1mm;
                 line-height: 1.3;
                 white-space: normal;
-                word-wrap: break-word;
-                font-size: 35px;
+                /* word-wrap: break-word; */
+                font-size: 20px;
             }
 
             .text-right {
@@ -225,10 +225,9 @@
                                 <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
                             </tr>
                             <tr>
-                                <td style="padding-top: 3mm; padding-bottom: 2mm">
+                                <td >
                                     Jatuh Tempo<br>
-                                    ##{{-- &nbsp;&nbsp;&nbsp;&nbsp;## --}}
-                                    {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
+                                    ##{{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
                                 </td>
                                 <td class="text-right"></td>
                             </tr>
