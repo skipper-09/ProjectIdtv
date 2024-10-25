@@ -46,21 +46,21 @@
 
             /* Typography */
             body {
-                font-size: 16px;
+                font-size: 35px;
                 width: 100%;
                 margin: 0;
                 padding: 0;
             }
 
             .company {
-                font-size: 20px;
+                font-size: 35px;
                 font-weight: 700;
                 text-align: center;
                 margin-bottom: 1mm;
             }
 
             .company-address {
-                font-size: 16px;
+                font-size: 35px;
                 text-align: center;
                 margin-bottom: 3mm;
             }
@@ -77,7 +77,7 @@
                 line-height: 1.3;
                 white-space: normal;
                 word-wrap: break-word;
-                font-size: 16px;
+                font-size: 35px;
             }
 
             .text-right {
@@ -91,7 +91,7 @@
             /* Footer */
             .footer {
                 margin-top: 4mm;
-                font-size: 16px;
+                font-size: 30px;
                 text-align: center;
                 padding: 2mm 0;
                 font-style: italic;
@@ -227,7 +227,7 @@
                             <tr>
                                 <td style="padding-top: 3mm; padding-bottom: 2mm">
                                     Jatuh Tempo<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;##
+                                    ##{{-- &nbsp;&nbsp;&nbsp;&nbsp;## --}}
                                     {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
                                 </td>
                                 <td class="text-right"></td>
