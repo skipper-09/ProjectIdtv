@@ -20,15 +20,15 @@
 
             /* Default 58mm thermal paper */
             @page {
-                size: 58mm auto;
+                size: auto;
                 margin: 1mm;
             }
 
             /* Responsive container */
             .container-fluid {
-                width: 56mm;
-                margin: 0 auto;
-                padding: 0;
+                width: auto;
+                margin:  auto;
+                padding: 30px;
             }
 
             /* Logo styles */

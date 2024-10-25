@@ -84,7 +84,7 @@
                             @endcan
                             @if (!Auth::user()->hasRole('Reseller'))
                             <div class="card-header row">
-                                <div class="form-group col-6 col-md-4">
+                                <div class="form-group col-12 col-md-6">
                                     <label>Filter Perusahaan <span class="text-danger">*</span></label>
                                     <select class="form-control select2 filter" id="Filter" name="company_id">
                                         <option value="">Filter Perusahaan</option>
