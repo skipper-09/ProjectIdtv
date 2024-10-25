@@ -17,86 +17,93 @@
 
         /* Print-specific styles */
         @media print {
-    /* Default 58mm thermal paper */
-    @page {
-        size: auto; /* Tentukan lebar kertas 58mm dan tinggi menyesuaikan */
-        margin: 0; /* Hapus semua margin default */
-    }
 
-    /* Kontainer utama */
-    .container-fluid {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-    }
+            /* Default 58mm thermal paper */
+            @page {
+                size: 58mm auto;
+                /* Tentukan lebar kertas 58mm dan tinggi menyesuaikan */
+                margin: 0;
+                /* Hapus semua margin default */
+            }
 
-    /* Typography */
-    body {
-        font-size: 20px; /* Sesuaikan ukuran font agar pas di kertas termal */
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
+            /* Kontainer utama */
+            .container-fluid {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
 
-    .logo-container {
-        text-align: center;
-        margin-bottom: 5px; /* Sesuaikan margin */
-    }
+            /* Typography */
+            body {
+                font-size: 20px;
+                /* Sesuaikan ukuran font agar pas di kertas termal */
+                margin: 0;
+                padding: 0;
+                width: 100%;
+            }
 
-    .logo-container img {
-        max-width: 40mm;
-        height: auto;
-        margin: 0 auto;
-    }
+            .logo-container {
+                text-align: center;
+                margin-bottom: 5px;
+                /* Sesuaikan margin */
+            }
 
-    .company {
-        font-size: 20px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 2px;
-    }
+            .logo-container img {
+                max-width: 40mm;
+                height: auto;
+                margin: 0 auto;
+            }
 
-    .company-address {
-        font-size: 20px;
-        text-align: center;
-        margin-bottom: 4px;
-    }
+            .company {
+                font-size: 30px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 2px;
+            }
 
-    /* Table styles */
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+            .company-address {
+                font-size: 30px;
+                text-align: center;
+                margin-bottom: 4px;
+            }
 
-    .table td {
-        padding: 2px 0;
-        line-height: 1.2;
-        white-space: nowrap;
-        word-wrap: break-word;
-        font-size: 20px; /* Sesuaikan ukuran font agar lebih kecil dan cocok dengan kertas termal */
-    }
+            /* Table styles */
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 10px,
+            }
 
-    .text-right {
-        text-align: right;
-    }
+            .table td {
+                padding: 10px 0;
+                line-height: 1.2;
+                white-space: nowrap;
+                word-wrap: break-word;
+                font-size: 30px;
+                /* Sesuaikan ukuran font agar lebih kecil dan cocok dengan kertas termal */
+            }
 
-    .text-bold {
-        font-weight: bold;
-    }
+            .text-right {
+                text-align: right;
+            }
 
-    /* Footer */
-    .footer {
-        margin-top: 5px;
-        font-size: 20px;
-        text-align: center;
-        font-style: italic;
-    }
+            .text-bold {
+                font-weight: bold;
+            }
 
-    /* Hide non-print elements */
-    .no-print {
-        display: none !important;
-    }
-}
+            /* Footer */
+            .footer {
+                margin-top: 5px;
+                font-size: 30px;
+                text-align: center;
+                font-style: italic;
+            }
+
+            /* Hide non-print elements */
+            .no-print {
+                display: none !important;
+            }
+        }
 
 
         /* Generic styles for screen preview */
@@ -221,7 +228,7 @@
                                 <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
                             </tr>
                             <tr>
-                                <td style="padding-top: 3mm; padding-bottom: 2mm">
+                                <td>
                                     Jatuh Tempo<br>
                                     ##{{-- &nbsp;&nbsp;&nbsp;&nbsp;## --}}
                                     {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
