@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\ChanelManagement;
 
+use App\Exports\ChanelExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChanelRequest;
+
+use App\Imports\ChanelImport;
 use App\Models\Chanel;
 use App\Models\Categori;
 use App\Models\User;
@@ -11,11 +13,11 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\File;
-use PhpParser\Node\Stmt\TryCatch;
+
 
 class Chanelcontroller extends Controller
 {
@@ -285,4 +287,44 @@ class Chanelcontroller extends Controller
             ]);
         }
     }
+
+
+
+
+//export
+    public function export() 
+    {
+        return Excel::download(new ChanelExport, 'chanel.csv');
+    }
+
+
+
+
+
+//import
+public function ImportChanel(Request $request)
+{
+    \Log::info('Start import process');
+
+    // $request->validate([
+    //     'file' => 'required|mimes:xlsx,xls,csv',
+    // ]);
+
+    \Log::info('Validation passed');
+
+    try {
+        Excel::import(new ChanelImport, $request->file('file'));
+
+        \Log::info('Import successful');
+
+        return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Import Chanel!']);
+    } catch (Exception $e) {
+        \Log::error('Error during import: ' . $e->getMessage());
+
+        return response()->json([
+            'message' => 'Error occurred during import: ' . $e->getMessage(),
+            'trace' => $e->getTrace()
+        ]);
+    }
+}
 }

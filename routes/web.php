@@ -121,6 +121,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit')->middleware('can:update-chanel');
             Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
             Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete')->middleware('can:delete-chanel');
+            Route::get('/export', [Chanelcontroller::class, 'export'])->name('chanel.export');
+            Route::post('/importfile', [Chanelcontroller::class, 'ImportChanel'])->name('chanel.importfile');
         });
 
         //Categori route

@@ -21,13 +21,13 @@
             /* Default 58mm thermal paper */
             @page {
                 size: auto;
-                margin: 1mm;
+                margin: 4px;
             }
 
             /* Responsive container */
             .container-fluid {
                 width: auto;
-                margin:  auto;
+                margin: 20px auto;
                 padding: 30px;
             }
 
@@ -46,21 +46,21 @@
 
             /* Typography */
             body {
-                font-size: 12pt;
+                font-size: 16px;
                 width: 100%;
                 margin: 0;
                 padding: 0;
             }
 
             .company {
-                font-size: 14pt;
+                font-size: 20px;
                 font-weight: 700;
                 text-align: center;
                 margin-bottom: 1mm;
             }
 
             .company-address {
-                font-size: 11pt;
+                font-size: 16px;
                 text-align: center;
                 margin-bottom: 3mm;
             }
@@ -77,7 +77,7 @@
                 line-height: 1.3;
                 white-space: normal;
                 word-wrap: break-word;
-                font-size: 12pt;
+                font-size: 16px;
             }
 
             .text-right {
@@ -91,7 +91,7 @@
             /* Footer */
             .footer {
                 margin-top: 4mm;
-                font-size: 11pt;
+                font-size: 16px;
                 text-align: center;
                 padding: 2mm 0;
                 font-style: italic;
