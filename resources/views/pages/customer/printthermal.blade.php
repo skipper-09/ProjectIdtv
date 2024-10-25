@@ -20,7 +20,7 @@
 
             /* Default 58mm thermal paper */
             @page {
-                size: 58mm auto;
+                size: 88mm auto;
                 /* Tentukan lebar kertas 58mm dan tinggi menyesuaikan */
                 margin: 0;
                 /* Hapus semua margin default */
@@ -37,6 +37,7 @@
             body {
                 font-size: 20px;
                 /* Sesuaikan ukuran font agar pas di kertas termal */
+                width: 80mm;
                 margin: 0;
                 padding: 0;
                 width: 100%;
@@ -67,7 +68,7 @@
                 margin-bottom: 4px;
             }
 
-            /* Table styles */
+
             .table {
                 width: 100%;
                 border-collapse: collapse;
@@ -80,7 +81,7 @@
                 white-space: nowrap;
                 word-wrap: break-word;
                 font-size: 30px;
-                /* Sesuaikan ukuran font agar lebih kecil dan cocok dengan kertas termal */
+
             }
 
             .text-right {
@@ -91,7 +92,7 @@
                 font-weight: bold;
             }
 
-            /* Footer */
+
             .footer {
                 margin-top: 5px;
                 font-size: 30px;
@@ -99,14 +100,15 @@
                 font-style: italic;
             }
 
-            /* Hide non-print elements */
+
             .no-print {
                 display: none !important;
             }
         }
 
 
-        /* Generic styles for screen preview */
+
+
         @media screen {
             .container-fluid {
                 width: 88mm;
@@ -230,7 +232,7 @@
                             <tr>
                                 <td>
                                     Jatuh Tempo<br>
-                                    ##{{-- &nbsp;&nbsp;&nbsp;&nbsp;## --}}
+                                    ##
                                     {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
                                 </td>
                                 <td class="text-right"></td>
