@@ -21,7 +21,7 @@
             /* Default 58mm thermal paper */
             @page {
                 size: auto;
-                margin: 4px;
+                margin: 10px;
             }
 
             /* Responsive container */
