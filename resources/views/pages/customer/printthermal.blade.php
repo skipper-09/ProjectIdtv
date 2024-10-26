@@ -11,41 +11,41 @@
         line-height: 1.3;
         font-family: 'Arial Narrow', sans-serif;
         color: black;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
+        /* -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important; */
     }
 
     /* Print-specific styles */
     @media print {
 
-        /* Default 58mm thermal paper */
+        
         @page {
-            size:auto;
-            /* Tentukan lebar kertas 58mm dan tinggi menyesuaikan */
+            size: auto;
             margin: 0;
-            /* Hapus semua margin default */
+            padding: 0;
+            /* padding: 0 40px 0 0; */
         }
 
-        /* Kontainer utama */
+       
         .container-fluid {
             width: 100%;
             margin: 0;
             padding: 0;
         }
 
-        /* Typography */
+        
         body {
+            height: auto;
             font-size: 30px;
-            /* Sesuaikan ukuran font agar pas di kertas termal */
-            margin: 0;
-            padding: 0;
+            margin: 0 ;
+            padding: 0 ;
             width: 100%;
         }
 
         .logo-container {
             text-align: center;
             margin-bottom: 5px;
-            /* Sesuaikan margin */
+           
         }
 
         .logo-container img {
@@ -71,16 +71,14 @@
         .table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px,
+            margin: 10px;
+            
         }
 
         .table td {
-            padding: 10px 0;
+            padding: 0;
             line-height: 1.2;
-            white-space: nowrap;
-            word-wrap: break-word;
             font-size: 30px;
-
         }
 
         .text-right {
@@ -111,7 +109,7 @@
     @media screen {
         .container-fluid {
             width: 88mm;
-            margin: 20px auto;
+            margin: 10px auto;
             padding: 10px;
             border: 1px solid #ccc;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -228,14 +226,14 @@
                         <td>{{ $subcription->paket->name }}</td>
                         <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
                     </tr>
-                    {{-- <tr>
+                    <tr>
                         <td>
                             Jatuh Tempo<br>
                             ##
                             {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
                         </td>
                         
-                    </tr> --}}
+                    </tr>
                     <tr>
                         <td class="text-right text-bold">Sub Total:</td>
                         <td class="text-right">Rp.{{ number_format($subcription->tagihan) }}</td>
