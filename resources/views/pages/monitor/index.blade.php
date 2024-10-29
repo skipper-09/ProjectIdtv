@@ -119,9 +119,9 @@
                 ]
             });
 
-            setInterval(function() {
-                table.ajax.reload(null, false);
-            }, 5000); // 5000 ms = 5 detik
+            // setInterval(function() {
+            //     table.ajax.reload(null, false);
+            // }, 5000); // 5000 ms = 5 detik
 
             @if (Session::has('message'))
                 iziToast.success({
