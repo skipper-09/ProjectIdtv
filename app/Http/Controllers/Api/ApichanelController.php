@@ -178,9 +178,9 @@ class ApichanelController extends Controller
         $calculated_signature_key = $request->input('signature_key');
         // Authorization using Base64 encoding of Server Key
         if (env('MIDTRANS_IS_PRODUCTION') == true) {
-            $auth = base64_encode(env('MIDTRANS_PRODUCTION_SERVER_KEY') . ':');
+            $auth = env('MIDTRANS_PRODUCTION_SERVER_KEY');
         } else {
-            $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
+            $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
         }
         // SHA512(order_id + status_code + gross_amount + serverkey);
         $data = $orderId . $statuscode . $gross_amount . $auth;

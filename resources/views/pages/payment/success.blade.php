@@ -120,7 +120,7 @@
                         <tr>
                             <td style=";padding: 3px" class="text-center">
                                 {{ \Carbon\Carbon::parse($subcription->start_date)->format('F j, Y') }}</td>
-                            <td style=";padding: 3px" class="text-center">{{ $subcription->payment->payment_type }}</td>
+                            <td style=";padding: 3px" class="text-center">{{ $subcription->payment[0]->payment_type }}</td>
                             <td style=";padding: 3px" class="text-center">{{ $subcription->invoices }}</td>
                             <td style=";padding: 3px" class="text-center">Rp.
                                 {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
