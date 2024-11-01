@@ -82,7 +82,7 @@
                                     {{ $page_name }}</a>
                             </div>
                             @endcan
-                            @if (!Auth::user()->hasRole('Reseller'))
+                            @if (!Auth::user()->hasRole('Reseller') && !Auth::user()->hasRole('CS'))
                             <div class="card-header row">
                                 <div class="form-group col-12 col-md-6">
                                     <label>Filter Perusahaan <span class="text-danger">*</span></label>

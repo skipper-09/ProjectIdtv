@@ -158,6 +158,21 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="form-group col-12 col-md-12">
+                                        <label>Customer Sevice <span class="text-danger">*</span></label>
+                                        <select class="form-control select2 @error('user_id') is-invalid @enderror" name="user_id" >
+                                            <option value="">Pilih Customer Sevice</option>
+                                            @foreach ($user as $item)
+                                            <option value="{{ $item->id }}"   {{ $item->id == $customer->user_id ? ' selected' : '' }}>
+                                                {{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('user_id')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
+                                    </div>
                                     <div class="form-group col-12 col-md-6">
                                         <label>Diperpanjang <span class="text-danger">*</span></label>
                                         <input type="date" name="start_date"

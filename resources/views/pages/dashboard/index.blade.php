@@ -65,6 +65,9 @@
                         </div>
                     </div>
                 @endcan
+                @can('read-income-periode')
+                    
+                
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-success">
@@ -81,9 +84,10 @@
                         </div>
                     </div>
                 </div>
+                @endcan
             </div>
             <div class="row">
-                <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+                <div class="col-lg-6 col-md-12 col-12 col-sm-12 {{ Auth::user()->hasRole('CS') ? 'd-none' : '' }}">
                     <div class="card">
                         <div class="card-header">
                             <h4>Customer</h4>

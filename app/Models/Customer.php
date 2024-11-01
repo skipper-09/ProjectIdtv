@@ -29,6 +29,7 @@ class Customer extends Model
         'is_active',
         'device_id',
         'is_active',
+        'user_id',
     ];
     protected $primaryKey = 'id';
 
@@ -48,6 +49,10 @@ class Customer extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     public function region()
     {
@@ -81,7 +86,8 @@ class Customer extends Model
             'stb.name',
             'region.name',
             'device_id',
-            'is_active'
+            'is_active',
+            'user.name'
         ])->logOnlyDirty();
     }
 

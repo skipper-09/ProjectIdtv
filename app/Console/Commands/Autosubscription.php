@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\SendInvoceWa;
 use App\Models\Customer;
 use App\Models\Package;
 use App\Models\Subscription;
@@ -59,7 +60,7 @@ class Autosubscription extends Command
                     'start_date' => null,
                     'end_date' => Carbon::parse($item->end_date)->addMonth($paket->duration)->toDateString(),
                     'status' => false,
-                    'fee'=>$item->customer->company->fee_reseller,
+                    'fee' => $item->customer->company->fee_reseller,
                     'tagihan' => $item->customer->company->fee_reseller + $paket->price
                 ]);
 
@@ -69,30 +70,15 @@ class Autosubscription extends Command
                 $phone = $item->customer->phone;
                 $tagihan = number_format($item->customer->company->fee_reseller + $paket->price);
                 $end_date = $item->end_date;
-                $pesan =
-                    "Halo, *$name*!\n\nKami ingin menginformasikan bahwa tagihan Anda telah diterbitkan. Berikut adalah rincian tagihan Anda:\n\nNama: *$name*\nJumlah Tagihan: Rp. *$tagihan*\nTanggal Jatuh Tempo: *$end_date*\n\nSilakan lakukan pembayaran sebelum tanggal jatuh tempo\nTerima kasih.";
+                // Jadwalkan pengiriman pesan WhatsApp
+                $wa = new SendInvoceWa(
+                    $name,
+                    $tagihan,
+                    $$end_date,
+                    $phone
+                );
 
-
-                $params = [
-                    [
-                        'name' => 'phone',
-                        'contents' => $phone
-                    ],
-                    [
-                        'name' => 'message',
-                        'contents' => $pesan
-                    ]
-                ];
-
-
-                $auth = env('WABLAS_TOKEN');
-                $url = env('WABLAS_URL');
-
-                $response = Http::withHeaders([
-                    'Authorization' => $auth,
-                ])->asMultipart()->post("$url/api/send-message", $params);
-
-                $responseBody = json_decode($response->body());
+                $this->dispatch($wa);
             }
         }
 
@@ -104,7 +90,7 @@ class Autosubscription extends Command
 
 
 
-    
+
 
         //  $today = Carbon::now()->toDateString();
         //  $threeDaysLater = Carbon::now()->addDays(3)->toDateString();

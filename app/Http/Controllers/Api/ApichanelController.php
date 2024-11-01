@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendSuccessPaymentWa;
 use App\Models\Categori;
 use App\Models\Chanel;
 use App\Models\Customer;
@@ -136,13 +137,18 @@ class ApichanelController extends Controller
         ];
 
         // Authorization using Base64 encoding of Server Key
-        $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
+        if (env('MIDTRANS_IS_PRODUCTION') == true) {
+            $auth = base64_encode(env('MIDTRANS_PRODUCTION_SERVER_KEY') . ':');
+        } else {
+            $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
+        }
+        $URL = env('MIDTRANS_URL');
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Authorization' => "Basic $auth"
-        ])->post('https://app.sandbox.midtrans.com/snap/v1/transactions', $params);
+        ])->post("{$URL}/snap/v1/transactions", $params);
 
         $responseBody = json_decode($response->body());
 
@@ -167,7 +173,12 @@ class ApichanelController extends Controller
         $statuscode = $request->input('status_code');
         $gross_amount = $request->input('gross_amount');
         $calculated_signature_key = $request->input('signature_key');
-        $auth = env('MIDTRANS_SERVER_KEY');
+        // Authorization using Base64 encoding of Server Key
+        if (env('MIDTRANS_IS_PRODUCTION') == true) {
+            $auth = base64_encode(env('MIDTRANS_PRODUCTION_SERVER_KEY') . ':');
+        } else {
+            $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
+        }
         // SHA512(order_id + status_code + gross_amount + serverkey);
         $data = $orderId . $statuscode . $gross_amount . $auth;
         $signature_key = hash('sha512', $data);
@@ -213,30 +224,14 @@ class ApichanelController extends Controller
                     $name = $subs->customer->name;
                     $phone = $subs->customer->phone;
                     //send to wa
-                    $pesan = "Halo, *$name*!\n\nPembayaran Anda telah berhasil.\n\nDetail pembayaran:\nNama: *$name*\nJumlah Pembayaran: *Rp $amount*\nTanggal Pembayaran: *$paymnet->created_at*\n\nTerima kasih telah melakukan pembayaran. Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.";
-
-
-
-                    $params = [
-                        [
-                            'name' => 'phone',
-                            'contents' => $phone
-                        ],
-                        [
-                            'name' => 'message',
-                            'contents' => $pesan
-                        ]
-                    ];
-
-
-                    $auth = env('WABLAS_TOKEN');
-                    $url = env('WABLAS_URL');
-
-                    $response = Http::withHeaders([
-                        'Authorization' => $auth,
-                    ])->asMultipart()->post("$url/api/send-message", $params);
-
-                    $responseBody = json_decode($response->body());
+                    // Jadwalkan pengiriman pesan WhatsApp
+                    $wa = new SendSuccessPaymentWa(
+                        $name,
+                        $amount,
+                        $paymnet,
+                        $phone
+                    );
+                    $this->dispatch($wa);
 
                     break;
 
@@ -255,104 +250,5 @@ class ApichanelController extends Controller
     }
 
 
-    //     public function handleNotification(Request $request)
-//     {
 
-
-
-
-    // //         // Dapatkan data notifikasi
-// //         $payload = $request->getContent();
-// //         $notification = json_decode($payload, true);
-
-    // //         // // // Log notifikasi (untuk debugging)
-// //         // Log::info('Midtrans Notification:', $notification);
-// //         $transactionStatus = $notification['transaction_status'];
-// //         $orderId = $notification['order_id'];
-
-    // //         // gett the invoice id
-//         $lastDashPos = strrpos($request->input('order_id'), '-');
-
-    // // Potong string sampai sebelum '-' terakhir
-// if ($lastDashPos !== false) {
-//     $neworder_id = substr($request->input('order_id'), 0, $lastDashPos);
-// }
-
-
-    //         $auth = base64_encode(env('MIDTRANS_SERVER_KEY') . ':');
-
-    //         $response = Http::withHeaders([
-//             'Content-Type' => 'application/json',
-//             'Authorization' => "Basic $auth"
-//         ])->get("https://api.sandbox.midtrans.com/v2/{{$request->input('order_id')}}/status");
-//         dd($response);
-//         $response = json_decode($response->body());
-
-
-
-    //         // // Cari order berdasarkan ID
-//         $subs = Subscription::where('invoices',$neworder_id)->first();
-
-    //         // Logika setelah pembayaran berhasil
-//         // $order = Payment::where('subcription_id', $status)->first();
-//         // $order->status = 'paid';
-//         // $order->save();
-
-
-    //         $paket = Package::find($subs->packet_id);
-
-
-    //         $amount = $paket->price + $subs->customer->company->fee_reseller;
-
-
-
-
-    //         if ($subs) {
-//             switch ($request->input('transaction_status')) {
-//                 case 'capture':
-//                 case 'settlement':
-//                     $subs->update([
-//                         'status'=>1,
-//                         'start_date'=>now(),
-//                         'end_date'=>now()->addMonth($paket->duration)->toDateString(),
-//                                 ]);
-//                                 //insert to payment table
-//                                 Payment::create([
-//                                     'subscription_id' => $subs->id,
-//                                     'customer_id' => $subs->customer->id,
-//                                     'amount' => $amount,
-//                                     'fee'=> $subs->customer->company->fee_reseller,
-//                                     'tanggal_bayar' => now(),
-//                                     'status' => 'paid',
-//                                     'payment_type'=> 'midtrans',
-//                                 ]);
-//                     break;
-
-    //                 case 'pending':
-//                     $subs->update([
-//                         'status'=>0,
-
-    //                                 ]);
-//                     break;
-
-    //                 case 'deny':
-//                 case 'cancel':
-//                     $subs->update([
-//                         'status'=>0,
-
-    //                                 ]);
-//                     break;
-
-    //                 case 'expire':
-//                     $subs->update([
-//                         'status'=>0,
-//                                 ]);
-//                     break;
-//             }
-
-
-    //         }
-
-    //          return response()->json(['status' => 'success']);
-//     }
 }

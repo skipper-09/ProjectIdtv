@@ -51,6 +51,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Company::class);
     }
+    public function customer()
+    {
+        return $this->hasMany(Customer::class);
+    }
 
 
     public function getActivitylogOptions(): LogOptions

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
+use App\Jobs\SendWhatsAppMessage;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Package;
@@ -26,13 +27,30 @@ class CustomerController extends Controller
 {
     public function index(): View
     {
+        $active = 0;
+        $inactive = 0;
+        $allcus = 0;
+        if (auth()->user()->hasRole('Reseller')) {
+            $company = Company::where('user_id', '=', auth()->id())->first();
+            $active = Customer::where('is_active', 1)->where('company_id', $company->id)->get()->count();
+            $inactive = Customer::where('is_active', 0)->where('company_id', $company->id)->get()->count();
+            $allcus = Customer::where('company_id', $company->id)->get()->count();
+        } else if (auth()->user()->hasRole('CS')) {
+            $active = Customer::where('is_active', 1)->where('user_id', auth()->id())->get()->count();
+            $inactive = Customer::where('is_active', 0)->where('user_id', auth()->id())->get()->count();
+            $allcus = Customer::where('user_id', auth()->id())->get()->count();
+        }else{
+            $active = Customer::where('is_active', 1)->get()->count();
+            $inactive = Customer::where('is_active', 0)->get()->count();
+            $allcus = Customer::all()->count();
+        }
         $data = [
             'type_menu' => '',
             'page_name' => 'Customer',
             'company' => Company::all(),
-            'customer' => Customer::all()->count(),
-            'cusactive' => Customer::where('is_active', 1)->get()->count(),
-            'cusinactive' => Customer::where('is_active', 0)->get()->count(),
+            'customer' => $allcus,
+            'cusactive' => $active,
+            'cusinactive' => $inactive,
         ];
         return view('pages.customer.index', $data);
     }
@@ -51,6 +69,8 @@ class CustomerController extends Controller
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
             $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('company_id', $company->id)->orderByDesc('id')->get();
+        } else if (auth()->user()->hasRole('CS')) {
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib'])->where('user_id', auth()->id())->orderByDesc('id')->get();
         } else {
 
             if ($request->has('filter') && !empty($request->input('filter'))) {
@@ -137,7 +157,7 @@ class CustomerController extends Controller
                 // Determine if the renew button should be active or disabled
                 $isPaid = $latestSubscription->status == 0; // Assuming there is an 'is_paid' field
 
-                if($userauth->can(['renew-customer'])){
+                if ($userauth->can(['renew-customer'])) {
                     if ($isPaid) {
                         // If the subscription is paid, disable the renew button
                         $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
@@ -174,8 +194,10 @@ class CustomerController extends Controller
             'stb' => Stb::all(),
             'region' => Region::all(),
             'company' => Company::all(),
-            'paket' => Package::all()
-
+            'paket' => Package::all(),
+            'user' => User::whereHas('roles', function ($query) {
+                $query->where('name', 'CS');
+            })->get()
         ];
         return view('pages.customer.addcustomer', $data);
     }
@@ -212,7 +234,8 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'packet_id' => $request->paket_id
+            'packet_id' => $request->paket_id,
+            'user_id' => $request->user_id,
         ]);
         $company = Company::find($request->company_id);
 
@@ -239,35 +262,16 @@ class CustomerController extends Controller
             'status' => 'paid'
         ]);
 
+        // Jadwalkan pengiriman pesan WhatsApp
+        $wa = new SendWhatsAppMessage(
+            $request->name,
+            $request->address,
+            $request->username,
+            $request->password,
+            $request->phone
+        );
 
-
-
-        //send to wa after succes registration
-        $pesan =
-            "Halo, *$request->name*!\n\nPendaftaran Anda telah berhasil.\nBerikut adalah detail akun Anda:\n\nNama: *$request->name*\nAlamat: *$request->address*\nUsername: *$request->username*\nPassword: *$request->password*\n\nSilakan gunakan username dan password ini untuk login ke sistem kami.\nPastikan untuk menjaga kerahasiaan informasi akun Anda.";
-
-
-        $params = [
-            [
-                'name' => 'phone',
-                'contents' => $request->phone
-            ],
-            [
-                'name' => 'message',
-                'contents' => $pesan
-            ]
-        ];
-
-
-        $auth = env('WABLAS_TOKEN');
-        $url = env('WABLAS_URL');
-
-        $response = Http::withHeaders([
-            'Authorization' => $auth,
-        ])->asMultipart()->post("$url/api/send-message", $params);
-
-        $responseBody = json_decode($response->body());
-
+        $this->dispatch($wa);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 
@@ -295,7 +299,10 @@ class CustomerController extends Controller
             'region' => Region::all(),
             'company' => Company::all(),
             'paket' => Package::all(),
-            'latestsubcribe' => $latestsub
+            'latestsubcribe' => $latestsub,
+            'user' => User::whereHas('roles', function ($query) {
+                $query->where('name', 'CS');
+            })->get()
         ];
 
         return view('pages.customer.editcustomer', $data);

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('region_id');
             $table->unsignedBigInteger('stb_id');
             $table->unsignedBigInteger('packet_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('mac');
             $table->string('nik');
             $table->string('name', length: 100);
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('company_id')->references('id')->on('companies')->nullOnDelete()->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->nullOnDelete()->onUpdate('cascade');
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('stb_id')->references('id')->on('stbs')->onDelete('restrict')->onUpdate('cascade');
             $table->foreign('packet_id')->references('id')->on('packages')->onDelete('cascade')->onUpdate('cascade');
