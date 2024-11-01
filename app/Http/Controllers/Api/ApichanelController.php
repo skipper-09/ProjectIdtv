@@ -126,13 +126,16 @@ class ApichanelController extends Controller
                 "bca_va",
                 "bri_va",
                 "bni_va",
-                "gopay"
+                "cimb_va",
+                "permata_va",
+                "gopay",
+                "other_qris"
             ],
             // Set expiry to 5 minutes (5 * 60 seconds)
             'expiry' => [
                 "start_time" => date("Y-m-d H:i:s T"),  // Current time in ISO 8601 format with timezone
                 "unit" => "minute",
-                "duration" => 5  // Set to 5 minutes
+                "duration" => 15  // Set to 5 minutes
             ],
         ];
 
