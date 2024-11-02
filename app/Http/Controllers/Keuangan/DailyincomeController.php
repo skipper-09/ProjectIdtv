@@ -46,11 +46,11 @@ class DailyincomeController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-            if ($userauth->can('update-customer')) {
+            if ($userauth->can('read-income-harian')) {
                 $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
-            if ($userauth->can('delete-customer')) {
+            if ($userauth->can('delete-income-harian')) {
                 $button .= ' <button class="btn btn-sm btn-danger action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('dailyincome.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Hapus"><i
                                                      class="fa-solid fa-trash"></i></button>';
             }
