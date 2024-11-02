@@ -206,15 +206,22 @@ class ApichanelController extends Controller
             switch ($transactionStatus) {
                 case 'capture':
                 case 'settlement':
+                     // Cek apakah payment sudah ada untuk subscription ini
+                $existingPayment = Payment::where('subscription_id', $subs->id)->first();
+
+                if (!$existingPayment) {
+                    // Update status subscription
                     $subs->update([
                         'status' => 1,
                         'start_date' => now(),
                         'end_date' => now()->addMonth($paket->duration)->toDateString(),
                     ]);
+
+                    // Update status customer
                     Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
 
-                    // Insert to payment table
-                    $paymnet = Payment::create([
+                    // Insert ke payment table
+                    $payment = Payment::create([
                         'subscription_id' => $subs->id,
                         'customer_id' => $subs->customer->id,
                         'amount' => $amount,
@@ -224,17 +231,15 @@ class ApichanelController extends Controller
                         'payment_type' => 'midtrans',
                     ]);
 
-                    $name = $subs->customer->name;
-                    $phone = $subs->customer->phone;
-                    //send to wa
-                    // Jadwalkan pengiriman pesan WhatsApp
+                    // Kirim notifikasi WhatsApp
                     $wa = new SendSuccessPaymentWa(
-                        $name,
+                        $subs->customer->name,
                         $amount,
-                        $paymnet,
-                        $phone
+                        $payment,
+                        $subs->customer->phone
                     );
                     $this->dispatch($wa);
+                }
 
                     break;
 
@@ -246,7 +251,8 @@ class ApichanelController extends Controller
                     break;
             }
         } else {
-            Log::warning('Subscription not found for invoice:', ['invoice' => $orderId]);
+            return response()->json(['message' => 'Tagihan Sudah dibayar'], 404);
+            
         }
 
         return response()->json(['status' => 'success']);

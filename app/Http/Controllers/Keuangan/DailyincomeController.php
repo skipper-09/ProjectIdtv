@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -45,14 +46,15 @@ class DailyincomeController extends Controller
             //     $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             //                                                 class="fas fa-eye"></i></button>';
             // }
-            // if ($userauth->can('delete-customer')) {
-            //     $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
-            //                                          class="fa-solid fa-bolt"></i></button>';
-            // }
             if ($userauth->can('update-customer')) {
                 $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
             }
+            if ($userauth->can('delete-customer')) {
+                $button .= ' <button class="btn btn-sm btn-danger action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('dailyincome.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Hapus"><i
+                                                     class="fa-solid fa-trash"></i></button>';
+            }
+            
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('nik', function ($data) {
             return $data->customer->nik;
@@ -109,5 +111,25 @@ class DailyincomeController extends Controller
             'subcription' => $sub
         ];
         return view('pages.customer.print', $data);
+    }
+
+
+    public function destroy($id)
+    {
+        try {
+            $payment = Payment::findOrFail($id);
+            $payment->delete();
+            //return response
+            return response()->json([
+                'status' => 'success',
+                'success' => true,
+                'message' => 'Data Income Berhasil Dihapus!.',
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Gagal Menghapus Data Income!',
+                'trace' => $e->getTrace()
+            ]);
+        }
     }
 }

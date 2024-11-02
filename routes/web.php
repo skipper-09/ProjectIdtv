@@ -267,6 +267,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             function () {
                 Route::get('', [DailyincomeController::class, 'index'])->name('dailyincome')->middleware('can:read-income-harian');
                 Route::get('getData', [DailyincomeController::class, 'getData'])->name('dailyincome.getdata');
+                Route::delete('/delete/{id}', [DailyincomeController::class, 'destroy'])->name('dailyincome.delete')->middleware('can:delete-income-harian');
             }
         );
         Route::prefix('income-periode')->group(
