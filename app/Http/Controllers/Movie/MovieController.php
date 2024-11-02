@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Movie;
 
+use App\Exports\MovieExport;
 use App\Http\Controllers\Controller;
+use App\Imports\MovieImport;
 use App\Models\Genre;
 use App\Models\Movie;
 use App\Models\User;
@@ -10,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class MovieController extends Controller
@@ -39,8 +42,8 @@ class MovieController extends Controller
             if ($userauth->can('read-movie-player')) {
                 if ($data->type == 'movie') {
                     $button .= ' <a href="' . route('movie.player', ['id' => $data->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $data->id . ' data-type="edit"><i
-                    class="fa-solid fa-eye"></i></a>';    
-                }else{
+                    class="fa-solid fa-eye"></i></a>';
+                } else {
                     $button .= ' <a href="' . route('episode', ['movie_id' => $data->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $data->id . ' data-type="Episode"><i
                                                                 class="fa-solid fa-eye"></i></a>';
                 }
@@ -98,7 +101,7 @@ class MovieController extends Controller
                 'type' => $request->type,
                 'url' => $request->url,
                 'status' => $request->status,
-                'description'=>$request->description
+                'description' => $request->description
             ]
         );
 
@@ -149,7 +152,7 @@ class MovieController extends Controller
                 'type' => $request->type,
                 'url' => $request->url,
                 'status' => $request->status,
-                'description'=>$request->description
+                'description' => $request->description
             ]);
 
             return redirect()->route('movie')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Movie!']);
@@ -210,6 +213,38 @@ class MovieController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+        }
+    }
+
+
+
+    public function export()
+    {
+        $now = now()->toDateString();
+        return Excel::download(new MovieExport, "movie-$now.csv");
+    }
+
+
+
+    public function ImportMovie(Request $request)
+    {
+        // $request->validate([
+        //     'file' => 'required|mimes:xlsx,xls,csv',
+        // ]);
+
+        try {
+            Excel::import(new MovieImport, $request->file('file'));
+
+            \Log::info('Import successful');
+
+            return redirect()->back()->with(['status' => 'Success!', 'message' => 'Berhasil Import Movie!']);
+        } catch (Exception $e) {
+            \Log::error('Error during import: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Error occurred during import: ' . $e->getMessage(),
                 'trace' => $e->getTrace()
             ]);
         }

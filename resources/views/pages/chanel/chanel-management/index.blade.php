@@ -76,7 +76,9 @@
 </div>
 
 
-@include('components.importmodal')
+@include('components.importmodal',[
+     'route'=> route('chanel.importfile'),
+])
 @endsection
 
 @push('scripts')

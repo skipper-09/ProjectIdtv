@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <!-- Konten modal di sini -->
-                <form action="{{ route('chanel.importfile') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ $route }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="form-group col-12 col-md-12">

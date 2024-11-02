@@ -32,9 +32,15 @@
                         <div class="col-12">
                             <div class="card">
                                 @can('create-movie')
-                                    <div class="card-header">
+                                    <div class="card-header d-flex justify-content-between align-content-between">
                                         <a href="{{ route('movie.add') }}" class="btn btn-primary">Tambah
                                             {{ $page_name }}</a>
+                                            <div class="d-flex gap-3">
+                                                <a href="{{ route('movie.export') }}" class="btn btn-success mr-2">Export
+                                                    {{ $page_name }}</a>
+                                                <a href="#" data-toggle="modal" data-type="show" data-target="#showmodalimport" class="btn btn-success">Import
+                                                    {{ $page_name }}</a>
+                                            </div>
                                     </div>
                                 @endcan
                                 <div class="card-body">
@@ -63,6 +69,9 @@
             </div>
         </section>
     </div>
+    @include('components.importmodal',[
+        'route'=> route('movie.importfile'),
+    ])
 @endsection
 
 @push('scripts')

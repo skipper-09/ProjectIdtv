@@ -107,7 +107,7 @@ class PendapatanController extends Controller
     {
         $company = Company::where('user_id', auth()->id())->first();
         $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
-            $query->where('status', true);
+            $query->where('status', 1);
         })->whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
         })->whereHas('subscrib', function ($query) {
@@ -168,7 +168,7 @@ class PendapatanController extends Controller
             $company = Company::where('user_id', auth()->id())->first();
         $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
-        })->where('is_claim',true)->sum('fee');
+        })->where('is_claim',1)->sum('fee');
 
         $data = [
             'type_menu' => 'layout',

@@ -16,9 +16,28 @@ class CategoriSeeder extends Seeder
      */
     public function run()
     {
-        Categori::create([
+        Categori::insert([
+        [
             'name' => 'NASIONAL',
-            'created_at' => Carbon::now()
-        ]);
+        ],
+        [
+            'name' => 'MOVIE',
+        ],
+        [
+            'name' => 'KIDS',
+        ],
+        [
+            'name' => 'NEWS',
+        ],
+        [
+            'name' => 'MUSIC',
+        ],
+        [
+            'name' => 'NATURE',
+        ],
+        [
+            'name' => 'RADIO',
+        ],
+    ]);
     }
 }

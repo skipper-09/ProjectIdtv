@@ -153,6 +153,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [MovieController::class, 'show'])->name('movie.edit')->middleware('can:update-movie');
             Route::put('/update/{id}', [MovieController::class, 'update'])->name('movie.update');
             Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('movie.delete')->middleware('can:delete-movie');
+            Route::get('/export', [MovieController::class, 'export'])->name('movie.export');
+            Route::post('/importfile', [MovieController::class, 'ImportMovie'])->name('movie.importfile');
         });
 
         //genre route
