@@ -341,6 +341,7 @@ class CustomerController extends Controller
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
             'packet_id' => $request->paket_id,
+            'user_id' => $request->user_id,
         ]);
 
         if ($customer->id != null) {
