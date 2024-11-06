@@ -35,13 +35,21 @@ class PendapatanController extends Controller
 
     public function getData()
     {
+        // $company = Company::where('user_id', auth()->id())->first();
+        // $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
+        //     $query->where('status', true);
+        // })->whereHas('customer', function ($query) use ($company) {
+        //     $query->where('company_id', $company->id);
+        // })->whereHas('subscrib', function ($query) {
+        //     $query->where('is_claim', false);
+        // })->get();
         $company = Company::where('user_id', auth()->id())->first();
         $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
-            $query->where('status', true);
+            $query->where('status', 1);
         })->whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
         })->whereHas('subscrib', function ($query) {
-            $query->where('is_claim', false);
+            $query->where('is_claim', 0);
         })->get();
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
@@ -64,7 +72,8 @@ class PendapatanController extends Controller
         })->editColumn('paket', function ($data) {
             return $data->subscrib->paket->name . ' - ' . 'Rp. ' . number_format($data->subscrib->paket->price);
         })->editColumn('fee', function ($data) {
-            return 'Rp. ' . number_format($data->subscrib->fee);
+            // return 'Rp. ' . number_format($data->fee);
+            return $data->fee;
         })->editColumn('claim', function ($data) {
             $span = '';
             if ($data->subscrib->is_claim == true) {
@@ -106,18 +115,19 @@ class PendapatanController extends Controller
     public function reqClaim()
     {
         $company = Company::where('user_id', auth()->id())->first();
-        $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
-            $query->where('status', 1);
-        })->whereHas('customer', function ($query) use ($company) {
-            $query->where('company_id', $company->id);
-        })->whereHas('subscrib', function ($query) {
-            $query->where('is_claim', 0);
-        })->sum('fee');
+        // $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
+        //     $query->where('status', 1);
+        // })->whereHas('customer', function ($query) use ($company) {
+        //     $query->where('company_id', $company->id);
+        // })->whereHas('subscrib', function ($query) {
+        //     $query->where('is_claim', 0);
+        // })->sum('fee');
+        
         $data = [
             'categori' => null,
             'type_menu' => 'layout',
             'page_name' => 'Claim Pendapatan',
-            'amount' => $payment,
+            // 'amount' => $payment,
             'company' => $company,
         ];
         return view('pages.reseller.pendapatan.reqclaim', $data);
@@ -169,7 +179,6 @@ class PendapatanController extends Controller
         $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
             $query->where('company_id', $company->id);
         })->where('is_claim',1)->sum('fee');
-
         $data = [
             'type_menu' => 'layout',
             'page_name' => 'History Claim',

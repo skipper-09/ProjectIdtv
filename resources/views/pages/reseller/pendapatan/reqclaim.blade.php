@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Jumlah Claim <span class="text-danger">*</span></label>
-                            <input type="number" name="amount" readonly value="{{ $amount }}"
+                            <input id="jumlah-claim" type="number" name="amount" readonly
                                 class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}">
                             @error('amount')
                             <div class="invalid-feedback">
@@ -125,89 +125,68 @@
 <script>
     $(document).ready(function() {
     
-              var table = $('#dataTable').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: '{{ route('reseller.getdata') }}',
-                    columns: [
-                        { 
+        var table = $('#dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: '{{ route('reseller.getdata') }}',
+        columns: [
+            { 
                 data: 'subscription_id', 
                 name: 'subscription_id',
                 orderable: false,
                 searchable: false,
-                render: function(data, type, full, meta){
-                    return '<input type="checkbox" class="claim-checkbox" name="subscribe_id[]" value="' + data + '">';
+                render: function(data, type, full, meta) {
+                   
+                    const fee = full.fee ? full.fee : 0; 
+                    return '<input type="checkbox" class="claim-checkbox" name="subscribe_id[]" value="' + data + '" data-fee="' + fee + '">';
                 }
             },
-                    {
-                            name: 'nik',
-                            data: 'nik',
-                        },
-                        {
-                            name: 'customer',
-                            data: 'customer',
-                        },
-                        {
-                            name: 'paket',
-                            data: 'paket',
-                        },
-                        {
-                            name: 'start_date',
-                            data: 'start_date',
-                        },
-                        {
-                            name: 'end_date',
-                            data: 'end_date',
-                        },
-                        {
-                            name: 'status',
-                            data: 'status',
-                        },
-                        {
-                            name: 'fee',
-                            data: 'fee',
-                        },
-                        {
-                            name: 'created_at',
-                            data: 'created_at',
-                        },
-                        {
-                            name: 'owner',
-                            data: 'owner',
-                        },
-                        {
-                            name: 'claim',
-                            data: 'claim',
-                        },
-                        @canany(['update-owner', 'delete-owner'])
-                            {
-                                data: 'action',
-                                name: 'action',
-                                orderable: false,
-                            searchable: false,
-                            }
-                        @endcanany
-                    ],
-                });
-
-                $('#select-all').on('click', function(){
-                var rows = table.rows({ 'search': 'applied' }).nodes();
-                $('input[type="checkbox"]', rows).prop('checked', this.checked);
-                });
-
-    // Handle click on individual row checkboxes
-    $('#claims-table tbody').on('change', 'input.claim-checkbox', function(){
-        if(!this.checked){
-            var el = $('#select-all').get(0);
-            if(el && el.checked && ('indeterminate' in el)){
-                el.indeterminate = true;
-            }
-        }
+            { name: 'nik', data: 'nik' },
+            { name: 'customer', data: 'customer' },
+            { name: 'paket', data: 'paket' },
+            { name: 'start_date', data: 'start_date' },
+            { name: 'end_date', data: 'end_date' },
+            { name: 'status', data: 'status' },
+            { name: 'fee',   data: 'fee'},
+            { name: 'created_at', data: 'created_at' },
+            { name: 'owner', data: 'owner' },
+            { name: 'claim', data: 'claim' },
+            @canany(['update-owner', 'delete-owner'])
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                }
+            @endcanany
+        ],
     });
-                
 
+    // Select All checkbox functionality
+    $('#select-all').on('click', function() {
+        var rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        calculateTotalClaim();
     });
+
+    // Calculate total claim when individual checkboxes are clicked
+    $('#dataTable tbody').on('change', 'input.claim-checkbox', function() {
+        calculateTotalClaim();
+    });
+
+    // Function to calculate total claim amount
+    function calculateTotalClaim() {
+        let totalClaim = 0;
+
+        
+        $('input.claim-checkbox:checked').each(function() {
+            const fee = parseFloat($(this).data('fee')) || 0;
+            totalClaim += fee;
+        });
 
        
+        $('#jumlah-claim').val(totalClaim);
+    }
+    });
 </script>
 @endpush
