@@ -164,7 +164,7 @@ class CustomerController extends Controller
                     } else {
                         if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
                             // Enable the renew button if within 3 days of the end date
-                            if ($userauth->can('update-customer')) {
+                            if ($userauth->can('renew-customer')) {
                                 $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
                             }
                         } else {
