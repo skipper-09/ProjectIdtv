@@ -65,6 +65,7 @@ class PermissionSeeder extends Seeder
             'delete-income-harian',
             'read-statistik',
             'read-feeclaim',
+            'proses-feeclaim',
             'read-income-periode',
             'read-log',
             'clean-log',

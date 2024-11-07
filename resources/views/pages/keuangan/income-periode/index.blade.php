@@ -97,9 +97,9 @@
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
-                                                    @canany(['update-owner', 'delete-owner'])
+                                                    {{-- @canany(['update-owner', 'delete-owner'])
                                                         <th>Action</th>
-                                                    @endcanany
+                                                    @endcanany --}}
                                                 </tr>
                                             </thead>
                                         </table>
@@ -195,14 +195,14 @@
                         name: 'owner',
                         data: 'owner',
                     },
-                    @canany(['update-owner', 'delete-owner'])
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false,
-                        }
-                    @endcanany
+                    // @canany(['update-owner', 'delete-owner'])
+                    //     {
+                    //         data: 'action',
+                    //         name: 'action',
+                    //         orderable: false,
+                    //         searchable: false,
+                    //     }
+                    // @endcanany
                 ],
                 dom: 'Bfrtip', // This is needed for the buttons to appear
                 buttons: [{

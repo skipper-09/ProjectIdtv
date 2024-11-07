@@ -45,7 +45,7 @@
                                                 <th>Title</th>
                                                 <th>Number Episode</th>
                                                 <th>Cover</th>
-                                                @canany(['update-movie', 'delete-movie'])
+                                                @canany(['update-episode', 'delete-episode'])
                                                 <th>Action</th>
                                                 @endcanany
                                             </tr>
@@ -90,7 +90,7 @@
                 { data: 'title', name: 'title' },
                 { data: 'episode_number', name: 'episode_number' },
                 { data: 'cover_image', name: 'cover_image' },
-                @canany(['update-movie', 'delete-movie'])
+                @canany(['update-episode', 'delete-episode'])
                     { data: 'action', name: 'action' }
                 @endcanany
             ]

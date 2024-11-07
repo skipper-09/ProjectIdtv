@@ -20,6 +20,7 @@ class RoleSeeder extends Seeder
         $administrator = Role::create(['name' => 'Administrator']);
         $reseler = Role::create(['name' => 'Reseller']);
         $customerservice = Role::create(['name'=>'CS']);
+        $Acounting = Role::create(['name'=>'Acounting']);
         //give permission role
         $developer->givePermissionTo([
             'read-dashboard',
@@ -71,6 +72,7 @@ class RoleSeeder extends Seeder
             'delete-income-harian',
             'read-statistik',
             'read-feeclaim',
+            'proses-feeclaim',
             'read-income-periode',
             'read-log',
             'clean-log',
@@ -144,6 +146,7 @@ class RoleSeeder extends Seeder
             'delete-income-harian',
             'read-statistik',
             'read-feeclaim',
+            'proses-feeclaim',
             'read-income-periode',
             'read-log',
             'clean-log',
@@ -166,6 +169,18 @@ class RoleSeeder extends Seeder
         $customerservice->givePermissionTo([
             'read-dashboard',
             'read-customer',
+        ]);
+        $Acounting->givePermissionTo([
+            'read-dashboard',
+            'read-customer',
+            'read-company',
+            'read-tagihan',
+            'read-income-harian',
+            'read-income-periode',
+            'renew-customer',
+            'read-statistik',
+            'read-feeclaim',
+            'proses-feeclaim',
         ]);
     }
 }

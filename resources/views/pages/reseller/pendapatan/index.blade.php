@@ -23,7 +23,7 @@
                 <a href="{{ route('customer') }}">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
-                            <i class="far fa-user"></i>
+                            <i class="fas fa-landmark"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">

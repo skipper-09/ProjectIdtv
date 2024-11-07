@@ -55,7 +55,7 @@
                                                     <th>Tanggal Pengajuan</th>
                                                     <th>Status</th>
                                                     <th>Perusahaan</th>
-                                                    @canany(['update-company', 'delete-company'])
+                                                    @canany(['proses-feeclaim'])
                                                         <th>Action</th>
                                                     @endcanany
                                                 </tr>
@@ -133,7 +133,7 @@
                         name: 'company',
                     },
 
-                    @canany(['update-company', 'delete-company'])
+                    @canany(['proses-feeclaim'])
                         {
                             data: 'action',
                             name: 'action',

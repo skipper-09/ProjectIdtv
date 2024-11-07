@@ -95,7 +95,7 @@
                                                     <th>Metode Pembayaran</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
-                                                    @canany(['update-owner', 'delete-owner'])
+                                                    @canany(['delete-income-harian'])
                                                         <th>Action</th>
                                                     @endcanany
                                                 </tr>
@@ -183,7 +183,7 @@
                         name: 'owner',
                         data: 'owner',
                     },
-                    @canany(['update-owner', 'delete-owner'])
+                    @canany(['delete-income-harian'])
                         {
                             data: 'action',
                             name: 'action',

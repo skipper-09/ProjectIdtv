@@ -121,7 +121,7 @@
             @endcanany
 
 
-            @canany(['read-company', 'read-owner'])
+            @canany(['read-company', 'read-owner','read-statistik','read-income-harian','read-income-periode','read-feeclaim'])
                 <li class="menu-header">KEUNGAN</li>
                 <li class="nav-item dropdown {{ $type_menu === 'Keuangan' ? 'active' : '' }}">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wallet"></i>
@@ -132,30 +132,31 @@
                             <a class="nav-link" href="{{ route('tagihan') }}">Tagihan Pelanggan</a>
                         </li>
                     @endcan
-                        @can('read-owner')
+                        @can('read-income-harian')
                             <li class="{{ Request::is('admin/keuangan/income-harian') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('dailyincome') }}">Income Harian</a>
                             </li>
                         @endcan
-                        @can('read-company')
+                        @can('read-income-periode')
                             <li class="{{ Request::is('admin/keuangan/income-periode') ? 'active' : '' }}">
                                 <a class="nav-link" href="#" data-toggle="modal" data-target="#showmodalkeu">Income
                                     Periode</a>
                             </li>
                         @endcan
-                        @can('read-company')
+                        @can('read-statistik')
                             <li class="{{ Request::is('admin/keuangan/statistik') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('statistik') }}">Statistik</a>
                             </li>
                         @endcan
                     </ul>
                 </li>
-
-                <li class="{{ Request::is('admin/keuangan/fee-claim') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('feeclaim') }}"><i class="fas fa-hourglass">
-                        </i> <span>Fee Reseller</span>
-                    </a>
-                </li>
+@can('read-feeclaim')    
+<li class="{{ Request::is('admin/keuangan/fee-claim') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('feeclaim') }}"><i class="fas fa-hourglass">
+        </i> <span>Fee Reseller</span>
+    </a>
+</li>
+@endcan
             @endcanany
 
             @canany(['read-users', 'read-role','read-log','read-version_control'])

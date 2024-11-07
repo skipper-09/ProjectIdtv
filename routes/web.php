@@ -294,7 +294,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             function () {
                 Route::get('', [FeeClaimController::class, 'index'])->name('feeclaim')->middleware('can:read-feeclaim');
                 Route::get('getData', [FeeClaimController::class, 'getData'])->name('feeclaim.getdata');
-                Route::get('show/{id}', [FeeClaimController::class, 'show'])->name('feeclaim.show');
+                Route::get('show/{id}', [FeeClaimController::class, 'show'])->name('feeclaim.show')->middleware('can:proses-feeclaim');
                 Route::put('/update/{id}', [FeeClaimController::class, 'Aprove'])->name('feeclaim.aprove');
             }
         );
