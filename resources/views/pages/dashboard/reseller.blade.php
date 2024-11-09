@@ -45,7 +45,7 @@
                             </div>
 
                             <p class="font-weight-bold" style="font-size: 16px; color:black"> Rp.
-                                {{ number_format($income->sum('amount')) }}</p>
+                                {{ number_format($income->sum('fee')) }}</p>
 
                         </div>
                     </div>

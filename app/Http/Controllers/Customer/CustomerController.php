@@ -262,16 +262,16 @@ class CustomerController extends Controller
             'status' => 'paid'
         ]);
 
-        // Jadwalkan pengiriman pesan WhatsApp
-        $wa = new SendWhatsAppMessage(
-            $request->name,
-            $request->address,
-            $request->username,
-            $request->password,
-            $request->phone
-        );
+        // // Jadwalkan pengiriman pesan WhatsApp
+        // $wa = new SendWhatsAppMessage(
+        //     $request->name,
+        //     $request->address,
+        //     $request->username,
+        //     $request->password,
+        //     $request->phone
+        // );
 
-        $this->dispatch($wa);
+        // $this->dispatch($wa);
         return redirect()->route('customer')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Customer!']);
     }
 

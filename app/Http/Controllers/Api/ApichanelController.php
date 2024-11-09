@@ -231,14 +231,14 @@ class ApichanelController extends Controller
                         'payment_type' => 'midtrans',
                     ]);
 
-                    // Kirim notifikasi WhatsApp
-                    $wa = new SendSuccessPaymentWa(
-                        $subs->customer->name,
-                        $amount,
-                        $payment,
-                        $subs->customer->phone
-                    );
-                    $this->dispatch($wa);
+                    // // Kirim notifikasi WhatsApp
+                    // $wa = new SendSuccessPaymentWa(
+                    //     $subs->customer->name,
+                    //     $amount,
+                    //     $payment,
+                    //     $subs->customer->phone
+                    // );
+                    // $this->dispatch($wa);
                 }
 
                     break;

@@ -70,10 +70,10 @@ class PeriodeIncomeController extends Controller
             // }
 
 
-            if ($userauth->can('update-customer')) {
+            
                 $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
-            }
+            
 
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('nik', function ($data) {

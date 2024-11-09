@@ -41,7 +41,7 @@ class DashboardController extends Controller
     $company = Company::where('user_id', auth()->id())->first();
     $data = [
       'customer' => Customer::where('company_id', '=', $company->id)->whereMonth('created_at',\Carbon\Carbon::now()->month)->get(),
-      'income' => Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($company) {
+      'income' =>Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($company) {
         $query->where('company_id', $company->id);
       }),
       'type_menu' => 'dashboard',

@@ -65,20 +65,20 @@ class Autosubscription extends Command
                 ]);
 
 
-                //send to wa after succes registration
-                $name = $item->customer->name;
-                $phone = $item->customer->phone;
-                $tagihan = number_format($item->customer->company->fee_reseller + $paket->price);
-                $end_date = $item->end_date;
-                // Jadwalkan pengiriman pesan WhatsApp
-                $wa = new SendInvoceWa(
-                    $name,
-                    $tagihan,
-                    $$end_date,
-                    $phone
-                );
+                // //send to wa after succes registration
+                // $name = $item->customer->name;
+                // $phone = $item->customer->phone;
+                // $tagihan = number_format($item->customer->company->fee_reseller + $paket->price);
+                // $end_date = $item->end_date;
+                // // Jadwalkan pengiriman pesan WhatsApp
+                // $wa = new SendInvoceWa(
+                //     $name,
+                //     $tagihan,
+                //     $$end_date,
+                //     $phone
+                // );
 
-                $this->dispatch($wa);
+                // $this->dispatch($wa);
             }
         }
 

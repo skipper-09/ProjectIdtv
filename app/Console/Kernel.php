@@ -27,9 +27,9 @@ class Kernel extends ConsoleKernel
     $schedule->command('subscription:renew')->everyMinute();
     $schedule->command('set:customer-inactive')->everyMinute();
     $schedule->command('streams:delete-old')->monthlyOn(15, '02:00');
-    $schedule->command('queue:work --stop-when-empty')
-             ->everyMinute()
-             ->withoutOverlapping();
+    // $schedule->command('queue:work --stop-when-empty')
+    //          ->everyMinute()
+    //          ->withoutOverlapping();
    
         
     }
