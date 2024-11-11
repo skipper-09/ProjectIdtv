@@ -41,6 +41,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('register/pelanggan', [CustomerController::class, 'CustomerRegister'])->middleware('guest')->name('customer.register');
+Route::post('post/pelangganpost', [CustomerController::class, 'customerpost'])->name('customer.post');
+
 Route::redirect('/', '/auth');
 Route::get('auth', [AuthController::class, 'index'])->middleware('guest')->name('auth');
 Route::post('auth/signin', [AuthController::class, 'signin'])->name('auth.signin');

@@ -462,33 +462,33 @@ class CustomerController extends Controller
             Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
 
 
-            //send wa
-            $name = $subs->customer->name;
-            $phone = $subs->customer->phone;
-            $amount = $subs->tagihan;
-            //send to wa
-            $pesan = "Halo, *$name*!\n\nPembayaran Anda telah berhasil.\n\nDetail pembayaran:\nNama: *$name*\nJumlah Pembayaran: *Rp $amount*\nTanggal Pembayaran: *$payment->created_at*\n\nTerima kasih telah melakukan pembayaran. Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.";
+            // //send wa
+            // $name = $subs->customer->name;
+            // $phone = $subs->customer->phone;
+            // $amount = $subs->tagihan;
+            // //send to wa
+            // $pesan = "Halo, *$name*!\n\nPembayaran Anda telah berhasil.\n\nDetail pembayaran:\nNama: *$name*\nJumlah Pembayaran: *Rp $amount*\nTanggal Pembayaran: *$payment->created_at*\n\nTerima kasih telah melakukan pembayaran. Jika ada pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.";
 
-            $params = [
-                [
-                    'name' => 'phone',
-                    'contents' => $phone
-                ],
-                [
-                    'name' => 'message',
-                    'contents' => $pesan
-                ]
-            ];
+            // $params = [
+            //     [
+            //         'name' => 'phone',
+            //         'contents' => $phone
+            //     ],
+            //     [
+            //         'name' => 'message',
+            //         'contents' => $pesan
+            //     ]
+            // ];
 
 
-            $auth = env('WABLAS_TOKEN');
-            $url = env('WABLAS_URL');
+            // $auth = env('WABLAS_TOKEN');
+            // $url = env('WABLAS_URL');
 
-            $response = Http::withHeaders([
-                'Authorization' => $auth,
-            ])->asMultipart()->post("$url/api/send-message", $params);
+            // $response = Http::withHeaders([
+            //     'Authorization' => $auth,
+            // ])->asMultipart()->post("$url/api/send-message", $params);
 
-            $responseBody = json_decode($response->body());
+            // $responseBody = json_decode($response->body());
 
             // Redirect dengan pesan sukses
             return redirect()->route('customer')
@@ -507,4 +507,50 @@ class CustomerController extends Controller
         }
     }
 
+
+
+    public function CustomerRegister(){
+        try {
+
+            // Set your Merchant Server Key
+\Midtrans\Config::$serverKey = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
+// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+\Midtrans\Config::$isProduction = false;
+// Set sanitization on (default)
+\Midtrans\Config::$isSanitized = true;
+// Set 3DS transaction for credit card to true
+\Midtrans\Config::$is3ds = true;
+
+$params = array(
+    'transaction_details' => array(
+        'order_id' => rand(),
+        'gross_amount' => 10000,
+    ),
+    'customer_details' => array(
+        'first_name' => 'budi',
+        'last_name' => 'pratama',
+        'email' => 'budi.pra@example.com',
+        'phone' => '08111222333',
+    ),
+);
+
+$snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            $data=[
+                'page_name' => 'Customer',
+                'paket'=>Package::all(),
+                'snap'=>$snapToken
+            ];
+            return view('pages.customer.publicregister',$data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message'=>$e->getMessage(),
+            ]);
+        }
+    }
+
+
+    public function customerpost(Request $request){
+return redirect()->back();
+    }
 }

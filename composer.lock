@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f7f78aac603068ae42f960e66601f6c",
+    "content-hash": "c47ab665ea41109ead4d60f04372d252",
     "packages": [
         {
             "name": "brick/math",
@@ -2436,16 +2436,16 @@
         },
         {
             "name": "midtrans/midtrans-php",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Midtrans/midtrans-php.git",
-                "reference": "ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad"
+                "reference": "737ddabeb0c4d40316c4db132f9ef5c8f7a1b3a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Midtrans/midtrans-php/zipball/ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad",
-                "reference": "ebbe9127f925d9588bb4ab6b1d48bf27ce14a1ad",
+                "url": "https://api.github.com/repos/Midtrans/midtrans-php/zipball/737ddabeb0c4d40316c4db132f9ef5c8f7a1b3a6",
+                "reference": "737ddabeb0c4d40316c4db132f9ef5c8f7a1b3a6",
                 "shasum": ""
             },
             "require": {
@@ -2486,9 +2486,9 @@
             "homepage": "https://midtrans.com",
             "support": {
                 "issues": "https://github.com/Midtrans/midtrans-php/issues",
-                "source": "https://github.com/Midtrans/midtrans-php/tree/v2.6.0"
+                "source": "https://github.com/Midtrans/midtrans-php/tree/v2.6.1"
             },
-            "time": "2024-09-24T12:46:40+00:00"
+            "time": "2024-10-16T08:55:12+00:00"
         },
         {
             "name": "monolog/monolog",

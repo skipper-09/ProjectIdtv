@@ -12,7 +12,7 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1",
-        "midtrans/midtrans-php": "*",
+        "midtrans/midtrans-php": "^2.6",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-permission": "^6.7",
         "yajra/laravel-datatables": "^9.0",
