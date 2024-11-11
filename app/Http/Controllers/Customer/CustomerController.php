@@ -39,7 +39,7 @@ class CustomerController extends Controller
             $active = Customer::where('is_active', 1)->where('user_id', auth()->id())->get()->count();
             $inactive = Customer::where('is_active', 0)->where('user_id', auth()->id())->get()->count();
             $allcus = Customer::where('user_id', auth()->id())->get()->count();
-        }else{
+        } else {
             $active = Customer::where('is_active', 1)->get()->count();
             $inactive = Customer::where('is_active', 0)->get()->count();
             $allcus = Customer::all()->count();
@@ -173,7 +173,6 @@ class CustomerController extends Controller
                         }
                     }
                 }
-
             }
 
             // Add print button if the user has permission
@@ -202,7 +201,7 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request, )
+    public function store(Request $request,)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -497,7 +496,6 @@ class CustomerController extends Controller
                     'message' => 'Berhasil Perpanjang Layanan Customer!',
                     'new_tab_url' => route('print.standart', ['id' => $subs->id, 'type' => 'subscription'])
                 ]);
-
         } catch (Exception $e) {
             // Tangkap kesalahan dan catat ke log
             // \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
@@ -509,48 +507,93 @@ class CustomerController extends Controller
 
 
 
-    public function CustomerRegister(){
+    public function CustomerRegister(Request $request)
+    {
         try {
 
-            // Set your Merchant Server Key
-\Midtrans\Config::$serverKey = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
-// Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-\Midtrans\Config::$isProduction = false;
-// Set sanitization on (default)
-\Midtrans\Config::$isSanitized = true;
-// Set 3DS transaction for credit card to true
-\Midtrans\Config::$is3ds = true;
+            // // Set your Merchant Server Key
+            // \Midtrans\Config::$serverKey = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
+            // // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+            // \Midtrans\Config::$isProduction = false;
+            // // Set sanitization on (default)
+            // \Midtrans\Config::$isSanitized = true;
+            // // Set 3DS transaction for credit card to true
+            // \Midtrans\Config::$is3ds = true;
 
-$params = array(
-    'transaction_details' => array(
-        'order_id' => rand(),
-        'gross_amount' => 10000,
-    ),
-    'customer_details' => array(
-        'first_name' => 'budi',
-        'last_name' => 'pratama',
-        'email' => 'budi.pra@example.com',
-        'phone' => '08111222333',
-    ),
-);
+            // $price = Package::find(1);
+            // $params = array(
+            //     'transaction_details' => array(
+            //         'order_id' => rand(),
+            //         'gross_amount' => $price->price,
+            //     ),
+            //     'customer_details' => array(
+            //         'first_name' => $request->name,
+            //         'last_name' => $request->name,
+            //         'email' => $request->email,
+            //         'phone' => $request->phone,
+            //     ),
+            // );
 
-$snapToken = \Midtrans\Snap::getSnapToken($params);
+            // $snapToken = \Midtrans\Snap::getSnapToken($params);
 
-            $data=[
+            $data = [
                 'page_name' => 'Customer',
-                'paket'=>Package::all(),
-                'snap'=>$snapToken
+                'paket' => Package::all(),
             ];
-            return view('pages.customer.publicregister',$data);
+            return view('pages.customer.publicregister', $data);
         } catch (Exception $e) {
             return response()->json([
-                'message'=>$e->getMessage(),
+                'message' => $e->getMessage(),
             ]);
         }
     }
 
 
-    public function customerpost(Request $request){
-return redirect()->back();
+    public function customerpost(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
+            'email' => 'required|string|email', // NIK harus 16 digit angka
+            'phone' => 'required', // Nomor telepon hanya angka dan panjang antara 10-15
+            'paket_id' => 'required',
+            'address' => 'required|string|max:500', // Maksimal 500 karakter
+            'username' => 'required|string|unique:customers,username|max:255', // username unik di tabel customers
+            'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
+            'password_confirmation' => 'required|string|min:6|max:255',
+            'address' => 'required|string|max:500', // Maksimal 500 karakter
+        ]);
+
+        $customer =  Customer::create([
+            'name' => $request->name,
+            'mac' => rand(10000, 99999),
+            'nik' => $request->nik,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'region_id' => 1,
+            'stb_id' => 1,
+            'company_id' => 1,
+            'username' => $request->username,
+            'showpassword' => $request->password,
+            'password' => Hash::make($request->password),
+            'is_active' => 0,
+            'packet_id' => $request->paket_id,
+        ]);
+
+        $company = Company::find($request->company_id);
+        $paket = Package::find($request->paket_id);
+
+        $subs = Subscription::create([
+            'customer_id' => $customer->id,
+            'packet_id' => $request->paket_id,
+            'start_date' => Carbon::now(),
+            'end_date' => Carbon::now()->addMonth($paket->duration),
+            'fee' => $company->fee_reseller ?? 0,
+        ]);
+        $amount = $paket->price + $customer->company->fee_reseller;
+        Subscription::find($subs->id)->update(['tagihan' => $amount]);
+
+
+        return redirect()->back();
     }
 }
