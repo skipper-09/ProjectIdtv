@@ -45,6 +45,7 @@
                                                 <th>Email</th>
                                                 <th>Fee</th>
                                                 <th>Pemilik</th>
+                                                <th>Referal Kode</th>
                                                 @canany(['update-company','delete-company'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -109,6 +110,10 @@
                     {
                         data: 'owner_id',
                         name: 'owner_id',
+                    },
+                    {
+                        data: 'referal',
+                        name: 'referal',
                     },
                     @canany(['update-company','delete-company'])
                     {

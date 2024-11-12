@@ -58,7 +58,6 @@
                                         </div>
                                     @enderror
                                 </div>
-
                                 <div class="form-group col-12 col-md-6">
                                     <label>Nik<span class="text-danger">*</span></label>
                                     <input type="text" inputmode="numeric" name="nik"
@@ -111,7 +110,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group col-12 col-md-12">
+                                <div class="form-group col-12 col-md-6">
                                     <label>Alamat <span class="text-danger">*</span></label>
                                     <textarea name="address" class="form-control @error('address') is-invalid @enderror" cols="40" rows="20"></textarea>
                                     @error('address')
@@ -120,11 +119,22 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="form-group col-12 col-md-6">
+                                    <label>Kode Referal</label>
+                                    <input type="text" name="referal"
+                                    class="form-control @error('referal') is-invalid @enderror" placeholder="Kode Referal">
+                                    <p class="text-muted">Bila tidak memiliki kode referal bisa dikosongi.</p>
+                                @error('referal')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                                </div>
                                 <button type="submit" class="btn btn-primary">Daftar</button>
                             </div>
                         </div>
                     </form>
-                    <div class="note mt-3">
+                    <div class="note mt-3 px-4">
                         <p><strong>Note:</strong> Perhatian Setelah Melakukan Pendaftaran harap menghubungi admin</p>
                     </div>
                 </div>

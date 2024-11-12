@@ -201,7 +201,7 @@ class CustomerController extends Controller
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request,)
+    public function store(Request $request, )
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -551,60 +551,80 @@ class CustomerController extends Controller
 
     public function customerpost(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
-            'email' => 'required|string|email', // NIK harus 16 digit angka
-            'phone' => 'required', // Nomor telepon hanya angka dan panjang antara 10-15
-            'paket_id' => 'required',
-            'address' => 'required|string|max:500', // Maksimal 500 karakter
-            'username' => 'required|string|unique:customers,username|max:255', // username unik di tabel customers
-            'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
-            'password_confirmation' => 'required|string|min:6|max:255',
-            'address' => 'required|string|max:500', // Maksimal 500 karakter
-        ],
-    [
-        'name.required'=>'Nama Wajib Di Isi',
-        'email.required'=>'Email Wajib Di Isi',
-        'nik.required'=>'Nik Wajib Di Isi',
-        'phone.required'=>'No Telepon Wajib Di Isi',
-        'paket_id.required'=>'Paket Wajib Di Pilih',
-        'address.required'=>'Alamat Wajib Di isi',
-        'username.required'=>'Username Wajib Di isi',
-    ]
-    );
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'nik' => 'required|string|regex:/^[0-9]+$/', // NIK harus 16 digit angka
+                'email' => 'required|string|email', // NIK harus 16 digit angka
+                'phone' => 'required', // Nomor telepon hanya angka dan panjang antara 10-15
+                'paket_id' => 'required',
+                'address' => 'required|string|max:500', // Maksimal 500 karakter
+                'username' => 'required|string|unique:customers,username|max:255', // username unik di tabel customers
+                'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
+                'password_confirmation' => 'required|string|min:6|max:255',
+            ],
+            [
+                'name.required' => 'Nama Wajib Di Isi',
+                'email.required' => 'Email Wajib Di Isi',
+                'nik.required' => 'Nik Wajib Di Isi',
+                'phone.required' => 'No Telepon Wajib Di Isi',
+                'paket_id.required' => 'Paket Wajib Di Pilih',
+                'address.required' => 'Alamat Wajib Di isi',
+                'username.required' => 'Username Wajib Di isi',
+            ]
+        );
 
-        $customer =  Customer::create([
-            'name' => $request->name,
-            'mac' => rand(10000, 99999),
-            'nik' => $request->nik,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'region_id' => 1,
-            'stb_id' => 1,
-            'company_id' => 1,
-            'username' => $request->username,
-            'showpassword' => $request->password,
-            'password' => Hash::make($request->password),
-            'is_active' => 0,
-            'packet_id' => $request->paket_id,
-        ]);
 
-        $company = Company::find($request->company_id);
+        $perusahaan = Company::where('referal', $request->referal)->first();
+        if ($request->referal == '') {
+
+            $customer = Customer::create([
+                'name' => $request->name,
+                'mac' => rand(10000, 99999),
+                'nik' => $request->nik,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'region_id' => 1,
+                'stb_id' => 1,
+                'company_id' => 1,
+                'username' => $request->username,
+                'showpassword' => $request->password,
+                'password' => Hash::make($request->password),
+                'is_active' => 0,
+                'packet_id' => $request->paket_id,
+            ]);
+        } else {
+
+            $customer = Customer::create([
+                'name' => $request->name,
+                'mac' => rand(10000, 99999),
+                'nik' => $request->nik,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'region_id' => 1,
+                'stb_id' => 1,
+                'company_id' => $perusahaan->id,
+                'username' => $request->username,
+                'showpassword' => $request->password,
+                'password' => Hash::make($request->password),
+                'is_active' => 0,
+                'packet_id' => $request->paket_id,
+            ]);
+        }
+
         $paket = Package::find($request->paket_id);
-
         $subs = Subscription::create([
             'customer_id' => $customer->id,
             'packet_id' => $request->paket_id,
             'start_date' => Carbon::now(),
             'end_date' => Carbon::now()->addMonth($paket->duration),
-            'fee' => $company->fee_reseller ?? 0,
-            'status' => false,        
+            'fee' => $perusahaan->fee_reseller ?? 0,
+            'status' => false,
         ]);
         $amount = $paket->price + $customer->company->fee_reseller;
         Subscription::find($subs->id)->update(['tagihan' => $amount]);
 
 
-        return redirect()->back()->with('success','Pendaftaran Berhasil Download Aplikasi Dan Bayar di aplikasi');
+        return redirect()->back()->with('success', 'Pendaftaran Berhasil Download Aplikasi Dan Bayar di aplikasi');
     }
 }

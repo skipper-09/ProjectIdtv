@@ -18,7 +18,7 @@ class PaketSeeder extends Seeder
         Package::insert([
             'name' => 'Paket Minimum',
             'duration' => 1,
-            'price' => '10000'
+            'price' => '20000'
         ]);
     }
 }

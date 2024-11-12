@@ -101,6 +101,7 @@
                                     <table class="table-striped table" id="dataTable">
                                         <thead>
                                             <tr>
+                                                <th>No</th>
                                                 <th>Nik</th>
                                                 <th>Nama</th>
                                                 <th>Mac</th>
@@ -173,13 +174,13 @@
                 },
                
                 columns: [
-                    // {
-                    //     data: 'DT_RowIndex',
-                    //     orderable: false,
-                    //     searchable: false,
-                    //     width: '10px',
-                    //     class:'text-center'
-                    // },
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '10px',
+                        class:'text-center'
+                    },
                     {
                         data: 'nik',
                         name: 'nik',

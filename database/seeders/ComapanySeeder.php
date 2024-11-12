@@ -15,19 +15,16 @@ class ComapanySeeder extends Seeder
      */
     public function run()
     {
-        Company::insert(
+        Company::create(
             [
-                [
-                    'name' => 'PT. CAHAYA SOLUSINDO',
-                    'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
-                    'phone' => '6282111777179',
+                    'name' => 'IDVISION',
+                    'address' => 'Jl Soekarno Hatta(Merr), Ruko este square Kec. Mulyarejo Surabaya',
+                    'phone' => '6282132272224',
                     'user_id' => 3,
-                    'fee_reseller' => 20000,
+                    'fee_reseller' => 0,
                     'rekening' => 23232323232323,
                     'bank_name' => 'BCA',
-                    'owner_rek' => 'Musthopa',
-                ],
-
+                    'owner_rek' => 'IDVISION',
             ]
         );
     }

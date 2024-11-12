@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('rekening');
             $table->string('bank_name');
             $table->string('owner_rek');
+            $table->string('referal')->unique();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->timestamps();
         });

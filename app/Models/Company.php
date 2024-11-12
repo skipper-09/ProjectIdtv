@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Str;
 
 class Company extends Model
 {
@@ -21,9 +22,30 @@ class Company extends Model
         'rekening',
         'bank_name',
         'owner_rek',
+        'referal'
 
     ];
     protected $primaryKey = 'id';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // generate invoice number
+        static::creating(function ($company) {
+            $company->referal = self::generateUniqueReferralCode();
+        });
+    }
+
+    // Method untuk membuat kode referral unik
+    private static function generateUniqueReferralCode()
+    {
+        do {
+            $code = Str::upper(Str::random(6)); 
+        } while (self::where('referal', $code)->exists());
+
+        return $code;
+    }
 
     public function customer()
     {
