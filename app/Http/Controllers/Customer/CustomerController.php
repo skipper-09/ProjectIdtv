@@ -599,6 +599,7 @@ class CustomerController extends Controller
             'start_date' => Carbon::now(),
             'end_date' => Carbon::now()->addMonth($paket->duration),
             'fee' => $company->fee_reseller ?? 0,
+            'status' => false,        
         ]);
         $amount = $paket->price + $customer->company->fee_reseller;
         Subscription::find($subs->id)->update(['tagihan' => $amount]);
