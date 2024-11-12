@@ -113,7 +113,7 @@
 
                                 <div class="form-group col-12 col-md-12">
                                     <label>Alamat <span class="text-danger">*</span></label>
-                                    <textarea name="address" class="form-control" cols="40" rows="20"></textarea>
+                                    <textarea name="address" class="form-control @error('address') is-invalid @enderror" cols="40" rows="20"></textarea>
                                     @error('address')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -137,9 +137,22 @@
     <!-- JS Libraries -->
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
     <!-- Page Specific JS File -->
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    {{-- <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script> --}}
+
+        @if(session('success'))
+        <script>
+            swal({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
     {{-- <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Select2

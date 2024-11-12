@@ -562,7 +562,17 @@ class CustomerController extends Controller
             'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
             'password_confirmation' => 'required|string|min:6|max:255',
             'address' => 'required|string|max:500', // Maksimal 500 karakter
-        ]);
+        ],
+    [
+        'name.required'=>'Nama Wajib Di Isi',
+        'email.required'=>'Email Wajib Di Isi',
+        'nik.required'=>'Nik Wajib Di Isi',
+        'phone.required'=>'No Telepon Wajib Di Isi',
+        'paket_id.required'=>'Paket Wajib Di Pilih',
+        'address.required'=>'Alamat Wajib Di isi',
+        'username.required'=>'Username Wajib Di isi',
+    ]
+    );
 
         $customer =  Customer::create([
             'name' => $request->name,
@@ -594,6 +604,6 @@ class CustomerController extends Controller
         Subscription::find($subs->id)->update(['tagihan' => $amount]);
 
 
-        return redirect()->back();
+        return redirect()->back()->with('success','Pendaftaran Berhasil Download Aplikasi Dan Bayar di aplikasi');
     }
 }
