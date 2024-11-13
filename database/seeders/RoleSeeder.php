@@ -95,7 +95,15 @@ class RoleSeeder extends Seeder
             'create-episode',
             'update-episode',
             'delete-episode',
-            'read-episode-player'
+            'read-episode-player',
+            'read-bank',
+            'create-bank',
+            'update-bank',
+            'delete-bank',
+            'read-reseller',
+            'create-reseller',
+            'update-reseller',
+            'delete-reseller',
         ]);
 
         $administrator->givePermissionTo([
@@ -150,7 +158,15 @@ class RoleSeeder extends Seeder
             'read-income-periode',
             'read-log',
             'clean-log',
-            'read-tagihan'
+            'read-tagihan',
+            'read-bank',
+            'create-bank',
+            'update-bank',
+            'delete-bank',
+            'read-reseller',
+            'create-reseller',
+            'update-reseller',
+            'delete-reseller',
         ]);
 
         $staff->givePermissionTo([

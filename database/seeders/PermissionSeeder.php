@@ -88,7 +88,15 @@ class PermissionSeeder extends Seeder
             'create-episode',
             'update-episode',
             'delete-episode',
-            'read-episode-player'
+            'read-episode-player',
+            'read-bank',
+            'create-bank',
+            'update-bank',
+            'delete-bank',
+            'read-reseller',
+            'create-reseller',
+            'update-reseller',
+            'delete-reseller',
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];

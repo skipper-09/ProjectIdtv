@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Package;
+use App\Models\Bank;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PaketSeeder extends Seeder
+class BankSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,11 +15,8 @@ class PaketSeeder extends Seeder
      */
     public function run()
     {
-        Package::insert([
-            'name' => 'Paket Minimum',
-            'duration' => 1,
-            'price' => '20000',
-            'company_id'=>1,
+        Bank::create([
+            'name'=>'BCA'
         ]);
     }
 }

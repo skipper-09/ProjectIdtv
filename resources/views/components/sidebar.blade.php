@@ -16,7 +16,7 @@
             </li>
             @endcan
 
-            @canany(['read-stb', 'read-region','read-paket'])
+            @canany(['read-stb', 'read-region','read-paket','read-bank'])
             <li class="menu-header">DATA MASTER</li>
             <li class="nav-item dropdown {{ $type_menu === 'master' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i>
@@ -30,6 +30,11 @@
                     @can('read-region')
                     <li class="{{ Request::is('admin/master/region') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('region') }}">Area</a>
+                    </li>
+                    @endcan
+                    @can('read-bank')
+                    <li class="{{ Request::is('admin/master/bank') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('bank') }}">Data Bank</a>
                     </li>
                     @endcan
                 </ul>
@@ -82,24 +87,32 @@
                 </ul>
             </li>
             @endcanany
-            @canany(['read-company', 'read-owner'])
-            <li class="nav-item dropdown {{ $type_menu === 'company' ? 'active' : '' }}">
+            @can('read-company')
+            <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('company') }}"><i class="fas fa-building">
+                    </i> <span>Perusahaan</span>
+                </a>
+            </li>
+            @endcan
+            @canany(['read-reseller', 'read-owner'])
+            <li class="nav-item dropdown {{ $type_menu === 'reseller' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-building"></i>
-                    <span>Perusahaan</span></a>
+                    <span>Reseller Management</span></a>
                 <ul class="dropdown-menu">
-                    {{-- @can('read-owner')
-                    <li class="{{ Request::is('admin/company/owner') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('owner') }}">Pemilik</a>
+                    @can('read-reseller')
+                    <li class="{{ Request::is('admin/reseller-management/reseller') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('resellerdata') }}">Reseller</a>
                     </li>
-                    @endcan --}}
+                    @endcan
                     @can('read-company')
                     <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('company') }}">Perusahaan</a>
+                        <a class="nav-link" href="{{ route('company') }}">Paket Reseller</a>
                     </li>
                     @endcan
                 </ul>
             </li>
             @endcanany
+            
             @can('read-customer')
             <li class="{{ Request::is('admin/customer') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('customer') }}"><i class="fas fa-people-group">

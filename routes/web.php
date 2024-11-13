@@ -14,6 +14,7 @@ use App\Http\Controllers\Keuangan\FeeClaimController;
 use App\Http\Controllers\Keuangan\StatistikController;
 use App\Http\Controllers\Keuangan\SubcriptionController;
 use App\Http\Controllers\Keuangan\TagihanController;
+use App\Http\Controllers\Master\BankController;
 use App\Http\Controllers\Master\PacketController;
 use App\Http\Controllers\Master\RegionController;
 use App\Http\Controllers\Master\StbController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Movie\GenreController;
 use App\Http\Controllers\Movie\MovieController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
+use App\Http\Controllers\Reseller\ResellerController;
 use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
@@ -98,6 +100,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::put('/update/{id}', [RegionController::class, 'update'])->name('region.update');
             Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('region.delete')->middleware('can:delete-region');
         });
+        Route::prefix('bank')->group(function () {
+            Route::get('', [BankController::class, 'index'])->name('bank')->middleware('can:read-bank');
+            Route::get('getData', [BankController::class, 'getData'])->name('bank.getdata');
+            Route::get('/tambah', [BankController::class, 'create'])->name('bank.add')->middleware('can:create-bank');
+            Route::post('store', [BankController::class, 'store'])->name('bank.store');
+            Route::get('/edit/{id}', [BankController::class, 'show'])->name('bank.edit')->middleware('can:update-bank');
+            Route::put('/update/{id}', [BankController::class, 'update'])->name('bank.update');
+            Route::delete('/delete/{id}', [BankController::class, 'destroy'])->name('bank.delete')->middleware('can:delete-bank');
+        });
 
 
         Route::prefix('paket')->group(function () {
@@ -140,6 +151,31 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         });
     });
 
+
+
+    Route::prefix('reseller-management')->group(function () {
+        //reseller
+        Route::prefix('reseller')->group(function () {
+            Route::get('/', [ResellerController::class, 'index'])->name('resellerdata')->middleware('can:read-reseller');
+            Route::get('getData', [ResellerController::class, 'getData'])->name('resellerdata.getdata');
+            Route::get('/tambah', [ResellerController::class, 'create'])->name('resellerdata.add')->middleware('can:create-reseller');
+            Route::post('store', [ResellerController::class, 'store'])->name('resellerdata.store');
+            Route::get('/edit/{id}', [ResellerController::class, 'show'])->name('resellerdata.edit')->middleware('can:update-reseller');
+            Route::put('/update/{id}', [ResellerController::class, 'update'])->name('resellerdata.update');
+            Route::delete('/delete/{id}', [ResellerController::class, 'destroy'])->name('resellerdata.delete')->middleware('can:delete-reseller');
+        });
+
+        // //paket reseller
+        // Route::prefix('paket-reseller')->group(function () {
+        //     Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel')->middleware('can:read-categori');
+        //     Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
+        //     Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
+        //     Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
+        //     Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-categori');
+        //     Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
+        //     Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
+        // });
+    });
 
 
 
