@@ -97,6 +97,10 @@ class PermissionSeeder extends Seeder
             'create-reseller',
             'update-reseller',
             'delete-reseller',
+            'read-resellerpaket',
+            'create-resellerpaket',
+            'update-resellerpaket',
+            'delete-resellerpaket',
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];

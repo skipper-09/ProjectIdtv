@@ -43,4 +43,8 @@ class Reseller extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function resellerpaket(){
+        return $this->hasMany(ResellerPaket::class);
+    }
 }

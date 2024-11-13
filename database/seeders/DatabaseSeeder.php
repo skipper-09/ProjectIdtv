@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             GenreSeeder::class,
             BankSeeder::class,
             ResellerSeeder::class,
+            ResellerPaketSeeder::class,
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

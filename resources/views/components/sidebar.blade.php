@@ -94,7 +94,7 @@
                 </a>
             </li>
             @endcan
-            @canany(['read-reseller', 'read-owner'])
+            @canany(['read-reseller', 'read-resellerpaket'])
             <li class="nav-item dropdown {{ $type_menu === 'reseller' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-building"></i>
                     <span>Reseller Management</span></a>
@@ -104,9 +104,9 @@
                         <a class="nav-link" href="{{ route('resellerdata') }}">Reseller</a>
                     </li>
                     @endcan
-                    @can('read-company')
-                    <li class="{{ Request::is('admin/company') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('company') }}">Paket Reseller</a>
+                    @can('read-resellerpaket')
+                    <li class="{{ Request::is('admin/reseller-management/paket-reseller') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('resellerdata-paket') }}">Paket Reseller</a>
                     </li>
                     @endcan
                 </ul>

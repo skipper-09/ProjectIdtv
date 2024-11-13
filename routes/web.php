@@ -25,6 +25,7 @@ use App\Http\Controllers\Movie\MovieController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Reseller\ResellerController;
+use App\Http\Controllers\Reseller\ResellerPaketController;
 use App\Http\Controllers\Settings\LogController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
@@ -166,15 +167,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         });
 
         // //paket reseller
-        // Route::prefix('paket-reseller')->group(function () {
-        //     Route::get('', [CategoryChanelcontroller::class, 'index'])->name('categori-chanel')->middleware('can:read-categori');
-        //     Route::get('getData', [CategoryChanelcontroller::class, 'getData'])->name('categori-chanel.getdata');
-        //     Route::get('/tambah', [CategoryChanelcontroller::class, 'create'])->name('categori-chanel.add')->middleware('can:create-categori');
-        //     Route::post('store', [CategoryChanelcontroller::class, 'store'])->name('categori-chanel.store');
-        //     Route::get('/edit/{id}', [CategoryChanelcontroller::class, 'show'])->name('categori-chanel.edit')->middleware('can:update-categori');
-        //     Route::put('/update/{id}', [CategoryChanelcontroller::class, 'update'])->name('categori-chanel.update');
-        //     Route::delete('/delete/{id}', [CategoryChanelcontroller::class, 'destroy'])->name('categori-chanel.delete')->middleware('can:delete-categori');
-        // });
+        Route::prefix('paket-reseller')->group(function () {
+            Route::get('', [ResellerPaketController::class, 'index'])->name('resellerdata-paket')->middleware('can:read-resellerpaket');
+            Route::get('getData', [ResellerPaketController::class, 'getData'])->name('resellerdata-paket.getdata');
+            Route::get('/tambah', [ResellerPaketController::class, 'create'])->name('resellerdata-paket.add')->middleware('can:create-resellerpaket');
+            Route::post('store', [ResellerPaketController::class, 'store'])->name('resellerdata-paket.store');
+            Route::get('/edit/{id}', [ResellerPaketController::class, 'show'])->name('resellerdata-paket.edit')->middleware('can:update-resellerpaket');
+            Route::put('/update/{id}', [ResellerPaketController::class, 'update'])->name('resellerdata-paket.update');
+            Route::delete('/delete/{id}', [ResellerPaketController::class, 'destroy'])->name('resellerdata-paket.delete')->middleware('can:delete-resellerpaket');
+        });
     });
 
 
