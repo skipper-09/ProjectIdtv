@@ -102,7 +102,6 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nik</th>
                                                 <th>Nama</th>
                                                 <th>Mac</th>
                                                 <th>Stb</th>
@@ -110,6 +109,7 @@
                                                 <th>Diperpanjang</th>
                                                 <th>Deadline</th>
                                                 <th>Perusahaan</th>
+                                                <th>Owner</th>
                                                 <th>Status</th>
                                                 <th>@can('renew-customer')
                                                     Renew|
@@ -182,10 +182,6 @@
                         class:'text-center'
                     },
                     {
-                        data: 'nik',
-                        name: 'nik',
-                    },
-                    {
                         data: 'name',
                         name: 'name',
                         width: '200px'
@@ -219,6 +215,12 @@
                     {
                         data: 'company',
                         name: 'company',
+                        orderable: false,
+                        searchable: true,
+                    },
+                    {
+                        data: 'reseller',
+                        name: 'reseller',
                         orderable: false,
                         searchable: true,
                     },

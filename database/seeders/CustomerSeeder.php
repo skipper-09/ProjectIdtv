@@ -23,8 +23,8 @@ class CustomerSeeder extends Seeder
             'name' => 'YACUP SUGIARTO / SUTOMO YUWONO - RT5 RW2 KAMPUNG BARU JL JUANDA NO 61',
             'company_id' => 1,
             'region_id' => 1,
-            'packet_id'=>1,
             'stb_id' => 1,
+            'paket_id' => 1,
             'mac' => '064220908733',
             'nik' => '3510072601520002',
             'phone' => '0876544646',
@@ -40,16 +40,14 @@ class CustomerSeeder extends Seeder
             'start_date' => now(),
             'end_date' => now()->addMonth(1),
             'fee'=>0,
-            'tagihan'=> $customer->company->fee_reseller + $customer->paket->price
+            'tagihan'=> 0
         ]);
-
-        $paket = Package::find($subcription->packet_id);
-        $amount = $paket->price + $customer->company->fee_reseller;
+        
         if ($subcription != null) {
             Payment::create([
             'subscription_id' =>$subcription->id,
             'customer_id' =>$customer->id,
-            'amount'=>$amount,
+            'amount'=>20000,
             'fee' =>0,
             'status'=> 'paid',
             'tanggal_bayar'=> now()

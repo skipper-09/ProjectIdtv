@@ -20,7 +20,8 @@ class Subscription extends Model
         'is_claim',
         'midtras_random',
         'midtras_link',
-        'tagihan'
+        'tagihan',
+        'reseller_package_id'
     ];
     protected $primaryKey = 'id';
 
@@ -51,6 +52,10 @@ class Subscription extends Model
     public function paket()
     {
         return $this->belongsTo(Package::class, 'packet_id', 'id');
+    }
+    public function resellerpaket()
+    {
+        return $this->belongsTo(ResellerPaket::class,'reseller_package_id','id');
     }
     public function payment()
     {

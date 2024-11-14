@@ -108,6 +108,10 @@ class RoleSeeder extends Seeder
             'create-resellerpaket',
             'update-resellerpaket',
             'delete-resellerpaket',
+            'read-subscription',
+            'create-subscription',
+            'update-subscription',
+            'delete-subscription',
         ]);
 
         $administrator->givePermissionTo([
@@ -175,6 +179,10 @@ class RoleSeeder extends Seeder
             'create-resellerpaket',
             'update-resellerpaket',
             'delete-resellerpaket',
+            'read-subscription',
+            'create-subscription',
+            'update-subscription',
+            'delete-subscription',
         ]);
 
         $staff->givePermissionTo([

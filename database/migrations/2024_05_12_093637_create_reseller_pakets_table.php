@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('reseller_id');
             $table->string('name');
             $table->decimal('price', 10, 0);
+            $table->decimal('total', 10, 0);
             $table->boolean('status')->default(true);
             $table->foreign('paket_id')->references('id')->on('packages')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('reseller_id')->references('id')->on('resellers')->onDelete('cascade')->onUpdate('cascade');

@@ -18,7 +18,13 @@ class SubcriptionController extends Controller
     public function getData(Request $request)
     {
         $customerId = $request->input('id');
-        $subcription = Subscription::with(['customer', 'paket'])->where('customer_id', $customerId)->orderByDesc('id')->get();
+        $cus = Customer::find($customerId);
+        if ($cus->reseller_id == null) {
+            $subcription = Subscription::with(['customer', 'paket'])->where('customer_id', $customerId)->orderByDesc('id')->get();
+        }else{
+            $subcription = Subscription::with(['customer', 'resellerpaket'])->where('customer_id', $customerId)->orderByDesc('id')->get();
+        }
+
 
         $hidedelete = $subcription->filter(function ($item) {
             return $item->end_date < now();
@@ -83,11 +89,11 @@ class SubcriptionController extends Controller
 
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('company', function ($data) {
-            return $data->customer->company->name;
+            return $data->customer->company->name ?? '';
         })->editColumn('paket', function ($data) {
-            return $data->paket->name;
+            return  $data->customer->reseller_id == null ?$data->paket->name : $data->resellerpaket->name;
         })->editColumn('nominal', function ($data) {
-            return 'Rp' . ' ' . number_format($data->paket->price);
+            return $data->customer->reseller_id == null ? 'Rp' . ' ' . number_format($data->paket->price) :'Rp' . ' ' . number_format($data->resellerpaket->total) ;
         })->editColumn('invoices', function ($data) {
             return $data->status == 1 ? $data->invoices : $data->invoices . "<span class='badge badge-danger ml-1'>Unpaid</span>";
         })->rawColumns(['action', 'company', 'paket', 'nominal', 'invoices'])->make(true);

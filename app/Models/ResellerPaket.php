@@ -13,6 +13,7 @@ class ResellerPaket extends Model
         'reseller_id',
         'name',
         'price',
+        'total',
         'status'
     ];
     protected $primaryKey = 'id';
@@ -24,6 +25,11 @@ class ResellerPaket extends Model
     public function paket()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    public function subscription()
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     public function setPriceAttribute($value)

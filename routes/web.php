@@ -296,13 +296,13 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::prefix('keuangan')->group(function () {
         Route::prefix('subcription')->group(
             function () {
-                Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-owner');
+                Route::get('', [SubcriptionController::class, 'index'])->name('keuangan')->middleware('can:read-subscription');
                 Route::get('getData', [SubcriptionController::class, 'getData'])->name('keuangan.getdata');
-                Route::get('/tambah', [SubcriptionController::class, 'create'])->name('keuangan.add')->middleware('can:create-owner');
+                Route::get('/tambah', [SubcriptionController::class, 'create'])->name('keuangan.add')->middleware('can:create-subscription');
                 Route::post('store', [SubcriptionController::class, 'store'])->name('keuangan.store');
-                Route::get('/edit/{id}', [SubcriptionController::class, 'show'])->name('keuangan.edit')->middleware('can:update-owner');
+                Route::get('/edit/{id}', [SubcriptionController::class, 'show'])->name('keuangan.edit')->middleware('can:update-subscription');
                 Route::put('/update/{id}', [SubcriptionController::class, 'update'])->name('keuangan.update');
-                Route::delete('/delete/{id}', [SubcriptionController::class, 'destroy'])->name('keuangan.delete')->middleware('can:delete-owner');
+                Route::delete('/delete/{id}', [SubcriptionController::class, 'destroy'])->name('keuangan.delete')->middleware('can:delete-subscription');
             }
         );
         Route::prefix('income-harian')->group(

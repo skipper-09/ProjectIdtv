@@ -112,6 +112,19 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-12 col-md-12">
+                                    <label>Type <span class="text-danger">*</span></label>
+                                    <select class="form-control select2 @error('type') is-invalid @enderror" name="type" id="type">
+                                        <option value="">Pilih Type</option>
+                                        <option value="reseller">Pelanggan Reseller</option>
+                                        <option value="perusahaan">Pelanggan Perusahaan</option>
+                                    </select>
+                                    @error('type')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-12 col-md-12 d-none" id="perusahaan">
                                     <label>Perusahaan <span class="text-danger">*</span></label>
                                     <select class="form-control select2 @error('company_id') is-invalid @enderror" name="company_id" id="company">
                                         <option value="">Pilih Perusahaan</option>
@@ -126,23 +139,9 @@
                                     </div>
                                     @enderror
                                 </div>
-                                <div class="form-group col-12 col-md-12">
-                                    <label>Customer Sevice <span class="text-danger">*</span></label>
-                                    <select class="form-control select2 @error('user_id') is-invalid @enderror" name="user_id" >
-                                        <option value="">Pilih Customer Sevice</option>
-                                        @foreach ($user as $item)
-                                        <option value="{{ $item->id }}">
-                                            {{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('user_id')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                    @enderror
-                                </div>
                                 
-                                <div class="form-group col-12 col-md-12">
+                                
+                                <div class="form-group col-12 col-md-12 d-none" id="paket">
                                     <label>Paket Pelanggan <span class="text-danger">*</span></label>
                                     <select class="form-control select2 @error('paket_id') is-invalid @enderror"
                                         name="paket_id" id="package">
@@ -153,6 +152,40 @@
                                         @endforeach
                                     </select>
                                     @error('paket_id')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group col-12 col-md-12 d-none" id="reseller">
+                                    <label>Reseller <span class="text-danger">*</span></label>
+                                    <select class="form-control select2 @error('reseller_id') is-invalid @enderror" name="reseller_id" id="reseller">
+                                        <option value="">Pilih Reseller</option>
+                                        @foreach ($reseller as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('reseller_id')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
+                                
+                                
+                                <div class="form-group col-12 col-md-12 d-none" id="resellerpaket">
+                                    <label>Paket Reseller <span class="text-danger">*</span></label>
+                                    <select class="form-control select2 @error('resellerpaket_id') is-invalid @enderror"
+                                        name="resellerpaket_id" id="packagereseller">
+                                        <option value="">Pilih Paket Reseller</option>
+                                        @foreach ($paketreseller as $s)
+                                        <option value="{{ $s->id }}">{{ $s->name }} - Rp. {{ number_format($s->total) }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('resellerpaket_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -231,7 +264,36 @@
     $(document).ready(function() {
     // Inisialisasi Select2 setelah halaman siap
     $('.select2').select2();
-}); --}}
 
 </script>
+}); --}}
+<script>
+    $(document).ready(function($) {
+        
+        $('#type').change(function() {
+            var selected = $('#type').val()
+            if (selected == 'perusahaan') {
+                $('#perusahaan').removeClass('d-none');
+                $('#paket').removeClass('d-none');
+
+                $('#reseller').addClass('d-none');
+                $('#resellerpaket').addClass('d-none');
+               
+            } else if (selected == ''){
+                $('#reseller').addClass('d-none');
+                $('#resellerpaket').addClass('d-none');
+
+                $('#perusahaan').addClass('d-none');
+                $('#paket').addClass('d-none');
+            }else{
+                $('#reseller').removeClass('d-none');
+                $('#resellerpaket').removeClass('d-none');
+
+                $('#perusahaan').addClass('d-none');
+                $('#paket').addClass('d-none');
+            }
+        });
+    });
+</script>
+
 @endpush

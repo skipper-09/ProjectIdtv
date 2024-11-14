@@ -24,12 +24,14 @@ class Customer extends Model
         'nik',
         'company_id',
         'stb_id',
-        'packet_id',
         'region_id',
         'is_active',
         'device_id',
         'is_active',
-        'user_id',
+        'reseller_id',
+        'resellerpaket_id',
+        'paket_id',
+        'type'
     ];
     protected $primaryKey = 'id';
 
@@ -44,15 +46,13 @@ class Customer extends Model
     }
     public function paket()
     {
-        return $this->belongsTo(Package::class, 'packet_id', 'id');
+        return $this->belongsTo(Package::class, 'paket_id', 'id');
     }
+    
+   
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id', 'id');
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
     }
     public function region()
     {
@@ -65,6 +65,12 @@ class Customer extends Model
     public function payment()
     {
         return $this->hasMany(Payment::class);
+    }
+    public function reseller(){
+        return $this->belongsTo(Reseller::class);
+    }
+    public function resellerpaket(){
+        return $this->belongsTo(ResellerPaket::class);
     }
 
     public function curentstream()
@@ -87,7 +93,6 @@ class Customer extends Model
             'region.name',
             'device_id',
             'is_active',
-            'user.name'
         ])->logOnlyDirty();
     }
 
