@@ -243,14 +243,15 @@ class CustomerController extends Controller
             
         ]);
         $resellerpaket = ResellerPaket::find($request->resellerpaket_id);
+        $paketutama = Package::find($request->paket_id);
         $subs = Subscription::create([
             'customer_id' => $customer->id,
             'packet_id' => $request->paket_id == null ? $resellerpaket->paket_id: $request->paket_id ,
             'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id ,
             'start_date' => Carbon::now(),
             'end_date' => $request->end_date,
-            'fee' => $request->paket_id == null ? $resellerpaket->price: 0 ,
-            'tagihan'=> $request->paket_id == null ? $resellerpaket->total : 0  
+            'fee' => $request->paket_id == null ? $resellerpaket->price: $paketutama->price ,
+            'tagihan'=> $request->paket_id == null ? $resellerpaket->total : $paketutama->price  
         ]);
         
 

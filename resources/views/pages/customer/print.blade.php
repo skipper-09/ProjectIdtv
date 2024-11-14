@@ -10,10 +10,12 @@
                 <div class="btn-group btn-group-sm d-print-none"><a style="width: 120px;font-weight: bold"
                         href="javascript:window.print()" class="btn btn-default border text-black-50 shadow-none"><i
                             class="fa fa-print"></i> A4 Print</a>
+                    
                     <a style="font-weight: bold;width: 120px;"
                         href="{{ route('print.thermal', ['id'=>$id,'type'=>$type]) }}"
                         class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-print"></i> POS
                         Print</a>
+                    
                     <a id="finish_btn" href="javascript:window.close()" style="width: 120px;font-weight: bold" href=""
                         class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-check"></i> Selesai</a>
                 </div>
@@ -42,9 +44,9 @@
         <div class="row">
             <div class="col-sm-6 text-sm-end order-sm-1"><strong>Dibayarkan ke :</strong>
                 <address>
-                    {{ $customer->company->name }}<br>
-                    {{ $customer->company->address }}<br>
-                    {{ $customer->company->phone }}
+                    {{ $customer->company->name ?? $customer->reseller->name }}<br>
+                    {{ $customer->company->address ?? $customer->reseller->address }}<br>
+                    {{ $customer->company->phone ?? $customer->reseller->address }}
                 </address>
             </div>
             <div class="col-sm-6 order-sm-0"><strong>Ditagihkan ke :</strong>
@@ -128,7 +130,7 @@
                         </td>
                         <td style=";padding: 3px" class="text-center">{{ $subcription->invoices }}</td>
                         <td style=";padding: 3px" class="text-center">Rp.
-                            {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                            {{ number_format($subcription->tagihan) }}
                         </td>
                     </tr>
                 </tbody>
@@ -141,9 +143,9 @@
                     Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda<br></li>
                 <li class="w-75">
                     Jika informasi pada bukti pembayaran ini ada kesalahan, silahkan hubungi
-                    kami<br><br><b>{{ $customer->company->name }}<br>
-                        {{ $customer->company->address }}<br>
-                        {{ $customer->company->phone }}</b></li>
+                    kami<br><br><b>{{ $customer->company->name ?? $customer->reseller->name }}<br>
+                        {{ $customer->company->address ?? $customer->reseller->address }}<br>
+                        {{ $customer->company->phone ?? $customer->reseller->phone }}</b></li>
             </ul>
         </span></div>
     <hr>

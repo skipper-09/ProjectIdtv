@@ -152,8 +152,8 @@
                 <img src="{{ asset('img/IDTV.png') }}" class="text-center" alt="Company Logo">
             </div>
             <div class="text-center">
-                <b class="company">{{ $customer->company->name }}</b><br>
-                {{ $customer->company->address }}
+                <b class="company">{{ $customer->company->name ?? $customer->reseller->name }}</b><br>
+                {{ $customer->company->address ?? $customer->reseller->address}}
             </div>
             <div style="margin: 10px;"></div>
         </header>

@@ -44,7 +44,7 @@
         </div>
         <label class="col-sm-3 font-weight-bolder">Perusahaan</label>
         <div class="col-sm-9">
-            <label for="">{{ $customer[0]->company->name }}</label>
+            <label for="">{{ $customer[0]->company->name ?? $customer[0]->reseller->name }}</label>
         </div>
         <label class="col-sm-3 font-weight-bolder">Tanggal Aktif</label>
         <div class="col-sm-9">
