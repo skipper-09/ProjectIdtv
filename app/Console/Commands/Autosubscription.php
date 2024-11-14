@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\SendInvoceWa;
 use App\Models\Customer;
 use App\Models\Package;
+use App\Models\ResellerPaket;
 use App\Models\Subscription;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -38,30 +39,48 @@ class Autosubscription extends Command
         $subs = Subscription::where('end_date', '<=', $threeDaysLater)
             ->where('start_date', '>=', $today)->get();
 
-        foreach ($subs as $item) {
-            // Cek apakah sudah ada perpanjangan sebelumnya
-            $existingSubscription = Subscription::where('customer_id', $item->customer_id)
-                ->where('packet_id', $item->packet_id)
-                ->where(function ($query) use ($today, $item) {
-                    $query->where('end_date', '>', $item->end_date);
-                    //                           ->orWhere('status', 0)->whereHas('payment',function($query) use($item){
-// $query->where('subscribetion_id',$item->id);
-//                           });
-                })
-                ->exists();
+            foreach ($subs as $item) {
+
+            $customer = Customer::find($item->customer_id);
+            if ($customer->type == 'perusahaan') {
+                // Cek apakah sudah ada perpanjangan sebelumnya
+                $existingSubscription = Subscription::where('customer_id', $item->customer_id)
+                    ->where('packet_id', $item->packet_id)
+                    ->where(function ($query) use ($today, $item) {
+                        $query->where('end_date', '>', $item->end_date);
+                        //                           ->orWhere('status', 0)->whereHas('payment',function($query) use($item){
+    // $query->where('subscribetion_id',$item->id);
+    //                           });
+                    })
+                    ->exists();
+            }else{
+                 // Cek apakah sudah ada perpanjangan sebelumnya
+                 $existingSubscription = Subscription::where('customer_id', $item->customer_id)
+                 ->where('reseller_package_id', $item->reseller_package_id)
+                 ->where(function ($query) use ($today, $item) {
+                     $query->where('end_date', '>', $item->end_date);
+                     //                           ->orWhere('status', 0)->whereHas('payment',function($query) use($item){
+ // $query->where('subscribetion_id',$item->id);
+ //                           });
+                 })
+                 ->exists();
+            }
+
 
 
 
             $paket = Package::find($item->packet_id);
-            if (!$existingSubscription && $paket) {
+            $resellerpaket = ResellerPaket::find($item->reseller_package_id);
+            if (!$existingSubscription && $paket ||!$existingSubscription && $resellerpaket) {
                 Subscription::create([
                     'customer_id' => $item->customer_id,
                     'packet_id' => $item->packet_id,
+                    'reseller_package_id' => $item->reseller_package_id,
                     'start_date' => null,
                     'end_date' => Carbon::parse($item->end_date)->addMonth($paket->duration)->toDateString(),
                     'status' => false,
-                    'fee' => $item->customer->company->fee_reseller,
-                    'tagihan' => $item->customer->company->fee_reseller + $paket->price
+                    'fee' => $item->fee,
+                    'tagihan' => $item->tagihan
                 ]);
 
 

@@ -129,8 +129,8 @@
                     {
                         name: 'owner',
                         data: 'owner',
-                        // orderable: false,
-                        // searchable: false
+                        orderable: false,
+                        searchable: false
                     },
                     
                 ]

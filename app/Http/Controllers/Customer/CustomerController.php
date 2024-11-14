@@ -250,7 +250,7 @@ class CustomerController extends Controller
             'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id ,
             'start_date' => Carbon::now(),
             'end_date' => $request->end_date,
-            'fee' => $request->paket_id == null ? $resellerpaket->price: $paketutama->price ,
+            'fee' => $request->paket_id == null ? $resellerpaket->price: 0,
             'tagihan'=> $request->paket_id == null ? $resellerpaket->total : $paketutama->price  
         ]);
         

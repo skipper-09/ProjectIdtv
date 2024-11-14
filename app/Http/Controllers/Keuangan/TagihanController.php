@@ -27,7 +27,7 @@ class TagihanController extends Controller
     public function getData()
     {
 
-        $payment = Subscription::whereDoesntHave('payment')->with(['customer','paket'])->get();
+        $payment = Subscription::whereDoesntHave('payment')->with(['customer','paket','resellerpaket'])->get();
         
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
@@ -51,14 +51,17 @@ class TagihanController extends Controller
             return $data->customer->nik;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
-        })->editColumn('owner', function ($data) {
-            return $data->customer->company->name;
+            
         })->editColumn('paket', function ($data) {
-            return $data->paket->name;
+            return $data->customer->type == 'reseller' ? $data->resellerpaket->name : $data->paket->name;
+            
+        })->editColumn('owner', function ($data) {
+            return $data->customer->type == 'reseller' ? $data->customer->reseller->name : $data->customer->company->name;
+            
         })->editColumn('pokok', function ($data) {
-            return number_format($data->paket->price);
+            return number_format($data->tagihan);
         })->editColumn('fee', function ($data) {
-            return number_format($data->customer->company->fee_reseller);
+            return $data->customer->type == 'perusahaan' ? 0 : number_format($data->resellerpaket->price);
         })->editColumn('start_date', function ($data) {
             return
                 $data->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date;
@@ -67,7 +70,7 @@ class TagihanController extends Controller
                 $data->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->end_date;
         })->editColumn('created_at', function ($data) {
             return
-                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at, 'UTC')
+                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
                 ->setTimezone(config('app.timezone'))
                 ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
