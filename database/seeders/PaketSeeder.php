@@ -15,11 +15,18 @@ class PaketSeeder extends Seeder
      */
     public function run()
     {
-        Package::insert([
+        Package::create([
             'name' => 'Paket Minimum',
             'duration' => 1,
             'price' => '20000',
             'company_id'=>1,
+        ]);
+        Package::create([
+            'name' => 'Paket Reseller',
+            'duration' => 1,
+            'price' => '10000',
+            'company_id'=>1,
+            'type_paket'=>'reseller'
         ]);
     }
 }

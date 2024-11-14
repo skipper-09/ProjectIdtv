@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('company_id');
             $table->string('name');
-            $table->integer('price');
+            $table->decimal('price',10,2);
             $table->integer('duration');
+            $table->enum('type_paket',['main','reseller'])->default('main');
+            $table->boolean('status')->default(true);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

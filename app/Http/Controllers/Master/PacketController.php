@@ -27,7 +27,7 @@ class PacketController extends Controller
 
     public function getData()
     {
-        $data = Package::all();
+        $data = Package::with('company')->get();
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -44,7 +44,17 @@ class PacketController extends Controller
             return $data->duration . ' Bulan';
         })->editColumn('price', function ($data) {
             return 'Rp'. ' '.number_format($data->price);
-        })->rawColumns(['action', 'duration','company_id'])->make(true);
+        })->editColumn('company', function ($data) {
+            return $data->company->name;
+        })->editColumn('type', function ($data) {
+            $type = '';
+            $data->type_paket == 'reseller' ? $type = '<span class="badge badge-primary">Reseller</span>' : $type = '<span class="badge badge-success">Utama</span>';
+            return $type;
+        })->editColumn('status', function ($data) {
+            $active = '';
+            $data->status == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            return $active;
+        })->rawColumns(['action', 'duration','company','status','type'])->make(true);
     }
 
   
@@ -53,6 +63,7 @@ class PacketController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Tambah Paket',
+            'company'=>Company::all()
         ];
         return view('pages.paket.add', $data);
     }
@@ -65,6 +76,9 @@ class PacketController extends Controller
             'name' => $request->name,
             'price' => $request->price,
             'duration' => $request->duration,
+            'company_id' => $request->company_id,
+            'status' => $request->status,
+            'type_paket' => $request->type,
         ]);
         return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Paket!']);
     }
@@ -74,7 +88,8 @@ class PacketController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Edit Paket',
-            'paket' => Package::findOrFail($id)
+            'paket' => Package::findOrFail($id),
+            'company'=>Company::all()
         ];
         return view('pages.paket.edit', $data);
     }
@@ -87,6 +102,9 @@ class PacketController extends Controller
         $paket->name = $request->name;
         $paket->price = $request->price;
         $paket->duration = $request->duration;
+        $paket->company_id = $request->company_id;
+        $paket->type_paket = $request->type;
+        $paket->status = $request->status;
         $paket->save();
         return redirect()->route('paket')->with(['status' => 'Success!', 'message' => 'Berhasil Mengubah Paket!']);
     }

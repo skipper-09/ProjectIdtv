@@ -39,7 +39,7 @@ class CustomerSeeder extends Seeder
             'packet_id' => 1,
             'start_date' => now(),
             'end_date' => now()->addMonth(1),
-            'fee'=>$customer->company->fee_reseller,
+            'fee'=>0,
             'tagihan'=> $customer->company->fee_reseller + $customer->paket->price
         ]);
 
@@ -50,7 +50,7 @@ class CustomerSeeder extends Seeder
             'subscription_id' =>$subcription->id,
             'customer_id' =>$customer->id,
             'amount'=>$amount,
-            'fee' =>$customer->company->fee_reseller,
+            'fee' =>0,
             'status'=> 'paid',
             'tanggal_bayar'=> now()
             ]);

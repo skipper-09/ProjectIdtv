@@ -14,6 +14,9 @@ class Package extends Model
         'name',
         'price',
         'duration',
+        'company_id',
+        'type_paket',
+        'status'
     ];
     protected $primaryKey = 'id';
 
@@ -22,6 +25,10 @@ class Package extends Model
     public function paket()
     {
         return $this->hasMany(Package::class);
+    }
+
+    public function company(){
+        return $this->belongsTo(Company::class);
     }
 
 

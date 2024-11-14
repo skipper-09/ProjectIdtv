@@ -40,8 +40,11 @@
                                         <thead>
                                             <tr>
                                                 <th>Nama</th>
+                                                <th>Type</th>
                                                 <th>Harga</th>
                                                 <th>Bulan</th>
+                                                <th>Perusahaan</th>
+                                                <th>Status</th>
                                                 @canany(['update-paket', 'delete-paket'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -84,6 +87,10 @@
                         data: 'name',
                         name: 'name',
                     },
+                    {
+                        data: 'type',
+                        name: 'type',
+                    },
                 {
                         data: 'price',
                         name: 'price',
@@ -92,6 +99,14 @@
                 {
                         data: 'duration',
                         name: 'duration',
+                    },
+                {
+                        data: 'company',
+                        name: 'company',
+                    },
+                {
+                        data: 'status',
+                        name: 'status',
                     },
                     
                     @canany(['update-paket', 'delete-paket'])

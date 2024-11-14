@@ -4,6 +4,8 @@
 
 @push('style')
 <!-- CSS Libraries -->
+<link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
 @endpush
 
 @section('main')
@@ -51,6 +53,52 @@
               @error('duration')
               <div class="invalid-feedback">
                 {{$message}}
+              </div>
+              @enderror
+            </div>
+            <div class="form-group col-12 col-md-6">
+              <label>Perusahaan <span class="text-danger">*</span></label>
+              <select class="form-control select2 @error('company_id') is-invalid @enderror" name="company_id"
+                id="company">
+                <option value="">Pilih Perusahaan</option>
+                @foreach ($company as $s)
+                <option value="{{ $s->id }}" {{ $s->id == $paket->company_id ? 'selected':'' }}>{{ $s->name }}
+                </option>
+                @endforeach
+              </select>
+              @error('company_id')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+            <div class="form-group col-12 col-md-6">
+              <label>Tipe Paket <span class="text-danger">*</span></label>
+              <select class="form-control select2 @error('type') is-invalid @enderror" name="type" id="type">
+                <option value="">Pilih Tipe Paket</option>
+                <option value="reseller" {{ $paket->type_paket == 'reseller' ? 'selected':'' }}>Reseller
+                </option>
+                <option value="main" {{ $paket->type_paket == 'main' ? 'selected':'' }}>Paket Utama
+                </option>
+              </select>
+              @error('type')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+              @enderror
+            </div>
+            <div class="form-group col-12 col-md-6">
+              <label>Status <span class="text-danger">*</span></label>
+              <select class="form-control select2 @error('status') is-invalid @enderror" name="status" id="status">
+                <option value="">Pilih Status</option>
+                <option value="1" {{ $paket->status == 1 ? 'selected':'' }}>Aktif
+                </option>
+                <option value="0" {{ $paket->status == 0 ? 'selected':'' }}>Tidak Aktif
+                </option>
+              </select>
+              @error('status')
+              <div class="invalid-feedback">
+                {{ $message }}
               </div>
               @enderror
             </div>

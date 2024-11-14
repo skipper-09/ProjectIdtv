@@ -18,34 +18,9 @@ class Company extends Model
         'email',
         'is_active',
         'user_id',
-        'fee_reseller',
-        'rekening',
-        'bank_name',
-        'owner_rek',
-        'referal'
-
     ];
     protected $primaryKey = 'id';
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        // generate invoice number
-        static::creating(function ($company) {
-            $company->referal = self::generateUniqueReferralCode();
-        });
-    }
-
-    // Method untuk membuat kode referral unik
-    private static function generateUniqueReferralCode()
-    {
-        do {
-            $code = Str::upper(Str::random(6)); 
-        } while (self::where('referal', $code)->exists());
-
-        return $code;
-    }
 
     public function customer()
     {

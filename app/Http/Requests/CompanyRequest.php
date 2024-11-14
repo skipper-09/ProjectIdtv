@@ -29,10 +29,6 @@ class CompanyRequest extends FormRequest
             'email' => 'required|email',
             'phone' => 'required|integer',
             'user_id' => 'required',
-            'rekening' => 'required',
-            'bank_name' => 'required',
-            'owner_rek' => 'required',
-            'fee_reseller' => 'required',
         ];
     }
 

@@ -57,6 +57,54 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Perusahaan <span class="text-danger">*</span></label>
+                                <select class="form-control select2 @error('company_id') is-invalid @enderror"
+                                    name="company_id" id="company">
+                                    <option value="">Pilih Perusahaan</option>
+                                    @foreach ($company as $s)
+                                    <option value="{{ $s->id }}">{{ $s->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @error('company_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Tipe Paket <span class="text-danger">*</span></label>
+                                <select class="form-control select2 @error('type') is-invalid @enderror"
+                                    name="type" id="type">
+                                    <option value="">Pilih Tipe Paket</option>
+                                    <option value="reseller">Reseller
+                                    </option>
+                                    <option value="main">Paket Utama
+                                    </option>
+                                </select>
+                                @error('type')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                                <label>Status <span class="text-danger">*</span></label>
+                                <select class="form-control select2 @error('status') is-invalid @enderror"
+                                    name="status" id="status">
+                                    <option value="">Pilih Status</option>
+                                    <option value="1">Aktif
+                                    </option>
+                                    <option value="0">Tidak Aktif
+                                    </option>
+                                </select>
+                                @error('status')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer text-left">

@@ -25,8 +25,24 @@ class PaketRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric',
             'duration' => 'required',
+            'company_id' => 'required',
+            'status' => 'required',
+            'type' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nama Waji di isi',
+            'price.required' => 'harga Waji di isi',
+            'price.numeric' => 'Input Harga Harus Angka',
+            'company_id.required' => 'Perusahaan Wajib Dipilih',
+            'status.required' => 'Status Wajib Dipilih',
+            'type.required' => 'Tipe Paket Wajib Dipilih',
+            
         ];
     }
 }

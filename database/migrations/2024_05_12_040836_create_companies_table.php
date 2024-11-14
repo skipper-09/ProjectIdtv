@@ -20,11 +20,7 @@ return new class extends Migration
             $table->longText('address');
             $table->string('phone');
             $table->string('email')->nullable();
-            $table->integer('fee_reseller')->nullable();
-            $table->string('rekening');
-            $table->string('bank_name');
-            $table->string('owner_rek');
-            $table->string('referal')->unique();
+           $table->boolean('is_active')->default(true);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');
             $table->timestamps();
         });

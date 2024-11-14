@@ -43,6 +43,7 @@
                                                 <th>Nama</th>
                                                 <th>Owner</th> 
                                                 <th>Paket Utama</th> 
+                                                <th>Durasi Paket</th> 
                                                 <th>Nonimal</th> 
                                                 <th>Total Harga Jual</th> 
                                                 <th>Status</th> 
@@ -104,6 +105,10 @@
                     {
                         data: 'paketutama',
                         name: 'paketutama',
+                    },
+                    {
+                        data: 'durationpaket',
+                        name: 'durationpaket',
                     },
                     {
                         data: 'price',
