@@ -141,6 +141,8 @@
             var start = @json($start_date);
             var end = @json($end_date);
             var company_id = @json($company_id);
+            var reseller_id = @json($reseller_id);
+            var type = @json($type);
 
             $('#dataTable').DataTable({
                 processing: true,
@@ -150,7 +152,9 @@
                     data: {
                         start_date: start,
                         end_date: end,
-                        company_id: company_id
+                        company_id: company_id,
+                        reseller_id: reseller_id,
+                        type: type
                     }
                 },
                 columns: [{

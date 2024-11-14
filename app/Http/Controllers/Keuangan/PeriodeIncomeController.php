@@ -48,9 +48,9 @@ class PeriodeIncomeController extends Controller
         }
 
         $perusahaan = '';
-        if ($company == null || $reseller == null) {
+        if ($company == null && $reseller == null) {
             $perusahaan = 'Semua Perusahaan';
-        } elseif ($company != null && $reseller == null) {
+        } else if ($company != null && $reseller == null) {
             $perusahaan = $company->name;
         } else if ($company == null && $reseller != null) {
             $perusahaan = $reseller->name;
@@ -123,13 +123,13 @@ class PeriodeIncomeController extends Controller
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
         })->editColumn('paket', function ($data) {
-            return $data->subscrib->paket->name;
+            return $data->customer->type == 'perusahaan' ? $data->subscrib->paket->name : $data->subscrib->resellerpaket->name;
         })->editColumn('pokok', function ($data) {
             return number_format($data->subscrib->paket->price);
         })->editColumn('fee_reseller', function ($data) {
             return $data->customer->type == 'perusahaan' ? 0 : number_format($data->customer->resellerpaket->price);
         })->editColumn('owner', function ($data) {
-            return $data->customer->company->name;
+            return $data->customer->type == 'perusahaan' ? $data->customer->company->name : $data->customer->reseller->name;
         })->editColumn('start_date', function ($data) {
             return
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date;

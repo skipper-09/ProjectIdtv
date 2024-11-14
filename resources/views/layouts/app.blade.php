@@ -82,7 +82,10 @@
 
         </div>
     </div>
-    @include('components.modal-component.incomeperiode', ['companies' => $companies])
+    @include('components.modal-component.incomeperiode', [
+        'companies' => $companies,
+        'reseller' => $reseller,
+    ])
 
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
