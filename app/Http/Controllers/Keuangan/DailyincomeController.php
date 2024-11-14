@@ -54,24 +54,22 @@ class DailyincomeController extends Controller
                 $button .= ' <button class="btn btn-sm btn-danger action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('dailyincome.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Hapus"><i
                                                      class="fa-solid fa-trash"></i></button>';
             }
-            
+
             return '<div class="d-flex">' . $button . '</div>';
-        })->editColumn('nik', function ($data) {
-            return $data->customer->nik;
         })->editColumn('invoice', function ($data) {
             return $data->subscrib->invoices;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
         })->editColumn('owner', function ($data) {
-            return $data->customer->company->name;
+            return $data->customer->type == 'perusahaan' ? $data->customer->company->name : $data->customer->reseller->name;
         })->editColumn('paket', function ($data) {
-            return $data->subscrib->paket->name;
+            return $data->customer->type == 'reseller' ? $data->subscrib->resellerpaket->name : $data->subscrib->paket->name;
         })->editColumn('pokok', function ($data) {
             return number_format($data->subscrib->paket->price);
         })->editColumn('payment_type', function ($data) {
             return $data->payment_type;
         })->editColumn('fee', function ($data) {
-            return number_format($data->customer->company->fee_reseller);
+            return $data->customer->type == 'perusahaan' ? 0 : number_format($data->customer->resellerpaket->price);
         })->editColumn('start_date', function ($data) {
             return
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date;
@@ -80,7 +78,7 @@ class DailyincomeController extends Controller
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->end_date;
         })->editColumn('created_at', function ($data) {
             return
-                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at, 'UTC')
+                Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
                 ->setTimezone(config('app.timezone'))
                 ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
@@ -93,7 +91,7 @@ class DailyincomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee', 'payment_type', 'invoice'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'start_date', 'owner', 'pokok', 'fee', 'payment_type', 'invoice'])->make(true);
     }
 
 

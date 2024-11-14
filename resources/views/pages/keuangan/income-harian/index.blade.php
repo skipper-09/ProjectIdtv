@@ -84,7 +84,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Invoice</th>
-                                                    <th>Nik</th>
+
                                                     <th>Nama</th>
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
@@ -139,10 +139,7 @@
                         name: 'invoice',
                         data: 'invoice',
                     },
-                    {
-                        name: 'nik',
-                        data: 'nik',
-                    },
+
                     {
                         name: 'customer',
                         data: 'customer',

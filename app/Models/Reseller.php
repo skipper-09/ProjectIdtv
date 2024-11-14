@@ -5,11 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+
 class Reseller extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'company_id','user_id','bank_id','name','address','phone','referal_code','rekening','owner_rek'
+        'company_id',
+        'user_id',
+        'bank_id',
+        'name',
+        'address',
+        'phone',
+        'referal_code',
+        'rekening',
+        'owner_rek'
     ];
     protected $primaryKey = 'id';
 
@@ -27,24 +36,34 @@ class Reseller extends Model
     private static function generateUniqueReferralCode()
     {
         do {
-            $code = Str::upper(Str::random(6)); 
+            $code = Str::upper(Str::random(6));
         } while (self::where('referal_code', $code)->exists());
 
         return $code;
     }
 
 
-    public function bank(){
+    public static function getAllItems()
+    {
+
+        return Reseller::all();
+    }
+
+    public function bank()
+    {
         return $this->belongsTo(Bank::class);
     }
-    public function company(){
+    public function company()
+    {
         return $this->belongsTo(Company::class);
     }
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function resellerpaket(){
+    public function resellerpaket()
+    {
         return $this->hasMany(ResellerPaket::class);
     }
 }

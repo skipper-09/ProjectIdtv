@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Reseller;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,13 +23,37 @@ class PeriodeIncomeController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
+        $type = $request->input('type');
+        $reseller_id = $request->input('reseller_id');
         $company = Company::find($company_id);
-        if ($company_id == null) {
-            $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        $reseller = Reseller::find($reseller_id);
+        if ($company_id == null || $reseller_id == null) {
+            if ($type == 'perusahaan') {
+                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            } else {
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
+                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            }
         } else {
-            $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
-                $query->where('company_id', $company_id);
-            })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            $type == 'reseller' ?
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get() :
+                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        }
+
+        $perusahaan = '';
+        if ($company == null || $reseller == null) {
+            $perusahaan = 'Semua Perusahaan';
+        } elseif ($company != null && $reseller == null) {
+            $perusahaan = $company->name;
+        } else if ($company == null && $reseller != null) {
+            $perusahaan = $reseller->name;
         }
         $data = [
             'type_menu' => 'Keuangan',
@@ -36,7 +61,9 @@ class PeriodeIncomeController extends Controller
             'start_date' => $startDate,
             'end_date' => $endDate,
             'company_id' => $company_id,
-            'company' => $company == null ? 'Semua Perusahaan' : $company->name,
+            'type' => $type,
+            'reseller_id' => $reseller_id,
+            'company' => $perusahaan,
             'income' => $payment->sum('amount')
 
         ];
@@ -47,14 +74,29 @@ class PeriodeIncomeController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
+        $reseller_id = $request->input('reseller_id');
+        $type = $request->input('type');
 
-        if ($company_id == null) {
-            $payment = Payment::with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        if ($company_id == null || $reseller_id == null) {
+            if ($type == 'perusahaan') {
+                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            } else {
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
+                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            }
         } else {
-            $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
-                $query->where('company_id', $company_id);
-            })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+            $type == 'reseller' ?
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get() :
+                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
+                    $query->where('company_id', $company_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
         }
+
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -70,10 +112,10 @@ class PeriodeIncomeController extends Controller
             // }
 
 
-            
-                $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
+
+            $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
-            
+
 
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('nik', function ($data) {
@@ -85,7 +127,7 @@ class PeriodeIncomeController extends Controller
         })->editColumn('pokok', function ($data) {
             return number_format($data->subscrib->paket->price);
         })->editColumn('fee_reseller', function ($data) {
-            return number_format($data->customer->company->fee_reseller);
+            return $data->customer->type == 'perusahaan' ? 0 : number_format($data->customer->resellerpaket->price);
         })->editColumn('owner', function ($data) {
             return $data->customer->company->name;
         })->editColumn('start_date', function ($data) {

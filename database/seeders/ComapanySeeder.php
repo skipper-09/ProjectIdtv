@@ -17,10 +17,10 @@ class ComapanySeeder extends Seeder
     {
         Company::create(
             [
-                    'name' => 'IDVISION',
-                    'address' => 'Jl Soekarno Hatta(Merr), Ruko este square Kec. Mulyarejo Surabaya',
-                    'phone' => '6282132272224',
-                    'user_id' => 3,
+                'name' => 'IDVISION',
+                'address' => 'Jl Soekarno Hatta(Merr), Ruko este square Kec. Mulyarejo Surabaya',
+                'phone' => '6282132272224',
+                'user_id' => 2,
             ]
         );
     }

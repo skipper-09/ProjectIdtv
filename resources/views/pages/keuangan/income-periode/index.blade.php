@@ -87,7 +87,7 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
-                                                    <th>Nik</th>
+                                                    <th>No</th>
                                                     <th>Nama</th>
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
@@ -97,7 +97,7 @@
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
                                                     <th>Owner</th>
-                                                        <th>Action</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                         </table>
@@ -154,8 +154,11 @@
                     }
                 },
                 columns: [{
-                        name: 'nik',
-                        data: 'nik',
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '10px',
+                        class: 'text-center'
                     },
                     {
                         name: 'customer',
@@ -193,14 +196,14 @@
                         name: 'owner',
                         data: 'owner',
                     },
-                    
-                        {
-                            data: 'action',
-                            name: 'action',
-                            orderable: false,
-                            searchable: false,
-                        }
-                    
+
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                    }
+
                 ],
                 dom: 'Bfrtip', // This is needed for the buttons to appear
                 buttons: [{
