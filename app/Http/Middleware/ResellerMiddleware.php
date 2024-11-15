@@ -17,8 +17,8 @@ class ResellerMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        $reseller = Reseller::getAllItems(); // Mengambil data dari model
-        view()->share('reseller', $reseller);
+        $resellers = Reseller::getAllItems(); // Mengambil data dari model
+        view()->share('resellers', $resellers);
 
         return $next($request);
     }

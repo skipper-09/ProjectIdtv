@@ -27,24 +27,33 @@ class PeriodeIncomeController extends Controller
         $reseller_id = $request->input('reseller_id');
         $company = Company::find($company_id);
         $reseller = Reseller::find($reseller_id);
-        if ($company_id == null || $reseller_id == null) {
-            if ($type == 'perusahaan') {
-                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
-                    $query->where('company_id', $company_id);
-                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+        
+        
+        if ($type == 'reseller') {
+            if ($reseller_id != null) {
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id)->whereNull('company_id');
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
-                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
-                    $query->where('reseller_id', $reseller_id);
-                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+                $payment = Payment::whereHas('customer', function ($query) use($reseller_id,$company_id) {
+                    $query->where('company_id',$company_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
-        } else {
-            $type == 'reseller' ?
-                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
-                    $query->where('reseller_id', $reseller_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get() :
+        }
+        
+        
+        else if ($type == 'perusahaan') {
+            if ($company_id != null) {
+                // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
+            } else {
+                // If company_id is null, show data for all companies
+                $payment = Payment::whereHas('customer', function ($query) use($reseller_id) {
+                    $query->where('reseller_id',$reseller_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
+            }
         }
 
         $perusahaan = '';
@@ -77,26 +86,30 @@ class PeriodeIncomeController extends Controller
         $reseller_id = $request->input('reseller_id');
         $type = $request->input('type');
 
-        if ($company_id == null || $reseller_id == null) {
-            if ($type == 'perusahaan') {
-                $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
-                    $query->where('company_id', $company_id);
-                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+         
+        if ($type == 'reseller') {
+            if ($reseller_id != null) {
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id)->whereNull('company_id');
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
-                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
-                    $query->where('reseller_id', $reseller_id);
-                })->with(['customer', 'subscrib'])->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+                $payment = Payment::whereHas('customer', function ($query) use($reseller_id,$company_id) {
+                    $query->where('company_id',$company_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
-        } else {
-            $type == 'reseller' ?
-                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
-                    $query->where('reseller_id', $reseller_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get() :
+        }else if ($type == 'perusahaan') {
+            if ($company_id != null) {
+                // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->orderBy('id', 'desc')->get();
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
+            } else {
+                // If company_id is null, show data for all companies
+                $payment = Payment::whereHas('customer', function ($query) use($reseller_id) {
+                    $query->where('reseller_id',$reseller_id);
+                })->whereBetween('created_at', [$startDate, $endDate])->get();
+            }
         }
-
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -110,9 +123,6 @@ class PeriodeIncomeController extends Controller
             //     $button .= ' <button class="btn btn-sm btn-warning action mr-1" data-id=' . $item->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $item->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Re New Pelanggan"><i
             //                                          class="fa-solid fa-bolt"></i></button>';
             // }
-
-
-
             $button .= ' <a href="' . route('print.standart', ['id' => $item->id, 'type' => 'income']) . '" class="btn btn-sm btn-success action mr-1" target="_blank" data-id=' . $item->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="PRINT INVOICE"><i
                                                 class="fa-solid fa-print"></i></a>';
 
@@ -139,8 +149,8 @@ class PeriodeIncomeController extends Controller
         })->editColumn('created_at', function ($data) {
             return
                 Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
-                ->setTimezone(config('app.timezone'))
-                ->format('Y-m-d H:i:s');
+                    ->setTimezone(config('app.timezone'))
+                    ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'paid') {

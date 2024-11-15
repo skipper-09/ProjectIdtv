@@ -84,7 +84,7 @@
     </div>
     @include('components.modal-component.incomeperiode', [
         'companies' => $companies,
-        'reseller' => $reseller,
+        'reseller' => $resellers,
     ])
 
     <!-- General JS Scripts -->
