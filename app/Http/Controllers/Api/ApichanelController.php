@@ -10,6 +10,7 @@ use App\Models\Chanel;
 use App\Models\Customer;
 use App\Models\Package;
 use App\Models\Payment;
+use App\Models\ResellerPaket;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -87,7 +88,7 @@ class ApichanelController extends Controller
     public function createPayment(Request $request)
     {
         $invoiceid = $request->query('order_id');
-        $sub = Subscription::with(['customer', 'paket'])->where('invoices', $invoiceid)->where('status', 0)->first();
+        $sub = Subscription::with(['customer', 'paket','resellerpaket'])->where('invoices', $invoiceid)->where('status', 0)->first();
 
         if ($sub == null) {
             return response()->json([
@@ -96,6 +97,7 @@ class ApichanelController extends Controller
         }
 
         $paket = Package::find($sub->packet_id);
+        $resellerpaket = ResellerPaket::find($sub->reseller_package_id);
         $random = Str::uuid();  // UUID for unique order_id
         $sub->update(['midtras_random' => $random]);
 
@@ -106,7 +108,7 @@ class ApichanelController extends Controller
             ],
             'item_details' => [
                 [
-                    "name" => $paket->name,
+                    "name" => $sub->customer->type == 'reseller' ? $resellerpaket->name : $paket->name,
                     "price" => $sub->tagihan,
                     "quantity" => 1,
                     "merchant_name" => "IDTV",
@@ -135,16 +137,17 @@ class ApichanelController extends Controller
             'expiry' => [
                 "start_time" => date("Y-m-d H:i:s T"),  // Current time in ISO 8601 format with timezone
                 "unit" => "minute",
-                "duration" => 15  // Set to 5 minutes
+                "duration" => 25  // Set to 5 minutes
             ],
         ];
 
         // Authorization using Base64 encoding of Server Key
-        if (env('MIDTRANS_IS_PRODUCTION') == true) {
-            $auth = base64_encode(env('MIDTRANS_PRODUCTION_SERVER_KEY') . ':');
-        } else {
-            $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
-        }
+        // if (env('MIDTRANS_IS_PRODUCTION') == true) {
+        //     $auth = base64_encode(env('MIDTRANS_PRODUCTION_SERVER_KEY') . ':');
+        // } else {
+        //     $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
+        // }
+        $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
         $URL = env('MIDTRANS_URL');
 
         $response = Http::withHeaders([
@@ -177,11 +180,12 @@ class ApichanelController extends Controller
         $gross_amount = $request->input('gross_amount');
         $calculated_signature_key = $request->input('signature_key');
         // Authorization using Base64 encoding of Server Key
-        if (env('MIDTRANS_IS_PRODUCTION') == true) {
-            $auth = env('MIDTRANS_PRODUCTION_SERVER_KEY');
-        } else {
-            $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
-        }
+        // if (env('MIDTRANS_IS_PRODUCTION') == true) {
+        //     $auth = env('MIDTRANS_PRODUCTION_SERVER_KEY');
+        // } else {
+        //     $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
+        // }
+        $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
         // SHA512(order_id + status_code + gross_amount + serverkey);
         $data = $orderId . $statuscode . $gross_amount . $auth;
         $signature_key = hash('sha512', $data);
@@ -201,6 +205,7 @@ class ApichanelController extends Controller
 
         if ($subs) {
             $paket = Package::find($subs->packet_id);
+            $resellerpaket = ResellerPaket::find($subs->reseller_package_id);
             $amount = $subs->tagihan;
 
             switch ($transactionStatus) {
@@ -225,7 +230,7 @@ class ApichanelController extends Controller
                         'subscription_id' => $subs->id,
                         'customer_id' => $subs->customer->id,
                         'amount' => $amount,
-                        'fee' => $subs->customer->company->fee_reseller,
+                        'fee' => $resellerpaket->price,
                         'tanggal_bayar' => now(),
                         'status' => 'paid',
                         'payment_type' => 'midtrans',

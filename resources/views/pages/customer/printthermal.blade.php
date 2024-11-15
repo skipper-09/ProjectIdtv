@@ -177,10 +177,10 @@
                             <td>Nama</td>
                             <td class="text-right">{{ $customer->name }}</td>
                         </tr>
-                        <tr>
+                       {{-- <tr>
                             <td>ID Pelanggan</td>
                             <td class="text-right">{{ $customer->nik }}</td>
-                        </tr>
+                        </tr>  --}}
                     </table>
                 </div>
             </div>
