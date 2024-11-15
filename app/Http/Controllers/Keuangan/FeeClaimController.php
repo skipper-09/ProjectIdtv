@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Keuangan;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Fee_claim;
+use App\Models\Reseller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class FeeClaimController extends Controller
         $data = [
             'type_menu' => 'Keungan',
             'page_name' => 'Fee Reseller',
-            'company' => Company::all()
+            'reseller' => Reseller::all()
         ];
         return view('pages.keuangan.fee-claim.index', $data);
     }
@@ -29,7 +30,7 @@ class FeeClaimController extends Controller
     public function getData(Request $request)
     {
         if ($request->has('filter') && !empty($request->input('filter'))) {
-            $fee = Fee_claim::where('company_id',$request->input('filter'))->orderByDesc('id')->get();
+            $fee = Fee_claim::where('reseller_id',$request->input('filter'))->orderByDesc('id')->get();
         }else{
             $fee = Fee_claim::orderByDesc('id')->get();
         }
@@ -43,15 +44,15 @@ class FeeClaimController extends Controller
             }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('bank_name', function ($data) {
-            return $data->company->bank_name;
+            return $data->reseller->bank->name;
         })->editColumn('rekening', function ($data) {
-            return $data->company->rekening;
+            return $data->reseller->rekening;
         })->editColumn('owner_rek', function ($data) {
-            return $data->company->owner_rek;
+            return $data->reseller->owner_rek;
         })->editColumn('amount', function ($data) {
             return number_format($data->amount);
-        })->editColumn('company', function ($data) {
-            return $data->company->name;
+        })->editColumn('reseller', function ($data) {
+            return $data->reseller->name;
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'pending') {
@@ -67,7 +68,7 @@ class FeeClaimController extends Controller
                 ->setTimezone(config('app.timezone'))
                 ->format('Y-m-d H:i:s');
             ;
-        })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'company', 'amount', 'status'])->make(true);
+        })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'reseller', 'amount', 'status'])->make(true);
 
     }
 
@@ -77,7 +78,7 @@ class FeeClaimController extends Controller
         $feeclaim = Fee_claim::findOrFail($id);
         $data = [
             'type_menu' => 'Keungan',
-            'page_name' => 'Proses' . ' ' . $feeclaim->company->name,
+            'page_name' => 'Proses' . ' ' . $feeclaim->reseller->name,
             'feeclaim' => $feeclaim,
         ];
         return view('pages.keuangan.fee-claim.prosesclaim', $data);

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Reseller;
 
 use App\Http\Controllers\Controller;
-use App\Models\Company;
 use App\Models\DetailClaim;
 use App\Models\Fee_claim;
 use App\Models\Payment;
@@ -23,7 +22,7 @@ class PendapatanController extends Controller
         $reseller = Reseller::where('user_id', auth()->id())->first();
         $canclaim = Subscription::whereHas('customer', function ($query) use ($reseller) {
             $query->where('reseller_id', $reseller->id);
-        })->where('is_claim',0)->sum('fee');
+        })->where('is_claim', 0)->sum('fee');
 
         $data = [
             'type_menu' => 'layout',
@@ -36,14 +35,6 @@ class PendapatanController extends Controller
 
     public function getData()
     {
-        // $company = Company::where('user_id', auth()->id())->first();
-        // $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
-        //     $query->where('status', true);
-        // })->whereHas('customer', function ($query) use ($company) {
-        //     $query->where('company_id', $company->id);
-        // })->whereHas('subscrib', function ($query) {
-        //     $query->where('is_claim', false);
-        // })->get();
         $reseller = Reseller::where('user_id', auth()->id())->first();
         $payment = Payment::with(['customer', 'subscrib'])->whereHas('subscrib', function ($query) {
             $query->where('status', 1);
@@ -82,7 +73,6 @@ class PendapatanController extends Controller
                 $span = '<span class="badge badge-success">Belum Di Claim</span>';
             }
             return $span;
-
         })->editColumn('start_date', function ($data) {
             return
                 $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $data->subscrib->where('customer_id', $data->customer_id)->orderBy('created_at', 'asc')->first()->start_date;
@@ -92,8 +82,8 @@ class PendapatanController extends Controller
         })->editColumn('created_at', function ($data) {
             return
                 Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at, 'UTC')
-                    ->setTimezone(config('app.timezone'))
-                    ->format('Y-m-d H:i:s');
+                ->setTimezone(config('app.timezone'))
+                ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'paid') {
@@ -122,7 +112,7 @@ class PendapatanController extends Controller
         // })->whereHas('subscrib', function ($query) {
         //     $query->where('is_claim', 0);
         // })->sum('fee');
-        
+
         $data = [
             'categori' => null,
             'type_menu' => 'layout',
@@ -142,26 +132,26 @@ class PendapatanController extends Controller
                 return redirect()->back()->with(['status' => 'Error!', 'message' => 'Tidak Ada Data untuk di claim']);
             }
 
-            $company = Company::where('user_id', Auth::id())->first();
+            $reseller = Reseller::where('user_id', Auth::id())->first();
             $claim = Fee_claim::create([
-                'company_id' => $company->id,
+                'reseller_id' => $reseller->id,
                 'amount' => $request->amount ?? 0,
-                'status'=>'pending'
+                'status' => 'pending',
+                // 'bukti_tf' => $request->bukti_tf ?? '',
             ]);
 
             foreach ($subsid as $id) {
                 //inset in table detail claim
                 Subscription::findOrFail($id)->update([
-                    'is_claim'=>1,
+                    'is_claim' => 1,
                 ]);
 
                 DetailClaim::create([
-                   'subscription_id' => $id,
-                   'feeclaim_id' => $claim->id,
+                    'subscription_id' => $id,
+                    'feeclaim_id' => $claim->id,
                 ]);
             }
             return redirect()->route('reseller.historyclaim')->with(['status' => 'Success!', 'message' => 'Request Claim Sedang di proses!']);
-
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
@@ -173,23 +163,25 @@ class PendapatanController extends Controller
 
 
     //history claim
-    public function HistoryClaim(){
+    public function HistoryClaim()
+    {
         try {
-            $company = Company::where('user_id', auth()->id())->first();
-        $canclaim = Subscription::whereHas('customer', function ($query) use ($company) {
-            $query->where('company_id', $company->id);
-        })->where('is_claim',1)->sum('fee');
-        $data = [
-            'type_menu' => 'layout',
-            'page_name' => 'History Claim',
-            'claim' => $canclaim,
-        ];
-        return view('pages.reseller.pendapatan.historyclaim', $data);
+            $reseller = Reseller::where('user_id', auth()->id())->first();
+            $canclaim = Subscription::whereHas('customer', function ($query) use ($reseller) {
+                $query->where('reseller_id', $reseller->id);
+            })->where('is_claim', 1)->sum('fee');
+            $data = [
+                'type_menu' => 'layout',
+                'page_name' => 'History Claim',
+                'claim' => $canclaim,
+            ];
+            return view('pages.reseller.pendapatan.historyclaim', $data);
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 'trace' => $e->getTrace()
-            ], 500);        }
+            ], 500);
+        }
     }
 
 
@@ -198,34 +190,35 @@ class PendapatanController extends Controller
         $data = [
             'type_menu' => '',
             'page_name' => 'Claim',
-            'detail' => Fee_claim::find($id), 
+            'detail' => Fee_claim::find($id),
         ];
         return view('pages.reseller.pendapatan.detail', $data);
     }
 
 
-    public function GetHistory(){
+    public function GetHistory()
+    {
         $fee = Fee_claim::orderByDesc('id')->get();
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
-            
+
             $button = '';
-        if ($fee->status == 'pending') {
-            $button = '<span class="badge badge-success">Sedang dicek</span>';
-        }else{
-            $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $fee->id . ' data-type="show" data-route="' . route('reseller.detail', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
+            if ($fee->status == 'pending') {
+                $button = '<span class="badge badge-success">Sedang dicek</span>';
+            } else {
+                $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $fee->id . ' data-type="show" data-route="' . route('reseller.detail', ['id' => $fee->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
             class="fas fa-eye"></i></button>';
-        }
+            }
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('bank_name', function ($data) {
-            return $data->company->bank_name;
+            return $data->reseller->bank->name;
         })->editColumn('rekening', function ($data) {
-            return $data->company->rekening;
+            return $data->reseller->rekening;
         })->editColumn('owner_rek', function ($data) {
-            return $data->company->owner_rek;
+            return $data->reseller->owner_rek;
         })->editColumn('amount', function ($data) {
             return number_format($data->amount);
-        })->editColumn('company', function ($data) {
-            return $data->company->name;
+        })->editColumn('reseller', function ($data) {
+            return $data->reseller->name;
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'pending') {
@@ -239,8 +232,7 @@ class PendapatanController extends Controller
         })->editColumn('created_at', function ($data) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
                 ->setTimezone(config('app.timezone'))
-                ->format('Y-m-d H:i:s');
-            ;
-        })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'company', 'amount', 'status'])->make(true);
+                ->format('Y-m-d H:i:s');;
+        })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'reseller', 'amount', 'status'])->make(true);
     }
 }
