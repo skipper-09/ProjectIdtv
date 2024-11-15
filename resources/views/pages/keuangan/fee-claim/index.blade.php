@@ -22,7 +22,7 @@
             </div>
 
             <div class="section-body">
-               
+
                 {{-- <h2 class="section-title">This is Example Page</h2>
             <p class="section-lead">This page is just an example for you to create your own page.</p> --}}
                 <div class="section-body">
@@ -30,18 +30,18 @@
                         <div class="col-12">
                             <div class="card">
                                 @if (!Auth::user()->hasRole('Reseller'))
-                                <div class="card-header row">
-                                  <div class="form-group col-6 col-md-4">
-                                      <label>Filter Perusahaan <span class="text-danger">*</span></label>
-                                      <select class="form-control select2 filter" id="Filter" name="company_id">
-                                          <option value="">Filter Perusahaan</option>
-                                          @foreach ($company as $item)
-                                          <option value="{{ $item->id }}">
-                                              {{ $item->name }}</option>
-                                          @endforeach
-                                      </select>
-                                  </div>
-                              </div>
+                                    <div class="card-header row">
+                                        <div class="form-group col-6 col-md-4">
+                                            <label>Filter Reseller <span class="text-danger">*</span></label>
+                                            <select class="form-control select2 filter" id="Filter" name="reseller_id">
+                                                <option value="">Filter Reseller</option>
+                                                @foreach ($reseller as $item)
+                                                    <option value="{{ $item->id }}">
+                                                        {{ $item->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 @endif
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -54,7 +54,7 @@
                                                     <th>Jumlah</th>
                                                     <th>Tanggal Pengajuan</th>
                                                     <th>Status</th>
-                                                    <th>Perusahaan</th>
+                                                    <th>Reseller</th>
                                                     @canany(['proses-feeclaim'])
                                                         <th>Action</th>
                                                     @endcanany
@@ -95,14 +95,13 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url:'{{ route('feeclaim.getdata') }}',
-                    type:'GET',
-                    data: function(d){
+                    url: '{{ route('feeclaim.getdata') }}',
+                    type: 'GET',
+                    data: function(d) {
                         d.filter = $('#Filter').find(":selected").val()
                     }
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'bank_name',
                         name: 'bank_name',
                     },
@@ -110,7 +109,7 @@
                         data: 'rekening',
                         name: 'rekening',
                     },
-                    
+
                     {
                         data: 'owner_rek',
                         name: 'owner_rek',
@@ -123,14 +122,14 @@
                         data: 'created_at',
                         name: 'created_at',
                     },
-                    
+
                     {
                         data: 'status',
                         name: 'status',
                     },
                     {
-                        data: 'company',
-                        name: 'company',
+                        data: 'reseller',
+                        name: 'reseller',
                     },
 
                     @canany(['proses-feeclaim'])
@@ -145,9 +144,9 @@
             });
 
 
-            $('.filter').on('change',function(){
+            $('.filter').on('change', function() {
                 let idfilterselected = $('#Filter').find(":selected").val();
-                table.ajax.reload(false,null);
+                table.ajax.reload(false, null);
             })
             @if (Session::has('message'))
                 iziToast.success({

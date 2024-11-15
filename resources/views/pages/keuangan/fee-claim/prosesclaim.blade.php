@@ -31,7 +31,7 @@
                   <div class="row">
                     <div class="form-group col-12 col-md-6">
                       <label>Nama Bank <span class="text-danger">*</span></label>
-                      <input type="text" readonly value="{{$feeclaim->company->bank_name }}" class="form-control @error('bank_name') is-invalid @enderror">
+                      <input type="text" readonly value="{{$feeclaim->reseller->bank->name }}" class="form-control @error('bank_name') is-invalid @enderror">
                       @error('bank_name') 
                       <div class="invalid-feedback">
                           {{$message}}
@@ -40,7 +40,7 @@
                     </div>
                   <div class="form-group col-12 col-md-6">
                       <label>Nomor Rekening <span class="text-danger">*</span></label>
-                      <input type="text" name="rekening" readonly value="{{ $feeclaim->company->rekening }}" class="form-control @error('rekening') is-invalid @enderror">
+                      <input type="text" name="rekening" readonly value="{{ $feeclaim->reseller->rekening }}" class="form-control @error('rekening') is-invalid @enderror">
                       @error('rekening')
                       <div class="invalid-feedback">
                           {{$message}}
@@ -49,7 +49,7 @@
                   </div>
                   <div class="form-group col-12 col-md-6">
                     <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
-                    <input type="text" name="owner_name" readonly value="{{ $feeclaim->company->owner_rek }}" class="form-control @error('owner_name') is-invalid @enderror">
+                    <input type="text" name="owner_name" readonly value="{{ $feeclaim->reseller->owner_rek }}" class="form-control @error('owner_name') is-invalid @enderror">
                     @error('owner_name')
                     <div class="invalid-feedback">
                         {{$message}}
