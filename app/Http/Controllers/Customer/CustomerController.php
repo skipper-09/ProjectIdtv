@@ -37,7 +37,7 @@ class CustomerController extends Controller
             $active = Customer::where('is_active', 1)->where('reseller_id', $reseller->id)->get()->count();
             $inactive = Customer::where('is_active', 0)->where('reseller_id', $reseller->id)->get()->count();
             $allcus = Customer::where('reseller_id', $reseller->id)->get()->count();
-        }else {
+        } else {
             $active = Customer::where('is_active', 1)->get()->count();
             $inactive = Customer::where('is_active', 0)->get()->count();
             $allcus = Customer::all()->count();
@@ -66,17 +66,17 @@ class CustomerController extends Controller
 
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib','reseller'])->where('company_id', $company->id)->orderByDesc('id')->get();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $company->id)->orderByDesc('id')->get();
         } else if (auth()->user()->hasRole('CS')) {
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib','reseller'])->where('user_id', auth()->id())->orderByDesc('id')->get();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('user_id', auth()->id())->orderByDesc('id')->get();
         } else {
 
             if ($request->has('filter') && !empty($request->input('filter'))) {
-                $customer = Customer::with(['region', 'stb', 'company', 'subcrib','reseller'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+                $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
 
                 // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
             } else {
-                $customer = Customer::with(['region', 'stb', 'company', 'subcrib','reseller'])->orderByDesc('id')->get();
+                $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->orderByDesc('id')->get();
             }
         }
         return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
@@ -181,7 +181,7 @@ class CustomerController extends Controller
             }
 
             return '<div class="d-flex">' . $button . '</div>';
-        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active','reseller'])->make(true);
+        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active', 'reseller'])->make(true);
     }
 
 
@@ -193,16 +193,33 @@ class CustomerController extends Controller
             'stb' => Stb::all(),
             'region' => Region::all(),
             'company' => Company::all(),
-            'paket' => Package::where('type_paket','main')->get(),
-            'reseller'=>Reseller::all(),
-            'paketreseller'=>ResellerPaket::where('status',1)->get()
+            'paket' => Package::where('type_paket', 'main')->get(),
+            'reseller' => Reseller::all(),
+            'paketreseller' => ResellerPaket::where('status', 1)->get(),
+            'getPaketResellerRoute' => route('customer.getPaketReseller')
         ];
         return view('pages.customer.addcustomer', $data);
     }
 
-    public function store(Request $request, )
+    public function getPaketReseller(Request $request)
     {
-        
+        $resellerId = $request->input('reseller_id');
+
+        if (!$resellerId) {
+            return response()->json(['message' => 'Reseller ID is required'], 400);
+        }
+
+        $paketReseller = ResellerPaket::where('reseller_id', $resellerId)
+            ->where('status', 1)
+            ->get();
+
+        return response()->json($paketReseller);
+    }
+
+
+    public function store(Request $request,)
+    {
+
         $request->validate([
             'name' => 'required|string|max:255',
             'mac' => 'required|string', // MAC address format
@@ -216,7 +233,7 @@ class CustomerController extends Controller
             'password_confirmation' => 'required|string|min:6|max:255',
             'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
             'end_date' => 'required',
-            
+
         ]);
 
         $customer = Customer::create([
@@ -232,24 +249,24 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'reseller_id'=>$request->reseller_id,
-            'type'=>$request->type,
-            'resellerpaket_id'=>$request->resellerpaket_id,
-            'paket_id'=>$request->paket_id,
-            
+            'reseller_id' => $request->reseller_id,
+            'type' => $request->type,
+            'resellerpaket_id' => $request->resellerpaket_id,
+            'paket_id' => $request->paket_id,
+
         ]);
         $resellerpaket = ResellerPaket::find($request->resellerpaket_id);
         $paketutama = Package::find($request->paket_id);
         $subs = Subscription::create([
             'customer_id' => $customer->id,
-            'packet_id' => $request->paket_id == null ? $resellerpaket->paket_id: $request->paket_id ,
-            'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id ,
+            'packet_id' => $request->paket_id == null ? $resellerpaket->paket_id : $request->paket_id,
+            'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id,
             'start_date' => Carbon::now(),
             'end_date' => $request->end_date,
-            'fee' => $request->paket_id == null ? $resellerpaket->price: 0,
-            'tagihan'=> $request->paket_id == null ? $resellerpaket->total : $paketutama->price  
+            'fee' => $request->paket_id == null ? $resellerpaket->price : 0,
+            'tagihan' => $request->paket_id == null ? $resellerpaket->total : $paketutama->price
         ]);
-        
+
 
         //insert to payment table
         Payment::create([
@@ -297,9 +314,9 @@ class CustomerController extends Controller
             'stb' => Stb::all(),
             'region' => Region::all(),
             'company' => Company::all(),
-           'paket' => Package::where('type_paket','main')->get(),
-            'reseller'=>Reseller::all(),
-            'paketreseller'=>ResellerPaket::where('status',1)->get(),
+            'paket' => Package::where('type_paket', 'main')->get(),
+            'reseller' => Reseller::all(),
+            'paketreseller' => ResellerPaket::where('status', 1)->get(),
             'latestsubcribe' => $latestsub,
         ];
 
@@ -338,21 +355,21 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'type'=>$request->type,
-            'resellerpaket_id'=>$request->resellerpaket_id,
-            'paket_id'=>$request->paket_id, 
+            'type' => $request->type,
+            'resellerpaket_id' => $request->resellerpaket_id,
+            'paket_id' => $request->paket_id,
         ]);
         $resellerpaket = ResellerPaket::find($request->resellerpaket_id);
 
         if ($customer->id != null) {
             $subs = Subscription::where('customer_id', $customer->id)->orderBy('id', 'desc')->first();
             $subs->update([
-               'packet_id' => $request->paket_id == null ? $resellerpaket->paket_id: $request->paket_id ,
-            'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id ,
+                'packet_id' => $request->paket_id == null ? $resellerpaket->paket_id : $request->paket_id,
+                'reseller_package_id' => $request->resellerpaket_id == null ? null : $request->resellerpaket_id,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
-                'fee' => $request->paket_id == null ? $resellerpaket->price: 0 ,
-                'tagihan'=> $request->paket_id == null ? $resellerpaket->total : 0 
+                'fee' => $request->paket_id == null ? $resellerpaket->price : 0,
+                'tagihan' => $request->paket_id == null ? $resellerpaket->total : 0
             ]);
         }
 
@@ -411,14 +428,34 @@ class CustomerController extends Controller
 
     public function RenewSubscription($id)
     {
+        // Fetch the most recent subscription for the customer
         $subs = Subscription::where('customer_id', $id)->orderBy('id', 'desc')->first();
+
+        // Initialize variables for paket lists
+        $resellerPaket = collect();  // Default empty collection for ResellerPaket
+        $paket = collect();       // Default empty collection for Package
+
+        // Check if the subscription exists
+        if ($subs) {
+            if ($subs->customer->type == 'reseller') {
+                // If the customer is a reseller, get the ResellerPaket based on reseller_package_id
+                $resellerPaket = ResellerPaket::where('id', $subs->reseller_package_id)->first();
+            } else {
+                // If the customer is not a reseller, get the Package based on packet_id
+                $paket = Package::where('id', $subs->packet_id)->first();
+            }
+        }
+
+        // Prepare data to pass to the view
         $data = [
             'type_menu' => '',
             'page_name' => 'Perpanjang Layanan Customer',
-            'paket' => Package::all(),
-            'subs' => $subs,
-
+            'resellerPaket' => $resellerPaket,  // ResellerPaket list
+            'paket' => $paket,  // This will either contain ResellerPaket or Package based on the condition
+            'subs' => $subs,    // Pass the subscription to the view
         ];
+
+        // Return the view with the data
         return view('pages.customer.renew', $data);
     }
 
@@ -441,14 +478,24 @@ class CustomerController extends Controller
             // Log informasi langganan yang ditemukan
             \Log::info('Langganan ditemukan: ' . json_encode($subs));
 
-            // Update status dan tanggal langganan
-            $subs->update([
-                'packet_id' => $request->paket_id,  // Paket yang dipilih
-                'status' => 1,
-                'start_date' => now(),
-                'end_date' => $request->end_date,
-            ]);
-
+            // Periksa apakah customer adalah reseller
+            if ($subs->customer->type == 'reseller') {
+                // Jika customer adalah reseller, gunakan reseller_package_id
+                $subs->update([
+                    'reseller_package_id' => $request->reseller_package_id,  // Paket reseller yang dipilih
+                    'status' => 1,
+                    'start_date' => now(),
+                    'end_date' => $request->end_date,
+                ]);
+            } else {
+                // Jika customer bukan reseller, gunakan packet_id
+                $subs->update([
+                    'packet_id' => $request->paket_id,  // Paket reguler yang dipilih
+                    'status' => 1,
+                    'start_date' => now(),
+                    'end_date' => $request->end_date,
+                ]);
+            }
 
             // Simpan data pembayaran
             $payment = Payment::create([
