@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('fee_claims', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('reseller_id');
             $table->integer('amount');
             $table->enum('status',['pending','aproved','rejected'])->default('pending');
             $table->string('bukti_tf')->nullable();
             $table->timestamps();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('reseller_id')->references('id')->on('resellers')->onDelete('cascade')->onUpdate('cascade');
 
         });
     }

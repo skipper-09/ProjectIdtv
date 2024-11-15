@@ -25,7 +25,12 @@ class ResellerPaketController extends Controller
 
     public function getData()
     {
-        $data = ResellerPaket::with(['reseller', 'paket'])->get();
+        $reseler = Reseller::where('user_id', auth()->id())->first();
+        if (auth()->user()->hasRole('Reseller')) {
+            $data = ResellerPaket::with(['reseller', 'paket'])->where('reseller_id', $reseler->id)->get();
+        } else {
+            $data = ResellerPaket::with(['reseller', 'paket'])->get();
+        }
         return DataTables::of($data)->addIndexColumn()->addColumn('action', function ($data) {
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
@@ -61,7 +66,7 @@ class ResellerPaketController extends Controller
             'type_menu' => 'reseller',
             'page_name' => 'Tambah Paket Reseller',
             'reseller' => Reseller::all(),
-            'paket' => Package::where('type_paket','reseller')->get()
+            'paket' => Package::where('type_paket', 'reseller')->get()
         ];
         return view('pages.resellermanagement.resellerpaket.add', $data);
     }
@@ -69,24 +74,43 @@ class ResellerPaketController extends Controller
 
     public function store(Request $request)
     {
-
-        $request->validate([
-            'paket_id' => 'required',
-            'reseller_id' => 'required',
-            'name' => 'required',
-            'price' => 'required||numeric',
-            'status' => 'required'
-        ]);
-        $paketutama = Package::find($request->paket_id);
-        $total = $request->price + $paketutama->price;
-        ResellerPaket::create([
-            'paket_id' => $request->paket_id,
-            'reseller_id' => $request->reseller_id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'status' => $request->status,
-            'total' => $total,
-        ]);
+        $reseler = Reseller::where('user_id', auth()->id())->first();
+        if (auth()->user()->hasRole('Reseller')) {
+            $request->validate([
+                'paket_id' => 'required',
+                'name' => 'required',
+                'price' => 'required||numeric',
+                'status' => 'required'
+            ]);
+            $paketutama = Package::find($request->paket_id);
+            $total = $request->price + $paketutama->price;
+            ResellerPaket::create([
+                'paket_id' => $request->paket_id,
+                'reseller_id' => $reseler->id,
+                'name' => $request->name,
+                'price' => $request->price,
+                'status' => $request->status,
+                'total' => $total,
+            ]);
+        } else {
+            $request->validate([
+                'paket_id' => 'required',
+                'reseller_id' => 'required',
+                'name' => 'required',
+                'price' => 'required||numeric',
+                'status' => 'required'
+            ]);
+            $paketutama = Package::find($request->paket_id);
+            $total = $request->price + $paketutama->price;
+            ResellerPaket::create([
+                'paket_id' => $request->paket_id,
+                'reseller_id' => $request->reseller_id,
+                'name' => $request->name,
+                'price' => $request->price,
+                'status' => $request->status,
+                'total' => $total,
+            ]);
+        }
 
         return redirect()->route('resellerdata-paket')->with(['status' => 'Success!', 'message' => 'Berhasil Menambahkan Paket Reseller!']);
     }
@@ -98,7 +122,7 @@ class ResellerPaketController extends Controller
             'page_name' => 'Edit Paket Reseller',
             'resellerpaket' => ResellerPaket::find($id),
             'reseller' => Reseller::all(),
-            'paket' => Package::where('type_paket','reseller')->get()
+            'paket' => Package::where('type_paket', 'reseller')->get()
         ];
         return view('pages.resellermanagement.resellerpaket.edit', $data);
     }
@@ -108,23 +132,44 @@ class ResellerPaketController extends Controller
     public function update(Request $request, $id)
     {
         $reseller = ResellerPaket::find($id);
-        $request->validate([
-            'paket_id' => 'required',
-            'reseller_id' => 'required',
-            'name' => 'required',
-            'price' => 'required||numeric',
-            'status' => 'required'
-        ]);
-        $paketutama = Package::find($request->paket_id);
-        $total = $request->price + $paketutama->price;
-        $reseller->update([
-            'paket_id' => $request->paket_id,
-            'reseller_id' => $request->reseller_id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'status' => $request->status,
-            'total'=>$total,
-        ]);
+
+        $reselerid = Reseller::where('user_id', auth()->id())->first();
+        if (auth()->user()->hasRole('Reseller')) {
+            $request->validate([
+                'paket_id' => 'required',
+                'name' => 'required',
+                'price' => 'required||numeric',
+                'status' => 'required'
+            ]);
+            $paketutama = Package::find($request->paket_id);
+            $total = $request->price + $paketutama->price;
+            $reseller->update([
+                'paket_id' => $request->paket_id,
+                'reseller_id' => $reselerid->id,
+                'name' => $request->name,
+                'price' => $request->price,
+                'status' => $request->status,
+                'total' => $total,
+            ]);
+        } else {
+            $request->validate([
+                'paket_id' => 'required',
+                'reseller_id' => 'required',
+                'name' => 'required',
+                'price' => 'required||numeric',
+                'status' => 'required'
+            ]);
+            $paketutama = Package::find($request->paket_id);
+            $total = $request->price + $paketutama->price;
+            $reseller->update([
+                'paket_id' => $request->paket_id,
+                'reseller_id' => $request->reseller_id,
+                'name' => $request->name,
+                'price' => $request->price,
+                'status' => $request->status,
+                'total' => $total,
+            ]);
+        }
 
         return redirect()->route('resellerdata-paket')->with(['status' => 'Success!', 'message' => 'Berhasil Update Paket Reseller!']);
     }

@@ -9,12 +9,12 @@ class Fee_claim extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'company_id','amount','status','bukti_tf'
+        'reseller_id','amount','status','bukti_tf'
     ];
     protected $primaryKey = 'id';
 
-public function company(){
-   return $this->belongsTo(Company::class,'company_id','id');
+public function reseller(){
+   return $this->belongsTo(Reseller::class,'reseller_id','id');
 }
 public function detailfee(){
    return $this->hasMany(DetailClaim::class);

@@ -28,11 +28,22 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="form-group col-12 col-md-6">
+                            <label>Nama Bank <span class="text-danger">*</span></label>
+                            <input type="text" name="bank_name" value="{{ $reseller->bank->name }}" readonly
+                                class="form-control @error('bank_name') is-invalid @enderror"
+                                value="{{ old('bank_name') }}">
+                            @error('bank_name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group col-12 col-md-6">
                             <label>Nomor Rekening <span class="text-danger">*</span></label>
-                            <input type="text" name="rekname" value="{{ $company->rekening }}" readonly
-                                class="form-control @error('rekname') is-invalid @enderror"
-                                value="{{ old('rekname') }}">
-                            @error('rekname')
+                            <input type="text" name="rekening" value="{{ $reseller->rekening }}" readonly
+                                class="form-control @error('rekening') is-invalid @enderror"
+                                value="{{ old('rekening') }}">
+                            @error('rekening')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
@@ -40,7 +51,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Nama Pemilik Rekening<span class="text-danger">*</span></label>
-                            <input type="text" name="name" value="{{ $company->owner_rek }}" readonly
+                            <input type="text" name="name" value="{{ $reseller->owner_rek }}" readonly
                                 class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
                             @error('name')
                             <div class="invalid-feedback">

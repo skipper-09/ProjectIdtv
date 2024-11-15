@@ -7,6 +7,7 @@ use App\Models\Chanel;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Reseller;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 
@@ -38,11 +39,11 @@ class DashboardController extends Controller
     $currentMonthEnd = \Carbon\Carbon::now()->endOfMonth();
 
 
-    $company = Company::where('user_id', auth()->id())->first();
+    $reseller = Reseller::where('user_id', auth()->id())->first();
     $data = [
-      'customer' => Customer::where('company_id', '=', $company->id)->whereMonth('created_at',\Carbon\Carbon::now()->month)->get(),
-      'income' =>Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($company) {
-        $query->where('company_id', $company->id);
+      'customer' => Customer::where('reseller_id', '=', $reseller->id)->whereMonth('created_at',\Carbon\Carbon::now()->month)->get(),
+      'income' =>Payment::whereBetween('created_at', [$currentMonthStart, $currentMonthEnd])->whereHas('customer', function ($query) use ($reseller) {
+        $query->where('reseller_id', $reseller->id);
       }),
       'type_menu' => 'dashboard',
       'page_name' => 'Dashboard',
@@ -69,13 +70,13 @@ class DashboardController extends Controller
     }
 
     $user = auth()->user();
-    $company = Company::where('user_id', '=', auth()->id())->first();
+     $reseller = Reseller::where('user_id', '=', auth()->id())->first();
 
 
 
     // Ambil data dari database sesuai dengan rentang waktu ini
     if ($user->hasRole('Reseller')) {
-      $customers = Customer::whereBetween('created_at', [$startDate, $endDate])->where('company_id', '=', $company->id)
+      $customers = Customer::whereBetween('created_at', [$startDate, $endDate])->where('reseller_id', '=', $reseller->id)
         ->selectRaw('DATE(created_at) as date, COUNT(*) as total')
         ->groupBy('date')
         ->get()

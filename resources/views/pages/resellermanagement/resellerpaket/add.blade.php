@@ -43,7 +43,9 @@
                             </div>
                             @enderror
                         </div>
-                        <div class="form-group col-12 col-md-6">
+                        
+                            
+                        <div class="form-group col-12 col-md-6 @if (Auth::user()->hasRole('Reseller')) d-none @endif" >
                             <label>Reseller <span class="text-danger">*</span></label>
                             <select class="form-control select2 @error('reseller_id') is-invalid @enderror"
                                 name="reseller_id" id="owner">
@@ -59,6 +61,7 @@
                             </div>
                             @enderror
                         </div>
+                        
                         <div class="form-group col-12 col-md-6">
                             <label>Paket <span class="text-danger">*</span></label>
                             <select class="form-control select2 @error('paket_id') is-invalid @enderror"
