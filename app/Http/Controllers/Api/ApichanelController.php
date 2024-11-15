@@ -230,7 +230,7 @@ class ApichanelController extends Controller
                         'subscription_id' => $subs->id,
                         'customer_id' => $subs->customer->id,
                         'amount' => $amount,
-                        'fee' => $resellerpaket->price,
+                        'fee' => $subs->customer->type == 'reseller' ? $resellerpaket->price : 0,
                         'tanggal_bayar' => now(),
                         'status' => 'paid',
                         'payment_type' => 'midtrans',

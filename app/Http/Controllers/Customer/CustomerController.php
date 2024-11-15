@@ -722,41 +722,23 @@ class CustomerController extends Controller
     public function CustomerRegister(Request $request)
     {
         try {
-
-            // // Set your Merchant Server Key
-            // \Midtrans\Config::$serverKey = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
-            // // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-            // \Midtrans\Config::$isProduction = false;
-            // // Set sanitization on (default)
-            // \Midtrans\Config::$isSanitized = true;
-            // // Set 3DS transaction for credit card to true
-            // \Midtrans\Config::$is3ds = true;
-
-            // $price = Package::find(1);
-            // $params = array(
-            //     'transaction_details' => array(
-            //         'order_id' => rand(),
-            //         'gross_amount' => $price->price,
-            //     ),
-            //     'customer_details' => array(
-            //         'first_name' => $request->name,
-            //         'last_name' => $request->name,
-            //         'email' => $request->email,
-            //         'phone' => $request->phone,
-            //     ),
-            // );
-
-            // $snapToken = \Midtrans\Snap::getSnapToken($params);
-
+            $kode = $request->input('kode');
+            $reseller = Reseller::where('referal_code', $kode)->first();
+    
+            if ($reseller) {
+                $resellerpaket = ResellerPaket::where('reseller_id', $reseller->id)->get();
+            }
+            $paket = Package::where('type_paket', 'main')->get();
+    
             $data = [
                 'page_name' => 'Customer',
-                'paket' => Package::all(),
+                'paket' => isset($resellerpaket) && $resellerpaket->isNotEmpty() ? $resellerpaket : $paket,
             ];
             return view('pages.customer.publicregister', $data);
         } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage(),
-            ]);
+            ], 500);
         }
     }
 
@@ -786,10 +768,11 @@ class CustomerController extends Controller
             ]
         );
 
-
-        $perusahaan = Company::where('referal', $request->referal)->first();
-        if ($request->referal == '') {
-
+        $kode = $request->input('kode');
+        $reseller = Reseller::where('referal_code', $kode)->first();
+        $paket = Package::find($request->paket_id);
+        $company = Company::find($paket->company_id);
+        if ($reseller == null) {
             $customer = Customer::create([
                 'name' => $request->name,
                 'mac' => rand(10000, 99999),
@@ -798,15 +781,25 @@ class CustomerController extends Controller
                 'address' => $request->address,
                 'region_id' => 1,
                 'stb_id' => 1,
-                'company_id' => 1,
+                'company_id' =>$paket->company_id,
                 'username' => $request->username,
                 'showpassword' => $request->password,
                 'password' => Hash::make($request->password),
                 'is_active' => 0,
+                'paket_id' => $request->paket_id,
+            ]);
+
+            Subscription::create([
+                'customer_id' => $customer->id,
                 'packet_id' => $request->paket_id,
+                'reseller_package_id' => $customer->resellerpaket_id,
+                'start_date' => Carbon::now(),
+                'end_date' => Carbon::now()->addMonth($paket->duration),
+                'fee' => 0,
+                'status' => false,
+                'tagihan'=> $paket->price,
             ]);
         } else {
-
             $customer = Customer::create([
                 'name' => $request->name,
                 'mac' => rand(10000, 99999),
@@ -815,26 +808,28 @@ class CustomerController extends Controller
                 'address' => $request->address,
                 'region_id' => 1,
                 'stb_id' => 1,
-                'company_id' => $perusahaan->id,
+                'reseller_id' => $reseller->id,
                 'username' => $request->username,
                 'showpassword' => $request->password,
                 'password' => Hash::make($request->password),
                 'is_active' => 0,
-                'packet_id' => $request->paket_id,
+                'resellerpaket_id' => $request->paket_id,
+                'type'=>'reseller',
+            ]);
+            Subscription::create([
+                'customer_id' => $customer->id,
+                'packet_id' => $customer->resellerpaket->paket_id,
+                'reseller_package_id' => $customer->resellerpaket_id,
+                'start_date' => Carbon::now(),
+                'end_date' => Carbon::now()->addMonth($customer->resellerpaket->paket->duration),
+                'fee' => $customer->resellerpaket->price,
+                'status' => false,
+                'tagihan'=> $customer->resellerpaket->total,
             ]);
         }
 
-        $paket = Package::find($request->paket_id);
-        $subs = Subscription::create([
-            'customer_id' => $customer->id,
-            'packet_id' => $request->paket_id,
-            'start_date' => Carbon::now(),
-            'end_date' => Carbon::now()->addMonth($paket->duration),
-            'fee' => $perusahaan->fee_reseller ?? 0,
-            'status' => false,
-        ]);
-        $amount = $paket->price + $customer->company->fee_reseller;
-        Subscription::find($subs->id)->update(['tagihan' => $amount]);
+        
+        // Subscription::find($subs->id)->update(['tagihan' => $amount]);
 
 
         return redirect()->back()->with('success', 'Pendaftaran Berhasil Download Aplikasi Dan Bayar di aplikasi');
