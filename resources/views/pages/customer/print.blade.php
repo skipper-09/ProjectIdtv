@@ -71,7 +71,7 @@
                         <tbody>
                             <tr>
                                 <td><span class="text-3"><span class="fw-500">
-                                            {{ $subcription->paket->name }}
+                                            {{ $customer->type == 'reseller' ? $subcription->resellerpaket->name : $subcription->paket->name  }}
                                         </span></span></td>
                                 <td class="text-center">
                                     {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}

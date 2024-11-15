@@ -42,9 +42,9 @@
             <div class="row">
                 <div class="col-sm-6 text-sm-end order-sm-1"><strong>Dibayarkan ke :</strong>
                     <address>
-                        {{ $customer->company->name }}<br>
-                        {{ $customer->company->address }}<br>
-                        {{ $customer->company->phone }}
+                        {{ $customer->company->name ?? $customer->reseller->name }}<br>
+                    {{ $customer->company->address ?? $customer->reseller->address }}<br>
+                    {{ $customer->company->phone ?? $customer->reseller->address }}
                     </address>
                 </div>
                 <div class="col-sm-6 order-sm-0"><strong>Ditagihkan ke :</strong>
@@ -69,7 +69,7 @@
                             <tbody>
                                 <tr>
                                     <td><span class="text-3"><span class="fw-500">
-                                                {{ $subcription->paket->name }}
+                                        {{ $customer->type == 'reseller' ? $subcription->resellerpaket->name : $subcription->paket->name  }}
                                             </span></span></td>
                                     <td class="text-center">
                                         {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}
@@ -78,7 +78,7 @@
                                         {{ $subcription->paket->duration }} Bulan
                                     </td>
                                     <td class="text-end">Rp.
-                                        {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                                        {{ number_format($subcription->tagihan) }}
                                     </td>
                                 </tr>
 
@@ -95,7 +95,7 @@
                                     <td colspan="3" class="text-end border-bottom-0"><strong>Total :</strong></td>
                                     <td class="text-end border-bottom-0">
                                         Rp.
-                                        {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                                        {{ number_format($subcription->tagihan) }}
                                     </td>
                                 </tr>
                             </tfoot>
@@ -123,7 +123,7 @@
                             <td style="padding: 3px" class="text-center">{{ $subcription->payment[0]->payment_type }}</td>
                             <td style="padding: 3px" class="text-center">{{ $subcription->invoices }}</td>
                             <td style="padding: 3px" class="text-center">Rp.
-                                {{ number_format($subcription->paket->price + $customer->company->fee_reseller) }}
+                                {{ number_format($subcription->tagihan) }}
                             </td>
                         </tr>
                     </tbody>
@@ -134,11 +134,11 @@
                 <ul style="margin-top: -10px">
                     <li>
                         Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda<br></li>
-                    <li class="w-75">
-                        Jika informasi pada bukti pembayaran ini ada kesalahan, silahkan hubungi
-                        kami<br><br><b>{{ $customer->company->name }}<br>
-                            {{ $customer->company->address }}<br>
-                            {{ $customer->company->phone }}</b></li>
+                        <li class="w-75">
+                            Jika informasi pada bukti pembayaran ini ada kesalahan, silahkan hubungi
+                            kami<br><br><b>{{ $customer->company->name ?? $customer->reseller->name }}<br>
+                                {{ $customer->company->address ?? $customer->reseller->address }}<br>
+                                {{ $customer->company->phone ?? $customer->reseller->phone }}</b></li>
                 </ul>
             </span></div>
         <hr>
