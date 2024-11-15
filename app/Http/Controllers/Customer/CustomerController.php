@@ -27,6 +27,163 @@ use Yajra\DataTables\DataTables;
 
 class CustomerController extends Controller
 {
+    // public function index(): View
+    // {
+    //     $active = 0;
+    //     $inactive = 0;
+    //     $allcus = 0;
+    //     if (auth()->user()->hasRole('Reseller')) {
+    //         $reseller = Reseller::where('user_id', '=', auth()->id())->first();
+    //         $active = Customer::where('is_active', 1)->where('reseller_id', $reseller->id)->get()->count();
+    //         $inactive = Customer::where('is_active', 0)->where('reseller_id', $reseller->id)->get()->count();
+    //         $allcus = Customer::where('reseller_id', $reseller->id)->get()->count();
+    //     } else {
+    //         $active = Customer::where('is_active', 1)->get()->count();
+    //         $inactive = Customer::where('is_active', 0)->get()->count();
+    //         $allcus = Customer::all()->count();
+    //     }
+    //     $data = [
+    //         'type_menu' => '',
+    //         'page_name' => 'Customer',
+    //         'company' => Company::all(),
+    //         'customer' => $allcus,
+    //         'cusactive' => $active,
+    //         'cusinactive' => $inactive,
+    //     ];
+    //     return view('pages.customer.index', $data);
+    // }
+
+
+    // public function getcompany(Request $request)
+    // {
+    //     $data['company_id'] = Region::where('company_id', $request->company_id)->get();
+    //     return response()->json($data);
+    // }
+
+
+    // public function getData(Request $request)
+    // {
+
+    //     if (auth()->user()->hasRole('Reseller')) {
+    //         $company = Company::where('user_id', '=', auth()->id())->first();
+    //         $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $company->id)->orderByDesc('id')->get();
+    //     } else if (auth()->user()->hasRole('CS')) {
+    //         $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('user_id', auth()->id())->orderByDesc('id')->get();
+    //     } else {
+
+    //         if ($request->has('filter') && !empty($request->input('filter'))) {
+    //             $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+
+    //             // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
+    //         } else {
+    //             $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->orderByDesc('id')->get();
+    //         }
+    //     }
+    //     return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
+    //         $userauth = User::with('roles')->where('id', Auth::id())->first();
+    //         $button = '';
+    //         if ($userauth->can(['reset-device'])) {
+    //             $button .= ' <button  class="btn btn-sm btn-warning mr-1 action" data-id=' . $customer->id . ' data-type="reset" data-route="' . route('customer.reset', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Rset Device"><i
+    //                                                         class="fas fa-power-off"></i></button>';
+    //         }
+    //         if ($userauth->can(['read-customer'])) {
+    //             $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
+    //                                                         class="fas fa-eye"></i></button>';
+    //         }
+    //         if ($userauth->can('update-customer')) {
+    //             $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
+    //                                                         class="fa-solid fa-pencil"></i></a>';
+    //         }
+    //         if ($userauth->can('delete-customer')) {
+    //             $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $customer->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
+    //                                                         class="fa-solid fa-trash"></i></button>';
+    //         }
+
+    //         return '<div class="d-flex">' . $button . '</div>';
+    //     })->addColumn('is_active', function ($chanel) {
+    //         $active = '';
+    //         $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+    //         return $active;
+    //     })->editColumn('stb', function (Customer $stb) {
+    //         return $stb->stb->name;
+    //     })->editColumn('reseller', function (Customer $stb) {
+    //         return $stb->reseller->name ?? '';
+    //     })->editColumn('company', function ($company) {
+    //         return optional($company->company)->name ?? 'Tidak ada perusahaan';
+    //     })->editColumn('region', function (Customer $region) {
+    //         return $region->region->name;
+    //     })->editColumn('start_date', function (Customer $sub) {
+    //         return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
+    //     })->editColumn('end_date', function (Customer $sub) {
+    //         $cus = '';
+
+    //         // Ambil subscription berdasarkan customer_id dan pastikan start_date tidak null
+    //         $activeSubscription = $sub->subcrib()
+    //             ->where('customer_id', $sub->id)
+    //             ->whereNotNull('start_date')
+    //             ->orderBy('created_at', 'desc')  // Ambil yang terbaru berdasarkan waktu pembuatan
+    //             ->first();
+
+    //         if ($activeSubscription) {
+    //             // Cek apakah end_date sudah lebih kecil dari hari ini
+    //             if ($activeSubscription->end_date < today()->format('Y-m-d')) {
+    //                 // Jika tanggal sudah lewat, tampilkan dengan teks merah
+    //                 $cus = '<span class="text-danger">' . $activeSubscription->end_date . '</span>';
+    //             } else {
+    //                 // Jika tanggal masih valid, tampilkan dengan teks hijau tebal
+    //                 $cus = '<span class="text-success fw-bold">' . $activeSubscription->end_date . '</span>';
+    //             }
+    //         }
+
+    //         return $cus;
+    //     })->editColumn('created_at', function (Customer $date) {
+    //         return date('d-m-Y', strtotime($date->created_at));
+    //     })->addColumn('renew', function ($customer) {
+    //         $userauth = User::with('roles')->where('id', Auth::id())->first();
+    //         $button = '';
+
+    //         // Retrieve the latest subscription for the customer
+    //         $latestSubscription = $customer->subcrib()
+    //             ->whereNotNull('start_date') // Ensure the subscription has started
+    //             ->orderBy('created_at', 'desc')
+    //             ->first();
+
+    //         if ($latestSubscription) {
+    //             // Calculate if today is within 3 days of the end_date
+    //             $endDate = Carbon::parse($latestSubscription->end_date);
+    //             $threeDaysBeforeEnd = $endDate->subDays(3);
+    //             $today = Carbon::now();
+
+    //             // Determine if the renew button should be active or disabled
+    //             $isPaid = $latestSubscription->status == 0; // Assuming there is an 'is_paid' field
+
+    //             if ($userauth->can(['renew-customer'])) {
+    //                 if ($isPaid) {
+    //                     // If the subscription is paid, disable the renew button
+    //                     $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
+    //                 } else {
+    //                     if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
+    //                         // Enable the renew button if within 3 days of the end date
+    //                         if ($userauth->can('renew-customer')) {
+    //                             $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
+    //                         }
+    //                     } else {
+    //                         // Otherwise, disable the renew button
+    //                         $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+    //                     }
+    //                 }
+    //             }
+    //         }
+
+    //         // Add print button if the user has permission
+    //         if ($userauth->can('read-customer')) {
+    //             $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa-solid fa-print"></i></a>';
+    //         }
+
+    //         return '<div class="d-flex">' . $button . '</div>';
+    //     })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active', 'reseller'])->make(true);
+    // }
+
     public function index(): View
     {
         $active = 0;
@@ -46,6 +203,7 @@ class CustomerController extends Controller
             'type_menu' => '',
             'page_name' => 'Customer',
             'company' => Company::all(),
+            'resellers' => Reseller::all(), // Add this line
             'customer' => $allcus,
             'cusactive' => $active,
             'cusinactive' => $inactive,
@@ -53,135 +211,138 @@ class CustomerController extends Controller
         return view('pages.customer.index', $data);
     }
 
-
-    // public function getcompany(Request $request)
-    // {
-    //     $data['company_id'] = Region::where('company_id', $request->company_id)->get();
-    //     return response()->json($data);
-    // }
-
-
     public function getData(Request $request)
     {
-
         if (auth()->user()->hasRole('Reseller')) {
             $company = Company::where('user_id', '=', auth()->id())->first();
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $company->id)->orderByDesc('id')->get();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])
+                ->where('company_id', $company->id)
+                ->orderByDesc('id')
+                ->get();
         } else if (auth()->user()->hasRole('CS')) {
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('user_id', auth()->id())->orderByDesc('id')->get();
+            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])
+                ->where('user_id', auth()->id())
+                ->orderByDesc('id')
+                ->get();
         } else {
+            $query = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller']);
 
+            // Apply company filter if provided
             if ($request->has('filter') && !empty($request->input('filter'))) {
-                $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
-
-                // $customer->where('company_id', $request->input('filter'))->orderBy('id', 'desc')->get();
-            } else {
-                $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])->orderByDesc('id')->get();
+                $query->where('company_id', $request->input('filter'));
             }
+
+            // Apply reseller filter if provided
+            if ($request->has('reseller') && !empty($request->input('reseller'))) {
+                $query->where('reseller_id', $request->input('reseller'));
+            }
+
+            $customer = $query->orderByDesc('id')->get();
         }
-        return DataTables::of($customer)->addIndexColumn()->addColumn('action', function ($customer) {
-            $userauth = User::with('roles')->where('id', Auth::id())->first();
-            $button = '';
-            if ($userauth->can(['reset-device'])) {
-                $button .= ' <button  class="btn btn-sm btn-warning mr-1 action" data-id=' . $customer->id . ' data-type="reset" data-route="' . route('customer.reset', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Rset Device"><i
-                                                            class="fas fa-power-off"></i></button>';
-            }
-            if ($userauth->can(['read-customer'])) {
-                $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
-                                                            class="fas fa-eye"></i></button>';
-            }
-            if ($userauth->can('update-customer')) {
-                $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
-                                                            class="fa-solid fa-pencil"></i></a>';
-            }
-            if ($userauth->can('delete-customer')) {
-                $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $customer->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
-                                                            class="fa-solid fa-trash"></i></button>';
-            }
 
-            return '<div class="d-flex">' . $button . '</div>';
-        })->addColumn('is_active', function ($chanel) {
-            $active = '';
-            $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
-            return $active;
-        })->editColumn('stb', function (Customer $stb) {
-            return $stb->stb->name;
-        })->editColumn('reseller', function (Customer $stb) {
-            return $stb->reseller->name ?? '';
-        })->editColumn('company', function ($company) {
-            return optional($company->company)->name ?? 'Tidak ada perusahaan';
-        })->editColumn('region', function (Customer $region) {
-            return $region->region->name;
-        })->editColumn('start_date', function (Customer $sub) {
-            return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
-        })->editColumn('end_date', function (Customer $sub) {
-            $cus = '';
-
-            // Ambil subscription berdasarkan customer_id dan pastikan start_date tidak null
-            $activeSubscription = $sub->subcrib()
-                ->where('customer_id', $sub->id)
-                ->whereNotNull('start_date')
-                ->orderBy('created_at', 'desc')  // Ambil yang terbaru berdasarkan waktu pembuatan
-                ->first();
-
-            if ($activeSubscription) {
-                // Cek apakah end_date sudah lebih kecil dari hari ini
-                if ($activeSubscription->end_date < today()->format('Y-m-d')) {
-                    // Jika tanggal sudah lewat, tampilkan dengan teks merah
-                    $cus = '<span class="text-danger">' . $activeSubscription->end_date . '</span>';
-                } else {
-                    // Jika tanggal masih valid, tampilkan dengan teks hijau tebal
-                    $cus = '<span class="text-success fw-bold">' . $activeSubscription->end_date . '</span>';
+        return DataTables::of($customer)
+            ->addIndexColumn()
+            ->addColumn('action', function ($customer) {
+                $userauth = User::with('roles')->where('id', Auth::id())->first();
+                $button = '';
+                if ($userauth->can(['reset-device'])) {
+                    $button .= ' <button  class="btn btn-sm btn-warning mr-1 action" data-id=' . $customer->id . ' data-type="reset" data-route="' . route('customer.reset', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Rset Device"><i
+                                                        class="fas fa-power-off"></i></button>';
                 }
-            }
+                if ($userauth->can(['read-customer'])) {
+                    $button .= ' <button  class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' data-type="show" data-route="' . route('customer.detail', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Show Data"><i
+                                                        class="fas fa-eye"></i></button>';
+                }
+                if ($userauth->can('update-customer')) {
+                    $button .= ' <a href="' . route('customer.edit', ['id' => $customer->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
+                                                        class="fa-solid fa-pencil"></i></a>';
+                }
+                if ($userauth->can('delete-customer')) {
+                    $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $customer->id . ' data-type="delete" data-route="' . route('customer.delete', ['id' => $customer->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
+                                                        class="fa-solid fa-trash"></i></button>';
+                }
 
-            return $cus;
-        })->editColumn('created_at', function (Customer $date) {
-            return date('d-m-Y', strtotime($date->created_at));
-        })->addColumn('renew', function ($customer) {
-            $userauth = User::with('roles')->where('id', Auth::id())->first();
-            $button = '';
+                return '<div class="d-flex">' . $button . '</div>';
+            })
+            ->addColumn('is_active', function ($chanel) {
+                $active = '';
+                $chanel->is_active == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+                return $active;
+            })
+            ->editColumn('stb', function (Customer $stb) {
+                return $stb->stb->name;
+            })
+            ->editColumn('reseller', function (Customer $stb) {
+                return $stb->reseller->name ?? '';
+            })
+            ->editColumn('company', function ($company) {
+                return optional($company->company)->name ?? 'Tidak ada perusahaan';
+            })
+            ->editColumn('region', function (Customer $region) {
+                return $region->region->name;
+            })
+            ->editColumn('start_date', function (Customer $sub) {
+                return $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date == null ? 'Tidak Ada' : $sub->subcrib()->where('customer_id', $sub->id)->orderBy('created_at', 'asc')->first()->start_date;
+            })
+            ->editColumn('end_date', function (Customer $sub) {
+                $cus = '';
+                $activeSubscription = $sub->subcrib()
+                    ->where('customer_id', $sub->id)
+                    ->whereNotNull('start_date')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
 
-            // Retrieve the latest subscription for the customer
-            $latestSubscription = $customer->subcrib()
-                ->whereNotNull('start_date') // Ensure the subscription has started
-                ->orderBy('created_at', 'desc')
-                ->first();
-
-            if ($latestSubscription) {
-                // Calculate if today is within 3 days of the end_date
-                $endDate = Carbon::parse($latestSubscription->end_date);
-                $threeDaysBeforeEnd = $endDate->subDays(3);
-                $today = Carbon::now();
-
-                // Determine if the renew button should be active or disabled
-                $isPaid = $latestSubscription->status == 0; // Assuming there is an 'is_paid' field
-
-                if ($userauth->can(['renew-customer'])) {
-                    if ($isPaid) {
-                        // If the subscription is paid, disable the renew button
-                        $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
+                if ($activeSubscription) {
+                    if ($activeSubscription->end_date < today()->format('Y-m-d')) {
+                        $cus = '<span class="text-danger">' . $activeSubscription->end_date . '</span>';
                     } else {
-                        if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
-                            // Enable the renew button if within 3 days of the end date
-                            if ($userauth->can('renew-customer')) {
-                                $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
-                            }
+                        $cus = '<span class="text-success fw-bold">' . $activeSubscription->end_date . '</span>';
+                    }
+                }
+
+                return $cus;
+            })
+            ->editColumn('created_at', function (Customer $date) {
+                return date('d-m-Y', strtotime($date->created_at));
+            })
+            ->addColumn('renew', function ($customer) {
+                $userauth = User::with('roles')->where('id', Auth::id())->first();
+                $button = '';
+
+                $latestSubscription = $customer->subcrib()
+                    ->whereNotNull('start_date')
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+
+                if ($latestSubscription) {
+                    $endDate = Carbon::parse($latestSubscription->end_date);
+                    $threeDaysBeforeEnd = $endDate->subDays(3);
+                    $today = Carbon::now();
+                    $isPaid = $latestSubscription->status == 0;
+
+                    if ($userauth->can(['renew-customer'])) {
+                        if ($isPaid) {
+                            $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
                         } else {
-                            // Otherwise, disable the renew button
-                            $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                            if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
+                                if ($userauth->can('renew-customer')) {
+                                    $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
+                                }
+                            } else {
+                                $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                            }
                         }
                     }
                 }
-            }
 
-            // Add print button if the user has permission
-            if ($userauth->can('read-customer')) {
-                $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa-solid fa-print"></i></a>';
-            }
+                if ($userauth->can('read-customer')) {
+                    $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa-solid fa-print"></i></a>';
+                }
 
-            return '<div class="d-flex">' . $button . '</div>';
-        })->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active', 'reseller'])->make(true);
+                return '<div class="d-flex">' . $button . '</div>';
+            })
+            ->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active', 'reseller'])
+            ->make(true);
     }
 
 
