@@ -243,6 +243,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('', [CustomerController::class, 'index'])->name('customer')->middleware('can:read-customer');
             Route::get('detail/{id}', [CustomerController::class, 'detail'])->name('customer.detail')->middleware('can:read-customer');
             Route::get('getData', [CustomerController::class, 'getData'])->name('customer.getdata');
+            Route::get('/get-paket-reseller', [CustomerController::class, 'getPaketReseller'])->name('customer.getPaketReseller');
 
             // Route::get('getpaket/{company_id}', [CustomerController::class, 'getPaket'])->name('customer.getpaket');
             // Route::post('getcompany', [CustomerController::class, 'getcompany'])->name('customer.getcompany');

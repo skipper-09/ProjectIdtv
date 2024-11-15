@@ -31,7 +31,7 @@
                                         <h4 class="card-title">{{ $subs->invoices }}</h4>
                                         <h6>
                                             {{ $subs->status == 1 ? 'Lunas' : 'Belum Bayar' }}
-                                        </h6>                                       
+                                        </h6>
                                     </div>
 
                                     <div class="mt-2">
@@ -47,7 +47,8 @@
                                             </tr>
                                             <tr>
                                                 <th>Paket</th>
-                                                <td>{{ $subs->paket->name }}</td>
+                                                <td>{{ $subs->customer->type == 'reseller' ? $subs->resellerpaket->name : $subs->paket->name }}
+                                                </td>
                                             </tr>
                                         </table>
                                     </div>
@@ -56,22 +57,54 @@
                                 <div class="row mt-3">
                                     <div class="form-group col-12 col-md-12">
                                         <label>Rubah Paket Customer <span class="text-danger">*</span></label>
-                                        <select class="form-control select2 @error('paket_id') is-invalid @enderror"
-                                            name="paket_id" id="package">
-                                            <option value="">Pilih Paket</option>
-                                            @foreach ($paket as $s)
-                                                <option value="{{ $s->id }}"
-                                                    @if ($s->id == $subs->packet_id) selected @endif>
-                                                    {{ $s->name }} - Rp. {{ number_format($s->price) }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('paket_id')
+
+                                        {{-- If customer is a reseller, show ResellerPaket select --}}
+                                        @if ($subs->customer->type == 'reseller')
+                                            <select
+                                                class="form-control select2 @error('reseller_package_id') is-invalid @enderror"
+                                                name="reseller_package_id" id="reseller_package">
+                                                <option value="">Pilih Paket Reseller</option>
+
+                                                @if ($resellerPaket)
+                                                    <option value="{{ $resellerPaket->id }}"
+                                                        @if ($subs && $subs->reseller_package_id == $resellerPaket->id) selected @endif>
+                                                        {{ $resellerPaket->name }} - Rp.
+                                                        {{ number_format($resellerPaket->total) }}
+                                                    </option>
+                                                @endif
+                                            </select>
+                                        @else
+                                            {{-- If customer is not a reseller, show Package select --}}
+                                            <select class="form-control select2 @error('packet_id') is-invalid @enderror"
+                                                name="packet_id" id="package">
+                                                <option value="">Pilih Paket</option>
+
+                                                @if ($paket)
+                                                    <option value="{{ $paket->id }}"
+                                                        @if ($subs && $subs->packet_id == $paket->id) selected @endif>
+                                                        {{ $paket->name }} - Rp. {{ number_format($paket->price) }}
+                                                    </option>
+                                                @endif
+                                            </select>
+                                        @endif
+
+                                        @error('packet_id')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
+                                        @error('reseller_package_id')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
                                         @enderror
                                     </div>
+
+
+
+
+
                                     <div class="form-group col-12 col-md-6">
                                         <label>Jatuh Tempo <span class="text-danger">*</span></label>
                                         <input type="date" name="end_date" value="{{ $subs->end_date }}"
