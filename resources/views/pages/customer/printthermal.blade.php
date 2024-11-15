@@ -63,6 +63,7 @@
             @page {
                 size: 58mm auto;
                 margin: 0;
+                padding: 0;
             }
 
             body,
@@ -116,13 +117,15 @@
                 font-size: 60px;
             }
 
-            .text-right {
-                text-align: right;
-            }
+            /* .text-right {
+                                text-align: right;
+                            } */
 
             .footer {
-                font-size: 50px;
+                font-size: 45px;
                 font-style: italic;
+                /* text-align: center; */
+                font-weight: bold
             }
 
             .no-print {
@@ -153,7 +156,7 @@
             </div>
             <div class="text-center">
                 <b class="company">{{ $customer->company->name ?? $customer->reseller->name }}</b><br>
-                {{ $customer->company->address ?? $customer->reseller->address}}
+                {{ $customer->company->address ?? $customer->reseller->address }}
             </div>
             <div style="margin: 10px;"></div>
         </header>
@@ -177,14 +180,14 @@
                             <td>Nama</td>
                             <td class="text-right">{{ $customer->name }}</td>
                         </tr>
-                       {{-- <tr>
+                        {{-- <tr>
                             <td>ID Pelanggan</td>
                             <td class="text-right">{{ $customer->nik }}</td>
-                        </tr>  --}}
+                        </tr> --}}
                     </table>
                 </div>
             </div>
-            <div class="card mt-2">
+            <div class="card">
                 <div class="card-body p-0">
                     <table class="table mb-0">
                         <tr>
@@ -192,7 +195,8 @@
                             <td class="text-right text-bold sub">Jumlah</td>
                         </tr>
                         <tr>
-                            <td>{{ $subcription->paket->name }}</td>
+                            <td>{{ $customer->type == 'reseller' ? $subcription->resellerpaket->name : $subcription->paket->name }}
+                            </td>
                             <td class="text-right">Rp. {{ number_format($subcription->tagihan) }}</td>
                         </tr>
                         <tr>
@@ -212,9 +216,9 @@
                     </table>
                 </div>
             </div>
+            <footer class="text-center footer">
+                Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda!
+            </footer>
         </main>
-        <footer class="text-center footer" style="font-style: italic; padding: 10px;">
-            Pembayaran sudah diterima, terima kasih sudah melunasi tagihan anda!
-        </footer>
     </div>
 @endsection

@@ -214,14 +214,9 @@ class CustomerController extends Controller
     public function getData(Request $request)
     {
         if (auth()->user()->hasRole('Reseller')) {
-            $company = Company::where('user_id', '=', auth()->id())->first();
+            $reseller = Reseller::where('user_id', '=', auth()->id())->first();
             $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])
-                ->where('company_id', $company->id)
-                ->orderByDesc('id')
-                ->get();
-        } else if (auth()->user()->hasRole('CS')) {
-            $customer = Customer::with(['region', 'stb', 'company', 'subcrib', 'reseller'])
-                ->where('user_id', auth()->id())
+                ->where('reseller_id', $reseller->id)
                 ->orderByDesc('id')
                 ->get();
         } else {
@@ -632,12 +627,12 @@ class CustomerController extends Controller
             // Pastikan langganan ditemukan
             if (!$subs) {
                 // Jika langganan tidak ditemukan, cetak pesan kesalahan dan redirect
-                \Log::error('Langganan tidak ditemukan untuk customer_id: ' . $id);
+                // \Log::error('Langganan tidak ditemukan untuk customer_id: ' . $id);
                 return redirect()->back()->withErrors(['message' => 'Langganan tidak ditemukan.']);
             }
 
             // Log informasi langganan yang ditemukan
-            \Log::info('Langganan ditemukan: ' . json_encode($subs));
+            // \Log::info('Langganan ditemukan: ' . json_encode($subs));
 
             // Periksa apakah customer adalah reseller
             if ($subs->customer->type == 'reseller') {
@@ -724,12 +719,12 @@ class CustomerController extends Controller
         try {
             $kode = $request->input('kode');
             $reseller = Reseller::where('referal_code', $kode)->first();
-    
+
             if ($reseller) {
                 $resellerpaket = ResellerPaket::where('reseller_id', $reseller->id)->get();
             }
             $paket = Package::where('type_paket', 'main')->get();
-    
+
             $data = [
                 'page_name' => 'Customer',
                 'paket' => isset($resellerpaket) && $resellerpaket->isNotEmpty() ? $resellerpaket : $paket,
@@ -781,7 +776,7 @@ class CustomerController extends Controller
                 'address' => $request->address,
                 'region_id' => 1,
                 'stb_id' => 1,
-                'company_id' =>$paket->company_id,
+                'company_id' => $paket->company_id,
                 'username' => $request->username,
                 'showpassword' => $request->password,
                 'password' => Hash::make($request->password),
@@ -797,7 +792,7 @@ class CustomerController extends Controller
                 'end_date' => Carbon::now()->addMonth($paket->duration),
                 'fee' => 0,
                 'status' => false,
-                'tagihan'=> $paket->price,
+                'tagihan' => $paket->price,
             ]);
         } else {
             $customer = Customer::create([
@@ -814,7 +809,7 @@ class CustomerController extends Controller
                 'password' => Hash::make($request->password),
                 'is_active' => 0,
                 'resellerpaket_id' => $request->paket_id,
-                'type'=>'reseller',
+                'type' => 'reseller',
             ]);
             Subscription::create([
                 'customer_id' => $customer->id,
@@ -824,11 +819,11 @@ class CustomerController extends Controller
                 'end_date' => Carbon::now()->addMonth($customer->resellerpaket->paket->duration),
                 'fee' => $customer->resellerpaket->price,
                 'status' => false,
-                'tagihan'=> $customer->resellerpaket->total,
+                'tagihan' => $customer->resellerpaket->total,
             ]);
         }
 
-        
+
         // Subscription::find($subs->id)->update(['tagihan' => $amount]);
 
 

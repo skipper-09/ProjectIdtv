@@ -9,8 +9,9 @@
             <div class="row">
                 <div class="form-group col-12 col-md-6">
                     <label>Mulai Tanggal <span class="text-danger">*</span></label>
-                    <input type="date" name="start_date" class="form-control @error('name') is-invalid @enderror" required>
-                    @error('name')
+                    <input type="date" name="start_date" class="form-control @error('start_date') is-invalid @enderror"
+                        required>
+                    @error('start_date')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -18,8 +19,9 @@
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label>Sampai Tanggal <span class="text-danger">*</span></label>
-                    <input type="date" name="end_date" class="form-control @error('mac') is-invalid @enderror" required>
-                    @error('mac')
+                    <input type="date" name="end_date" class="form-control @error('end_date') is-invalid @enderror"
+                        required>
+                    @error('end_date')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -27,11 +29,16 @@
                 </div>
                 <div class="form-group col-12 col-md-12">
                     <label>Type <span class="text-danger">*</span></label>
-                    <select class="form-control select2 " name="type" id="typemodal">
+                    <select class="form-control select2 @error('type') is-invalid @enderror" name="type" id="typemodal">
                         <option value="">Pilih Type</option>
                         <option value="reseller">Pelanggan Reseller</option>
                         <option value="perusahaan">Pelanggan Perusahaan</option>
                     </select>
+                    @error('type')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div class="form-group col-12 col-md-12 d-none" id="company">
                     <label>Perusahaan </label>

@@ -82,7 +82,7 @@
                                             {{ $page_name }}</a>
                                     </div>
                                 @endcan
-                                @if (!Auth::user()->hasRole('Reseller') && !Auth::user()->hasRole('CS'))
+                                @if (!Auth::user()->hasRole('Reseller'))
                                     <div class="card-header row">
                                         <div class="form-group col-12 col-md-6">
                                             <label>Filter Perusahaan <span class="text-danger">*</span></label>
@@ -118,7 +118,9 @@
                                                     <th>Area</th>
                                                     <th>Diperpanjang</th>
                                                     <th>Deadline</th>
-                                                    <th>Perusahaan</th>
+                                                    @if (!Auth::user()->hasRole('Reseller'))
+                                                        <th>Perusahaan</th>
+                                                    @endif
                                                     <th>Owner</th>
                                                     <th>Status</th>
                                                     <th>
@@ -222,13 +224,14 @@
                         data: 'end_date',
                         name: 'end_date',
                     },
-                    {
-                        data: 'company',
-                        name: 'company',
-                        orderable: false,
-                        searchable: true,
-                    },
-                    {
+                    @if (!Auth::user()->hasRole('Reseller'))
+                        {
+                            data: 'company',
+                            name: 'company',
+                            orderable: false,
+                            searchable: true,
+                        },
+                    @endif {
                         data: 'reseller',
                         name: 'reseller',
                         orderable: false,

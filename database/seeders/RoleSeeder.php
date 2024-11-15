@@ -18,9 +18,9 @@ class RoleSeeder extends Seeder
         $developer = Role::create(['name' => 'Developer']);
         $staff = Role::create(['name' => 'Staff']);
         $administrator = Role::create(['name' => 'Administrator']);
+        $owner = Role::create(['name' => 'Owner']);
         $reseler = Role::create(['name' => 'Reseller']);
-        $customerservice = Role::create(['name'=>'CS']);
-        $Acounting = Role::create(['name'=>'Acounting']);
+        $Acounting = Role::create(['name' => 'Acounting']);
         //give permission role
         $developer->givePermissionTo([
             'read-dashboard',
@@ -185,6 +185,77 @@ class RoleSeeder extends Seeder
             'delete-subscription',
         ]);
 
+        $owner->givePermissionTo([
+            'read-dashboard',
+            'read-users',
+            'create-users',
+            'update-users',
+            'delete-users',
+            'read-chanel',
+            'create-chanel',
+            'update-chanel',
+            'delete-chanel',
+            'read-chanel-player',
+            'read-categori',
+            'create-categori',
+            'update-categori',
+            'delete-categori',
+            'read-owner',
+            'create-owner',
+            'update-owner',
+            'delete-owner',
+            'read-role',
+            'create-role',
+            'update-role',
+            'delete-role',
+            'read-customer',
+            'create-customer',
+            'update-customer',
+            'delete-customer',
+            'read-company',
+            'create-company',
+            'update-company',
+            'delete-company',
+            'read-region',
+            'create-region',
+            'update-region',
+            'delete-region',
+            'read-stb',
+            'create-stb',
+            'update-stb',
+            'delete-stb',
+            'read-paket',
+            'create-paket',
+            'update-paket',
+            'delete-paket',
+            'delete-log',
+            'read-income-harian',
+            'delete-income-harian',
+            'read-statistik',
+            'read-feeclaim',
+            'proses-feeclaim',
+            'read-income-periode',
+            'read-log',
+            'clean-log',
+            'read-tagihan',
+            'read-bank',
+            'create-bank',
+            'update-bank',
+            'delete-bank',
+            'read-reseller',
+            'create-reseller',
+            'update-reseller',
+            'delete-reseller',
+            'read-resellerpaket',
+            'create-resellerpaket',
+            'update-resellerpaket',
+            'delete-resellerpaket',
+            'read-subscription',
+            'create-subscription',
+            'update-subscription',
+            'delete-subscription',
+        ]);
+
         $staff->givePermissionTo([
             'read-dashboard',
             'read-users',
@@ -198,10 +269,7 @@ class RoleSeeder extends Seeder
             'read-dashboard',
             'read-customer',
         ]);
-        $customerservice->givePermissionTo([
-            'read-dashboard',
-            'read-customer',
-        ]);
+
         $Acounting->givePermissionTo([
             'read-dashboard',
             'read-customer',

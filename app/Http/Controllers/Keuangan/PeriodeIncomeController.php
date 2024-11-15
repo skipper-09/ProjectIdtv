@@ -22,6 +22,19 @@ class PeriodeIncomeController extends Controller
 {
     public function index(Request $request)
     {
+
+        $request->validate([
+            'type' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ], [
+            'type.required' => 'Tipe Customer harus diisi.',
+            'start_date.required' => 'Tanggal mulai harus diisi.',
+            'start_date.date' => 'Tanggal mulai harus berupa format tanggal yang valid.',
+            'end_date.required' => 'Tanggal selesai harus diisi.',
+            'end_date.date' => 'Tanggal selesai harus berupa format tanggal yang valid.',
+            'end_date.after_or_equal' => 'Tanggal selesai harus lebih besar atau sama dengan tanggal mulai.',
+        ]);
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $company_id = $request->input('company_id');
@@ -29,22 +42,23 @@ class PeriodeIncomeController extends Controller
         $reseller_id = $request->input('reseller_id');
         $company = Company::find($company_id);
         $reseller = Reseller::find($reseller_id);
-        
-        
+
+        if ($type == '') {
+            return redirect()->back()->with(['status' => 'Error!', 'message' => 'Filter Harus dengan memilih Type']);
+        }
+
+
         if ($type == 'reseller') {
             if ($reseller_id != null) {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id)->whereNull('company_id');
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
-                $payment = Payment::whereHas('customer', function ($query) use($reseller_id,$company_id) {
-                    $query->where('company_id',$company_id);
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id, $company_id) {
+                    $query->where('company_id', $company_id);
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
-        }
-        
-        
-        else if ($type == 'perusahaan') {
+        } else if ($type == 'perusahaan') {
             if ($company_id != null) {
                 // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
@@ -52,8 +66,8 @@ class PeriodeIncomeController extends Controller
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
                 // If company_id is null, show data for all companies
-                $payment = Payment::whereHas('customer', function ($query) use($reseller_id) {
-                    $query->where('reseller_id',$reseller_id);
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
         }
@@ -88,18 +102,18 @@ class PeriodeIncomeController extends Controller
         $reseller_id = $request->input('reseller_id');
         $type = $request->input('type');
 
-         
+
         if ($type == 'reseller') {
             if ($reseller_id != null) {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id)->whereNull('company_id');
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
-                $payment = Payment::whereHas('customer', function ($query) use($reseller_id,$company_id) {
-                    $query->where('company_id',$company_id);
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id, $company_id) {
+                    $query->where('company_id', $company_id);
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
-        }else if ($type == 'perusahaan') {
+        } else if ($type == 'perusahaan') {
             if ($company_id != null) {
                 // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
@@ -107,8 +121,8 @@ class PeriodeIncomeController extends Controller
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             } else {
                 // If company_id is null, show data for all companies
-                $payment = Payment::whereHas('customer', function ($query) use($reseller_id) {
-                    $query->where('reseller_id',$reseller_id);
+                $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
+                    $query->where('reseller_id', $reseller_id);
                 })->whereBetween('created_at', [$startDate, $endDate])->get();
             }
         }
@@ -151,8 +165,8 @@ class PeriodeIncomeController extends Controller
         })->editColumn('created_at', function ($data) {
             return
                 Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
-                    ->setTimezone(config('app.timezone'))
-                    ->format('Y-m-d H:i:s');
+                ->setTimezone(config('app.timezone'))
+                ->format('Y-m-d H:i:s');
         })->editColumn('status', function ($data) {
             $span = '';
             if ($data->status == 'paid') {
@@ -186,13 +200,16 @@ class PeriodeIncomeController extends Controller
 
 
 
-    public function ExportData($start,$end,$type){
-        
+    public function ExportData($start, $end, $type)
+    {
+
         $startDate = Carbon::parse($start)->format('Y-m-d');
         $endDate = Carbon::parse($end)->format('Y-m-d');
-    
+
         // Menyaring data berdasarkan tanggal dan tipe
-        return Excel::download(new PeriodeIncomeExport($startDate, $endDate, $type), 
-            "income_tanggal_{$startDate}_{$endDate}.csv");
+        return Excel::download(
+            new PeriodeIncomeExport($startDate, $endDate, $type),
+            "income_tanggal_{$startDate}_{$endDate}.csv"
+        );
     }
 }

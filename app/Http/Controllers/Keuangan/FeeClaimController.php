@@ -30,16 +30,16 @@ class FeeClaimController extends Controller
     public function getData(Request $request)
     {
         if ($request->has('filter') && !empty($request->input('filter'))) {
-            $fee = Fee_claim::where('reseller_id',$request->input('filter'))->orderByDesc('id')->get();
-        }else{
+            $fee = Fee_claim::where('reseller_id', $request->input('filter'))->orderByDesc('id')->get();
+        } else {
             $fee = Fee_claim::orderByDesc('id')->get();
         }
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
             $button = '';
             if ($fee->status == 'pending') {
-                    $button .= ' <a href="' . route('feeclaim.show', ['id' => $fee->id]) . '" class="btn btn-sm btn-success action mr-1 " data-id=' . $fee->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Prses Data"><i
+                $button .= ' <a href="' . route('feeclaim.show', ['id' => $fee->id]) . '" class="btn btn-sm btn-success action mr-1 " data-id=' . $fee->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Prses Data"><i
                                                                 class="fa-solid fa-eye"></i></a>';
-            }else{
+            } else {
                 $button = '<span class="badge badge-success">Sudah Di proses</span>';
             }
             return '<div class="d-flex">' . $button . '</div>';
@@ -66,10 +66,8 @@ class FeeClaimController extends Controller
         })->editColumn('created_at', function ($data) {
             return Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)
                 ->setTimezone(config('app.timezone'))
-                ->format('Y-m-d H:i:s');
-            ;
+                ->format('Y-m-d H:i:s');;
         })->rawColumns(['action', 'rekening', 'bank_name', 'owner_rek', 'created_at', 'reseller', 'amount', 'status'])->make(true);
-
     }
 
 
@@ -88,28 +86,30 @@ class FeeClaimController extends Controller
 
     public function Aprove(Request $request, $id)
     {
-        try {
 
-            $feeclaim = Fee_claim::findOrFail($id);
-            $filename = '';
-            if ($request->hasFile('buktitf')) {
-                $file = $request->file('buktitf');
-                $filename = 'buktitransfer_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('storage/images/buktitf/'), $filename);
-            }
+        $request->validate([
+            'status' => 'required',
+            'buktitf' => 'required',
+        ], [
+            'buktitf.required' => 'Bukti Transfer Tidak Boleh Kosong!',
+            'status.required' => 'Status Tidak Boleh Kosong!',
+        ]);
 
-            $feeclaim->update([
-                'company_id' => $feeclaim->company_id,
-                'amount' => $feeclaim->amount,
-                'status' => $request->status,
-                'bukti_tf' => $filename,
-            ]);
-            return redirect()->route('feeclaim')->with(['status' => 'Success!', 'message' => 'Berhasil Proses Request Claim!']);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-                'trace' => $e->getTrace()
-            ], 500);
+        $feeclaim = Fee_claim::findOrFail($id);
+
+        $filename = '';
+        if ($request->hasFile('buktitf')) {
+            $file = $request->file('buktitf');
+            $filename = 'buktitransfer_' . rand(0, 999999999) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('storage/images/buktitf/'), $filename);
         }
+
+        $feeclaim->update([
+            'reseller_id' => $feeclaim->reseller_id,
+            'amount' => $feeclaim->amount,
+            'status' => $request->status,
+            'bukti_tf' => $filename,
+        ]);
+        return redirect()->route('feeclaim')->with(['status' => 'Success!', 'message' => 'Berhasil Proses Request Claim!']);
     }
 }

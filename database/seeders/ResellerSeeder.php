@@ -17,7 +17,7 @@ class ResellerSeeder extends Seeder
     {
         Reseller::create([
             'company_id' => 1,
-            'user_id' => 3,
+            'user_id' => 4,
             'bank_id' => 1,
             'name' => 'PT Cahaya Solusindo',
             'address' => 'Banyuwangi',

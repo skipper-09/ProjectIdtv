@@ -23,6 +23,12 @@ class UserSeeder extends Seeder
             'email' => 'root@gmail.com',
             'password' => Hash::make('root'),
         ])->assignRole('Developer');
+        User::create([
+            'name' => 'Owner IDVISION',
+            'username' => 'idvision',
+            'email' => 'owner@gmail.com',
+            'password' => Hash::make('password'),
+        ])->assignRole('Owner');
 
         User::create([
             'name' => 'Staff',
