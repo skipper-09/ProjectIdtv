@@ -210,18 +210,16 @@
 
                 ],
                 dom: 'Bfrtip', // This is needed for the buttons to appear
-                buttons: [{
-                    extend: 'csv',
-                    text: 'Export as CSV',
-                    exportOptions: {
-                        columns: ':visible:not(:last-child)' // Export all columns except the last (actions)
-                    },
-                    filename: function() {
-                        var d = new Date();
-                        return 'Data_Income_' + d.getFullYear() + '_' + (d.getMonth() + 1) +
-                            '_' + d.getDate();
-                    }
-                }, ]
+                buttons: [
+        {
+            text: 'Export to Excel',
+            action: function () {
+            var exportUrl = '{{ route('export-income-periode', ['start' => '__start__', 'end' => '__end__','type' => '__type__']) }}';
+            exportUrl = exportUrl.replace('__start__', start).replace('__end__', end).replace('__type__', type); // Replace the placeholders with actual values
+            window.location.href = exportUrl;
+        }
+        }
+    ]
             });
 
             @if (Session::has('message'))

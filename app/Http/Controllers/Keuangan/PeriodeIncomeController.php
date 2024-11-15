@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Keuangan;
 
+use App\Exports\PeriodeIncomeExport;
 use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Models\Customer;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\Console\Input\Input;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -179,5 +181,18 @@ class PeriodeIncomeController extends Controller
             'subcription' => $sub
         ];
         return view('pages.customer.print', $data);
+    }
+
+
+
+
+    public function ExportData($start,$end,$type){
+        
+        $startDate = Carbon::parse($start)->format('Y-m-d');
+        $endDate = Carbon::parse($end)->format('Y-m-d');
+    
+        // Menyaring data berdasarkan tanggal dan tipe
+        return Excel::download(new PeriodeIncomeExport($startDate, $endDate, $type), 
+            "income_tanggal_{$startDate}_{$endDate}.csv");
     }
 }

@@ -316,6 +316,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             function () {
                 Route::post('', [PeriodeIncomeController::class, 'index'])->name('periodeincome')->middleware('can:read-income-periode');
                 Route::get('getData', [PeriodeIncomeController::class, 'getData'])->name('periodeincome.getdata');
+                Route::get('export-periode/{start}/{end}/{type}',[PeriodeincomeController::class,'ExportData'])->name('export-income-periode');
             }
         );
         Route::prefix('statistik')->group(

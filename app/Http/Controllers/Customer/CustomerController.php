@@ -33,15 +33,11 @@ class CustomerController extends Controller
         $inactive = 0;
         $allcus = 0;
         if (auth()->user()->hasRole('Reseller')) {
-            $company = Company::where('user_id', '=', auth()->id())->first();
-            $active = Customer::where('is_active', 1)->where('company_id', $company->id)->get()->count();
-            $inactive = Customer::where('is_active', 0)->where('company_id', $company->id)->get()->count();
-            $allcus = Customer::where('company_id', $company->id)->get()->count();
-        } else if (auth()->user()->hasRole('CS')) {
-            $active = Customer::where('is_active', 1)->where('user_id', auth()->id())->get()->count();
-            $inactive = Customer::where('is_active', 0)->where('user_id', auth()->id())->get()->count();
-            $allcus = Customer::where('user_id', auth()->id())->get()->count();
-        } else {
+            $reseller = Reseller::where('user_id', '=', auth()->id())->first();
+            $active = Customer::where('is_active', 1)->where('reseller_id', $reseller->id)->get()->count();
+            $inactive = Customer::where('is_active', 0)->where('reseller_id', $reseller->id)->get()->count();
+            $allcus = Customer::where('reseller_id', $reseller->id)->get()->count();
+        }else {
             $active = Customer::where('is_active', 1)->get()->count();
             $inactive = Customer::where('is_active', 0)->get()->count();
             $allcus = Customer::all()->count();
