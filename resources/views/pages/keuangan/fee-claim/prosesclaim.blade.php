@@ -4,6 +4,8 @@
 
 @push('style')
     <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/datatables/media/css/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
 @endpush
@@ -19,16 +21,37 @@
                 </div>
             </div>
 
+            <!-- Customer Information Card -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Customer Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table-striped table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Area</th>
+                                    <th>Alamat</th>
+                                    <th>Paket</th>
+                                    <th>Harga</th>
+                                    <th>Diperpanjang</th>
+                                    <th>Deadline</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Original Fee Claim Form -->
             <div class="card">
                 <form action="{{ route('feeclaim.aprove', ['id' => $feeclaim->id]) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    {{-- <div class="card-header">
-                <h4>Default Validation</h4>
-              </div> --}}
                     <div class="card-body">
-
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label>Nama Bank <span class="text-danger">*</span></label>
@@ -109,17 +132,16 @@
                     </div>
                 </form>
             </div>
-
-
-
         </section>
     </div>
 @endsection
 
 @push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('library/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
     <script src="{{ asset('library/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('library/sweetalert/dist/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
     <!-- Page Specific JS File -->
     <script>
         function previewFile(input) {
@@ -135,5 +157,70 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        $(document).ready(function() {
+            var id = @json($feeclaim->id);
+
+            var table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('feeclaim.getdatadetail') }}',
+                    type: 'GET',
+                    data: {
+                        id: id,
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name',
+                    },
+                    {
+                        data: 'region',
+                        name: 'region',
+                    },
+                    {
+                        data: 'customer_address',
+                        name: 'customer_address',
+                    },
+                    {
+                        data: 'paket',
+                        name: 'paket',
+                    },
+                    {
+                        data: 'harga',
+                        name: 'harga',
+                    },
+                    {
+                        data: 'start_date',
+                        name: 'start_date',
+                    },
+                    {
+                        data: 'end_date',
+                        name: 'end_date',
+                    }
+                ]
+            });
+
+
+            $('.filter').on('change', function() {
+                let idfilterselected = $('#Filter').find(":selected").val();
+                table.ajax.reload(false, null);
+            })
+
+            @if (Session::has('message'))
+                iziToast.success({
+                    title: `{{ Session::get('status') }}`,
+                    message: `{{ Session::get('message') }}`,
+                    position: 'topRight'
+                });
+            @endif
+        });
     </script>
 @endpush
