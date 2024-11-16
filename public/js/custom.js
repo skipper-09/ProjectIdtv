@@ -13,6 +13,24 @@ $("#dataTable").on("click", ".action", function () {
     let id = data.id;
     let type = data.type;
     var route = data.route;
+    var clipboard = data.clipboard;
+
+    if (type == "copy") {
+        function url(path) {
+            return window.location.origin + path;
+        }
+
+        var copyText = clipboard;
+        var dataurl = url(`/register/pelanggan?kode=${copyText}`);
+
+        navigator.clipboard.writeText(dataurl);
+        swal({
+            title: "Success!",
+            text: "Link Pendaftaran Customer Reseller Berhasil disalin!",
+            icon: "success",
+        });
+    }
+
     if (type == "delete") {
         swal({
             title: "Apakah Kamu Yakin?",
@@ -108,7 +126,7 @@ $("#dataTable").on("click", ".action", function () {
     //                 <button class="btn btn-sm btn-primary" id="print-thermal">Thermal Printer</button>
     //             </div>
     //         </div>
-            
+
     //         `);
     //     $("#showmodal").modal("show");
     // }

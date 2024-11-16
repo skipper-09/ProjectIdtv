@@ -32,14 +32,18 @@ class ResellerController extends Controller
             $userauth = User::with('roles')->where('id', Auth::id())->first();
             $button = '';
             if ($userauth->can('update-reseller')) {
-                $button .= ' <a href="' . route('resellerdata.edit', ['id' => $data->id]) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $data->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
+                $button .= ' <a href="' . route('resellerdata.edit', ['id' => $data->id]) . '" class="btn btn-sm btn-success action" data-id=' . $data->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Edit Data"><i
                                                             class="fa-solid fa-pencil"></i></a>';
             }
             if ($userauth->can('delete-reseller')) {
                 $button .= ' <button class="btn btn-sm btn-danger action" data-id=' . $data->id . ' data-type="delete" data-route="' . route('resellerdata.delete', ['id' => $data->id]) . '" data-toggle="tooltip" data-placement="bottom" title="Delete Data"><i
                                                             class="fa-solid fa-trash"></i></button>';
             }
-            return '<div class="d-flex">' . $button . '</div>';
+            if ($userauth->can('read-reseller')) {
+                $button .= ' <button class="btn btn-sm btn-success action" data-id=' . $data->id . ' data-type="copy" data-type="copy" data-clipboard="' . $data->referal_code . '"  data-toggle="tooltip" data-placement="bottom" title="Salin Registrasi Customer Reseller"><i
+                                                            class="fa-solid fa-copy"></i></button>';
+            }
+            return '<div class="d-flex" style="gap: 4px;">' . $button . '</div>';
         })->editColumn('bank', function ($data) {
             return $data->bank->name;
         })->editColumn('user', function ($data) {

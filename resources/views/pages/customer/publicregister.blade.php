@@ -48,7 +48,7 @@
                                     <option value="">Pilih Paket</option>
                                     @foreach ($paket as $s)
                                     <option value="{{ $s->id }}">{{ $s->name }} - Rp.
-                                        {{ number_format($s->price) }} - {{ $s->duration ?? $s->paket->duration }} Bulan
+                                        {{ number_format(isset($reseller->id) ? $s->total : $s->price) }} - {{ $s->duration ?? $s->paket->duration }} Bulan
                                     </option>
                                     @endforeach
                                 </select>

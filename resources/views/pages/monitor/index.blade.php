@@ -41,6 +41,7 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>No</th>
                                                     <th>Nama</th>
                                                     <th>Device Id</th>
                                                     <th>Device Brand</th>
@@ -83,7 +84,14 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('curentstream.getdata') }}',
-                columns: [{
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '10px',
+                        class: 'text-center'
+                    },{
                         data: 'name',
                         name: 'name'
                     },

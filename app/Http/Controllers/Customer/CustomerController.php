@@ -481,6 +481,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'mac' => 'required|string', // MAC address format
@@ -489,13 +490,11 @@ class CustomerController extends Controller
             'address' => 'required|string|max:500', // Maksimal 500 karakter
             'region_id' => 'required|integer|exists:regions,id', // Pastikan region_id ada di tabel regions
             'stb_id' => 'required|integer|exists:stbs,id', // Pastikan stb_id ada di tabel stbs
-            'company_id' => 'required', // Pastikan company_id ada di tabel companies
             'username' => 'required|string|max:255|unique:customers,username,' . $id, // username unik di tabel customers
             'password' => 'required|string|min:6|max:255|confirmed', // Password harus dikonfirmasi (pastikan ada `password_confirmation` di request)
             'password_confirmation' => 'required|string|min:6|max:255',
             'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
             'end_date' => 'required',
-            'paket_id' => 'required',
         ]);
         $customer = Customer::find($id);
         $customer->update([
@@ -511,6 +510,7 @@ class CustomerController extends Controller
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
+            'reseller_id' => $request->reseller_id,
             'type' => $request->type,
             'resellerpaket_id' => $request->resellerpaket_id,
             'paket_id' => $request->paket_id,
@@ -728,6 +728,7 @@ class CustomerController extends Controller
             $data = [
                 'page_name' => 'Customer',
                 'paket' => isset($resellerpaket) && $resellerpaket->isNotEmpty() ? $resellerpaket : $paket,
+                'reseller'=> $reseller,
             ];
             return view('pages.customer.publicregister', $data);
         } catch (Exception $e) {
