@@ -47,6 +47,7 @@ class DashboardController extends Controller
       }),
       'type_menu' => 'dashboard',
       'page_name' => 'Dashboard',
+      'reseller'=>$reseller
     ];
     return view('pages.dashboard.reseller', $data);
   }
