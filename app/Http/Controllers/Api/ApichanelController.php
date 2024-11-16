@@ -147,8 +147,8 @@ class ApichanelController extends Controller
         // } else {
         //     $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
         // }
-        $auth = base64_encode(env('MIDTRANS_DEVELOPMENT_SERVER_KEY') . ':');
-        $URL = env('MIDTRANS_URL');
+        $auth = base64_encode(Midtrans('server_key') . ':');
+        $URL = Midtrans('url');
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
@@ -185,7 +185,7 @@ class ApichanelController extends Controller
         // } else {
         //     $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
         // }
-        $auth = env('MIDTRANS_DEVELOPMENT_SERVER_KEY');
+        $auth = Midtrans('server_key');
         // SHA512(order_id + status_code + gross_amount + serverkey);
         $data = $orderId . $statuscode . $gross_amount . $auth;
         $signature_key = hash('sha512', $data);

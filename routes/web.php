@@ -27,6 +27,7 @@ use App\Http\Controllers\Reseller\PendapatanController;
 use App\Http\Controllers\Reseller\ResellerController;
 use App\Http\Controllers\Reseller\ResellerPaketController;
 use App\Http\Controllers\Settings\LogController;
+use App\Http\Controllers\Settings\MidtransSettingController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\UserController;
@@ -136,8 +137,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [Chanelcontroller::class, 'show'])->name('chanel.edit')->middleware('can:update-chanel');
             Route::put('/update/{id}', [Chanelcontroller::class, 'update'])->name('chanel.update');
             Route::delete('/delete/{id}', [Chanelcontroller::class, 'destroy'])->name('chanel.delete')->middleware('can:delete-chanel');
-            Route::get('/export', [Chanelcontroller::class, 'export'])->name('chanel.export');
-            Route::post('/importfile', [Chanelcontroller::class, 'ImportChanel'])->name('chanel.importfile');
+            Route::get('/export', [Chanelcontroller::class, 'export'])->name('chanel.export')->middleware('can:export-chanel');
+            Route::post('/importfile', [Chanelcontroller::class, 'ImportChanel'])->name('chanel.importfile')->middleware('can:import-chanel');
         });
 
         //Categori route
@@ -193,8 +194,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
             Route::get('/edit/{id}', [MovieController::class, 'show'])->name('movie.edit')->middleware('can:update-movie');
             Route::put('/update/{id}', [MovieController::class, 'update'])->name('movie.update');
             Route::delete('/delete/{id}', [MovieController::class, 'destroy'])->name('movie.delete')->middleware('can:delete-movie');
-            Route::get('/export', [MovieController::class, 'export'])->name('movie.export');
-            Route::post('/importfile', [MovieController::class, 'ImportMovie'])->name('movie.importfile');
+            Route::get('/export', [MovieController::class, 'export'])->name('movie.export')->middleware('can:export-movie');
+            Route::post('/importfile', [MovieController::class, 'ImportMovie'])->name('movie.importfile')->middleware('can:import-movie');
         });
 
         //genre route
@@ -380,6 +381,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::prefix('profile')->group(function () {
             Route::get('/edit/{id}', [ProfileController::class, 'index'])->name('profile.edit');
             Route::put('/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
+        });
+        Route::prefix('payment-gateway')->group(function () {
+            Route::get('', [MidtransSettingController::class, 'index'])->name('midtrans')->middleware('can:setting-payment-gateway');
+            Route::post('update', [MidtransSettingController::class, 'update'])->name('midtrans.update');
+            
         });
     });
 });
