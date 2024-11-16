@@ -176,7 +176,7 @@
                 @endcan
             @endcanany
 
-            @canany(['read-users', 'read-role', 'read-log', 'read-version_control'])
+            @canany(['read-users', 'read-role', 'read-log', 'read-version_control','setting-payment-gateway'])
                 <li class="menu-header">SETTINGS</li>
                 <li class="nav-item dropdown {{ $type_menu === 'setting' ? 'active' : '' }}">
                     <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-gear"></i>
@@ -202,6 +202,12 @@
                                 <a class="nav-link" href="{{ route('versioncontrol') }}">Control Versi Aplikasi</a>
                             </li>
                         @endcan
+                        @can('setting-payment-gateway')
+                        <li class="{{ Request::is('admin/settings/payment-gateway') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('midtrans') }}">Setting Midtrans</a>
+                        </li>
+                        @endcan
+                        
 
                     </ul>
                 </li>

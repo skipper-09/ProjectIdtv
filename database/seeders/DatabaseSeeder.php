@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             BankSeeder::class,
             ResellerSeeder::class,
             ResellerPaketSeeder::class,
+            MidtranSettingSeeder::class
         ]);
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -26,6 +26,8 @@ class PermissionSeeder extends Seeder
             'update-chanel',
             'delete-chanel',
             'read-chanel-player',
+            'export-chanel',
+            'import-chanel',
             'read-categori',
             'create-categori',
             'update-categori',
@@ -84,6 +86,8 @@ class PermissionSeeder extends Seeder
             'update-movie',
             'delete-movie',
             'read-movie-player',
+            'export-movie',
+            'import-movie',
             'read-episode',
             'create-episode',
             'update-episode',
@@ -105,6 +109,7 @@ class PermissionSeeder extends Seeder
             'create-subscription',
             'update-subscription',
             'delete-subscription',
+            'setting-payment-gateway'
         ];
         $permissions = collect($arrayOfPermissionNames)->map(function ($permission) {
             return ['name' => $permission, 'guard_name' => 'web'];
