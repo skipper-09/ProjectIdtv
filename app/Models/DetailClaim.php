@@ -9,7 +9,7 @@ class DetailClaim extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'subscription_id','feeclaim_id'
+        'subscription_id','feeclaim_id','status'
     ];
     protected $primaryKey = 'id';
 

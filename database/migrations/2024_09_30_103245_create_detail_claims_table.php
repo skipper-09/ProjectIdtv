@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('subscription_id');
             $table->unsignedBigInteger('feeclaim_id');
+            $table->enum('status',['pending','aproved','rejected'])->default('pending');
             $table->timestamps();
             $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('feeclaim_id')->references('id')->on('fee_claims')->onDelete('cascade')->onUpdate('cascade');
