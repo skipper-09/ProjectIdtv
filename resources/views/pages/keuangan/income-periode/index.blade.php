@@ -96,6 +96,7 @@
                                                     <th>Fee Reseller</th>
                                                     <th>Status</th>
                                                     <th>Tanggal Bayar</th>
+                                                    <th>Metode Pembayaran</th>
                                                     <th>Owner</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -195,6 +196,10 @@
                     {
                         name: 'created_at',
                         data: 'created_at',
+                    },
+                    {
+                        name: 'payment_type',
+                        data: 'payment_type',
                     },
                     {
                         name: 'owner',

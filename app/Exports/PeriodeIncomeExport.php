@@ -38,6 +38,7 @@ class PeriodeIncomeExport implements FromCollection, WithHeadings, WithColumnFor
                     'fee reseller'=> $payment->subscrib->customer->type == 'reseller' ? $payment->customer->resellerpaket->price : 0,
                     'status'=> 'Lunas',
                     'tanggal bayar' =>$payment->created_at,
+                    'metode bayar' =>$payment->payment_type,
                     'owner'=>$payment->subscrib->customer->type == 'reseller' ? $payment->customer->reseller->name : $payment->customer->company->name,
                 ];
             });
@@ -54,6 +55,7 @@ class PeriodeIncomeExport implements FromCollection, WithHeadings, WithColumnFor
             'Fee Reseller',
             'Status',
             'Tanggal Bayar',
+            'Metode Bayar',
             'Owner'
         ];
     }

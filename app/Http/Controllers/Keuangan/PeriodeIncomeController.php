@@ -52,23 +52,23 @@ class PeriodeIncomeController extends Controller
             if ($reseller_id != null) {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id)->whereNull('company_id');
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             } else {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id, $company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             }
         } else if ($type == 'perusahaan') {
             if ($company_id != null) {
                 // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             } else {
                 // If company_id is null, show data for all companies
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             }
         }
 
@@ -107,23 +107,23 @@ class PeriodeIncomeController extends Controller
             if ($reseller_id != null) {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id)->whereNull('company_id');
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             } else {
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id, $company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             }
         } else if ($type == 'perusahaan') {
             if ($company_id != null) {
                 // If company_id is not null, filter by company_id
                 $payment = Payment::whereHas('customer', function ($query) use ($company_id) {
                     $query->where('company_id', $company_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             } else {
                 // If company_id is null, show data for all companies
                 $payment = Payment::whereHas('customer', function ($query) use ($reseller_id) {
                     $query->where('reseller_id', $reseller_id);
-                })->whereBetween('created_at', [$startDate, $endDate])->get();
+                })->whereBetween('created_at', [Carbon::parse($startDate)->startOfDay(), Carbon::parse($endDate)->endOfDay()])->get();
             }
         }
 
@@ -148,6 +148,8 @@ class PeriodeIncomeController extends Controller
             return $data->customer->nik;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
+        })->editColumn('payment_type', function ($data) {
+            return $data->payment_type;
         })->editColumn('paket', function ($data) {
             return $data->customer->type == 'perusahaan' ? $data->subscrib->paket->name : $data->subscrib->resellerpaket->name;
         })->editColumn('pokok', function ($data) {
@@ -177,7 +179,7 @@ class PeriodeIncomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee_reseller'])->make(true);
+        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee_reseller','payment_type'])->make(true);
     }
 
 
@@ -203,8 +205,8 @@ class PeriodeIncomeController extends Controller
     public function ExportData($start, $end, $type)
     {
 
-        $startDate = Carbon::parse($start)->format('Y-m-d');
-        $endDate = Carbon::parse($end)->format('Y-m-d');
+        $startDate = Carbon::parse($start)->startOfDay();
+        $endDate = Carbon::parse($end)->endOfDay();
 
         // Menyaring data berdasarkan tanggal dan tipe
         return Excel::download(
