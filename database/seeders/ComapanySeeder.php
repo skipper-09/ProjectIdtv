@@ -21,6 +21,7 @@ class ComapanySeeder extends Seeder
                 'address' => 'Jl Soekarno Hatta(Merr), Ruko este square Kec. Mulyarejo Surabaya',
                 'phone' => '6282132272224',
                 'user_id' => 2,
+                'email'=> 'admin@idvision.co.id'
             ]
         );
     }

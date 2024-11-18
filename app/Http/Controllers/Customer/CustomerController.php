@@ -373,7 +373,7 @@ class CustomerController extends Controller
     }
 
 
-    public function store(Request $request,)
+    public function store(Request $request, )
     {
 
         $request->validate([
@@ -392,6 +392,10 @@ class CustomerController extends Controller
 
         ]);
 
+        if ($request->type == null) {
+            return redirect()->back()->with(['status' => 'Eror!', 'message' => 'Gagal Tipe Customer Wajib Kamu pilih!']);
+        }
+
         $customer = Customer::create([
             'name' => $request->name,
             'mac' => $request->mac,
@@ -400,15 +404,15 @@ class CustomerController extends Controller
             'address' => $request->address,
             'region_id' => $request->region_id,
             'stb_id' => $request->stb_id,
-            'company_id' => $request->company_id,
+            'company_id' => $request->type == 'perusahaan' ? $request->company_id : null,
             'username' => $request->username,
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'reseller_id' => $request->reseller_id,
+            'reseller_id' => $request->type == 'reseller' ? $request->reseller_id : null,
             'type' => $request->type,
-            'resellerpaket_id' => $request->resellerpaket_id,
-            'paket_id' => $request->paket_id,
+            'resellerpaket_id' => $request->type == 'reseller' ? $request->resellerpaket_id : null,
+            'paket_id' => $request->type == 'perusahaan' ? $request->paket_id : null,
 
         ]);
         $resellerpaket = ResellerPaket::find($request->resellerpaket_id);
@@ -481,7 +485,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'mac' => 'required|string', // MAC address format
@@ -496,6 +500,10 @@ class CustomerController extends Controller
             'is_active' => 'required|boolean', // Nilai boolean (0 atau 1)
             'end_date' => 'required',
         ]);
+
+        if ($request->type == null) {
+            return redirect()->back()->with(['status' => 'Eror!', 'message' => 'Gagal Tipe Customer Wajib Kamu pilih!']);
+        }
         $customer = Customer::find($id);
         $customer->update([
             'name' => $request->name,
@@ -505,15 +513,15 @@ class CustomerController extends Controller
             'address' => $request->address,
             'region_id' => $request->region_id,
             'stb_id' => $request->stb_id,
-            'company_id' => $request->company_id,
+            'company_id' => $request->type == 'perusahaan' ? $request->company_id : null,
             'username' => $request->username,
             'showpassword' => $request->password,
             'password' => Hash::make($request->password),
             'is_active' => $request->is_active,
-            'reseller_id' => $request->reseller_id,
+            'reseller_id' => $request->type == 'reseller' ? $request->reseller_id : null,
             'type' => $request->type,
-            'resellerpaket_id' => $request->resellerpaket_id,
-            'paket_id' => $request->paket_id,
+            'resellerpaket_id' => $request->type == 'reseller' ? $request->resellerpaket_id : null,
+            'paket_id' => $request->type == 'perusahaan' ? $request->paket_id : null,
         ]);
         $resellerpaket = ResellerPaket::find($request->resellerpaket_id);
 
@@ -728,7 +736,7 @@ class CustomerController extends Controller
             $data = [
                 'page_name' => 'Customer',
                 'paket' => isset($resellerpaket) && $resellerpaket->isNotEmpty() ? $resellerpaket : $paket,
-                'reseller'=> $reseller,
+                'reseller' => $reseller,
             ];
             return view('pages.customer.publicregister', $data);
         } catch (Exception $e) {

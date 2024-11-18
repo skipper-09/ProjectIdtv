@@ -14,7 +14,7 @@
         <div class="section-header">
             <h1>{{ $page_name }}</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('paket') }}">Paket</a></div>
+                <div class="breadcrumb-item active"><a href="{{ route('resellerdata') }}">Reseller</a></div>
                 <div class="breadcrumb-item">{{ $page_name }}</div>
             </div>
         </div>
@@ -115,7 +115,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Alamat <span class="text-danger">*</span></label>
-                            <textarea name="address" class="form-control" id="" cols="30" rows="10"></textarea>
+                            <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="" cols="30" rows="10"></textarea>
                             @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}

@@ -24,6 +24,9 @@ class CategoriSeeder extends Seeder
             'name' => 'MOVIE',
         ],
         [
+            'name' => 'SPORTS',
+        ],
+        [
             'name' => 'KIDS',
         ],
         [
@@ -35,9 +38,7 @@ class CategoriSeeder extends Seeder
         [
             'name' => 'NATURE',
         ],
-        [
-            'name' => 'RADIO',
-        ],
+        
     ]);
     }
 }

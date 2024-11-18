@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Reseller;
 use App\Http\Controllers\Controller;
 use App\Models\Bank;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Models\Reseller;
 use App\Models\User;
 use Exception;
@@ -50,7 +51,11 @@ class ResellerController extends Controller
             return $data->user->name;
         })->editColumn('company', function ($data) {
             return $data->company->name;
-        })->rawColumns(['action',])->make(true);
+        })->editColumn('status', function ($data) {
+            $active = '';
+            $data->status == 1 ? $active = '<span class="badge badge-primary">Aktif</span>' : $active = '<span class="badge badge-secondary">Tidak Aktif</span>';
+            return $active;
+        })->rawColumns(['action','status'])->make(true);
     }
 
     public function create()
@@ -120,7 +125,8 @@ class ResellerController extends Controller
                 'address' => 'required',
                 'phone' => 'required',
                 'rekening' => 'required',
-                'owner_rek' => 'required'
+                'owner_rek' => 'required',
+                'status'=>'required'
             ],[
                 'company_id.required'=>'Perusahaan Wajib dipilih',
                 'user_id.required'=>'Pemilik Reseller Wajib dipilih',
@@ -130,6 +136,7 @@ class ResellerController extends Controller
                 'rekening.required'=>'Rekening Wajib di isi',
                 'owner_rek.required'=>'Nama Pemilik Rekening Wajib di isi',
                 'phone.required'=>'No Telepon Wajib di isi',
+                'status.required'=>'Status Wajib di isi',
             ]);
 
             $reseller = Reseller::find($id);
@@ -142,7 +149,9 @@ class ResellerController extends Controller
                 'phone'=>$request->phone,
                 'rekening'=>$request->rekening,
                 'owner_rek'=>$request->owner_rek,
+                'status'=>$request->status,
             ]);
+
             return redirect()->route('resellerdata')->with(['status' => 'Success!', 'message' => 'Berhasil Update Reseller!']);   
     }
 

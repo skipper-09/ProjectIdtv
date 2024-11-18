@@ -18,7 +18,8 @@ class Reseller extends Model
         'phone',
         'referal_code',
         'rekening',
-        'owner_rek'
+        'owner_rek',
+        'status',
     ];
     protected $primaryKey = 'id';
 
@@ -42,6 +43,21 @@ class Reseller extends Model
         return $code;
     }
 
+
+    protected static function booted()
+    {
+        static::updated(function ($reseller) {
+            if ($reseller->isDirty('status') && $reseller->status == 0) {
+                Customer::where('reseller_id', $reseller->id)->update(['is_active' => 0]);
+            }elseif ($reseller->isDirty('status') && $reseller->status == 1) {
+                Customer::where('reseller_id', $reseller->id)
+                    ->whereHas('subcrib', function ($query) {
+                        $query->whereDate('end_date', '>=', now())->where('status',1)->orderByDesc('created_at')->limit(1);
+                    })
+                    ->update(['is_active' => 1]);
+            }
+        });
+    }
 
     public static function getAllItems()
     {

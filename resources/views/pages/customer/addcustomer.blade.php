@@ -6,6 +6,7 @@
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="{{ asset('library/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('library/bootstrap-social/bootstrap-social.css') }}">
+    <link rel="stylesheet" href="{{ asset('library/izitoast/dist/css/iziToast.min.css') }}">
 @endpush
 
 @section('main')
@@ -258,8 +259,17 @@
     <!-- JavaScript Libraries -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('library/izitoast/dist/js/iziToast.min.js') }}"></script>
 
     <script>
+ @if (Session::has('message'))
+                iziToast.success({
+                    title: `{{ Session::get('status') }}`,
+                    message: `{{ Session::get('message') }}`,
+                    position: 'topRight'
+                });
+            @endif
+
         $(document).ready(function() {
             $('.select2').select2();
 

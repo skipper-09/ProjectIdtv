@@ -13,7 +13,7 @@
     <div class="section-header">
       <h1>{{$page_name}}</h1>
       <div class="section-header-breadcrumb">
-        <div class="breadcrumb-item active"><a href="{{route('region')}}">Area</a></div>
+        <div class="breadcrumb-item active"><a href="{{route('bank')}}">Bank</a></div>
         <div class="breadcrumb-item">{{$page_name}}</div>
       </div>
     </div>

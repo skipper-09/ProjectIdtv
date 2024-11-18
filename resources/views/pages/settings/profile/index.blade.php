@@ -15,8 +15,8 @@
         <div class="section-header">
             <h1>{{ $page_name }}</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('company') }}">Perusahaan</a></div>
-                <div class="breadcrumb-item">{{ $page_name }}</div>
+                {{-- <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Perusahaan</a></div> --}}
+                <div class="breadcrumb-item active">{{ $page_name }}</div>
             </div>
         </div>
 

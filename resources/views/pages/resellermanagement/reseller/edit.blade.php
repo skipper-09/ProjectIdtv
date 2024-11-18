@@ -14,7 +14,7 @@
         <div class="section-header">
             <h1>{{ $page_name }}</h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="{{ route('paket') }}">Paket</a></div>
+                <div class="breadcrumb-item active"><a href="{{ route('resellerdata') }}">Reseller</a></div>
                 <div class="breadcrumb-item">{{ $page_name }}</div>
             </div>
         </div>
@@ -115,12 +115,28 @@
                         </div>
                         <div class="form-group col-12 col-md-6">
                             <label>Alamat <span class="text-danger">*</span></label>
-                            <textarea name="address" class="form-control" id="" cols="30" rows="10">{{ $reseller->address }}</textarea>
+                            <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="" cols="30" rows="10">{{ $reseller->address }}</textarea>
                             @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
                             @enderror
+                        </div>
+                        <div class="form-group col-12 col-md-6">
+                            <label>Status <span class="text-danger">*</span></label>
+                            <select class="form-control select2 @error('status') is-invalid @enderror" id="status" name="status">
+                                <option value="">Pilih Status</option>
+                                <option value="1" {{ $reseller->status == 1 ? 'selected' : '' }}>Aktif
+                                </option>
+                                <option value="0" {{ $reseller->status == 0 ? 'selected' : '' }}>Tidak
+                                    Aktif
+                                </option>
+                                @error('status')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </select>
                         </div>
                     </div>
                 </div>

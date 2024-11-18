@@ -20,13 +20,13 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Developer',
             'username' => 'developer',
-            'email' => 'root@gmail.com',
-            'password' => Hash::make('root'),
+            'email' => 'csnetdev@gmail.com',
+            'password' => Hash::make('csnetdev'),
         ])->assignRole('Developer');
         User::create([
-            'name' => 'Owner IDVISION',
+            'name' => 'Toko Agung',
             'username' => 'idvision',
-            'email' => 'owner@gmail.com',
+            'email' => 'admin@idvision.co.id',
             'password' => Hash::make('password'),
         ])->assignRole('Owner');
 

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('referal_code');
             $table->string('rekening');
             $table->string('owner_rek');
+            $table->boolean('status')->default(true);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');

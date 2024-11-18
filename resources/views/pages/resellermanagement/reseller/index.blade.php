@@ -47,6 +47,7 @@
                                                 <th>Referal Kode</th>
                                                 <th>User Pemilik</th>
                                                 <th>Perusahaan</th>
+                                                <th>Status</th>
                                                 @canany(['update-reseller', 'delete-reseller'])
                                                 <th>Action</th>
                                                 @endcanany
@@ -120,6 +121,10 @@
                     {
                         data: 'company',
                         name: 'company',
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
                     },
                 
                     

@@ -20,8 +20,8 @@ class ResellerSeeder extends Seeder
             'user_id' => 4,
             'bank_id' => 1,
             'name' => 'PT Cahaya Solusindo',
-            'address' => 'Banyuwangi',
-            'phone' => '082323343545',
+            'address' => 'Jl. Letjen S Parman No.58, Sumberrejo, Pakis, Kec. Banyuwangi, Kabupaten Banyuwangi, Jawa Timur 68419',
+            'phone' => '6282111777179',
             'rekening' => '234234234234',
             'owner_rek' => 'CSNET'
         ]);

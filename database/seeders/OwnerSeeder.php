@@ -17,13 +17,13 @@ class OwnerSeeder extends Seeder
     public function run()
     {
         owner::insert([
-            'name' => 'ahmad',
-            'phone' => '123445',
-            'email' => 'ahmad@gmail.com',
+            'name' => 'Toko Agung',
+            'phone' => '6282132272224',
+            'email' => 'admin@idvision.co.id',
             'address' => 'tes',
-            'username' => 'ahmad',
-            'showpassword' => 'ahmad',
-            'password' => Hash::make('ahmad')
+            'username' => 'tokoagung',
+            'showpassword' => 'tokoagung',
+            'password' => Hash::make('tokoagung')
         ]);
     }
 }

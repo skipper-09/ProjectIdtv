@@ -18,5 +18,14 @@ class BankSeeder extends Seeder
         Bank::create([
             'name'=>'BCA'
         ]);
+        Bank::create([
+            'name'=>'BNI'
+        ]);
+        Bank::create([
+            'name'=>'BRI'
+        ]);
+        Bank::create([
+            'name'=>'MANDIRI'
+        ]);
     }
 }
