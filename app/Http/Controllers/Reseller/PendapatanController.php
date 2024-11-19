@@ -198,7 +198,8 @@ class PendapatanController extends Controller
 
     public function GetHistory()
     {
-        $fee = Fee_claim::orderByDesc('id')->get();
+        $reseller = Reseller::where('user_id', auth()->id())->first();
+        $fee = Fee_claim::where('reseller_id',$reseller->id)->orderByDesc('id')->get();
         return DataTables::of($fee)->addIndexColumn()->addColumn('action', function ($fee) {
 
             $button = '';
