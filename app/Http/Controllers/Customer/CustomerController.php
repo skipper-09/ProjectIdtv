@@ -654,7 +654,7 @@ class CustomerController extends Controller
             } else {
                 // Jika customer bukan reseller, gunakan packet_id
                 $subs->update([
-                    'packet_id' => $request->paket_id,  // Paket reguler yang dipilih
+                    'packet_id' => $request->packet_id,  // Paket reguler yang dipilih
                     'status' => 1,
                     'start_date' => now(),
                     'end_date' => $request->end_date,
@@ -712,8 +712,9 @@ class CustomerController extends Controller
                     'new_tab_url' => route('print.standart', ['id' => $subs->id, 'type' => 'subscription'])
                 ]);
         } catch (Exception $e) {
+            
             // Tangkap kesalahan dan catat ke log
-            // \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
+             \Log::error('Gagal memperpanjang langganan: ' . $e->getMessage());
 
             // Redirect dengan pesan kesalahan
             return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan saat memperpanjang layanan.']);
