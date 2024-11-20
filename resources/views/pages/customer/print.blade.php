@@ -10,12 +10,13 @@
                 <div class="btn-group btn-group-sm d-print-none"><a style="width: 120px;font-weight: bold"
                         href="javascript:window.print()" class="btn btn-default border text-black-50 shadow-none"><i
                             class="fa fa-print"></i> A4 Print</a>
-                    
-                    <a style="font-weight: bold;width: 120px;"
-                        href="{{ route('print.thermal', ['id'=>$id,'type'=>$type]) }}"
-                        class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-print"></i> POS
-                        Print</a>
-                    
+
+                    <a style="font-weight: bold; width: 120px; {{ $subcription->payment->isEmpty() || $subcription->payment->where('status', '!=', 'paid')->isNotEmpty() ? 'display: none;' : '' }}"
+                        href="{{ route('print.thermal', ['id' => $id, 'type' => $type]) }}"
+                        class="btn btn-default border text-black-50 shadow-none">
+                        <i class="fa fa-print"></i> POS Print
+                    </a>
+
                     <a id="finish_btn" href="javascript:window.close()" style="width: 120px;font-weight: bold" href=""
                         class="btn btn-default border text-black-50 shadow-none"><i class="fa fa-check"></i> Selesai</a>
                 </div>
@@ -71,7 +72,8 @@
                         <tbody>
                             <tr>
                                 <td><span class="text-3"><span class="fw-500">
-                                            {{ $customer->type == 'reseller' ? $subcription->resellerpaket->name : $subcription->paket->name  }}
+                                            {{ $customer->type == 'reseller' ? $subcription->resellerpaket->name :
+                                            $subcription->paket->name }}
                                         </span></span></td>
                                 <td class="text-center">
                                     {{ \Carbon\Carbon::parse($subcription->end_date)->format('F j, Y') }}

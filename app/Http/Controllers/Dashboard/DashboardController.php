@@ -24,7 +24,7 @@ class DashboardController extends Controller
     if (!auth()->user()->hasRole('Reseller')) {
       $data = [
         'chanel' => Chanel::all(),
-        'company' => Company::all(),
+        'reseller' => Reseller::all(),
         'customer' => Customer::whereMonth('created_at',now())->get(),
         'income' => Payment::all(),
         'log' =>  $lastactivity,

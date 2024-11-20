@@ -170,6 +170,79 @@ class ApichanelController extends Controller
 
 
 
+//testing qris
+    // public function createPayment(Request $request)
+    // {
+    //     $invoiceid = $request->query('order_id');
+    //     $sub = Subscription::with(['customer', 'paket', 'resellerpaket'])->where('invoices', $invoiceid)->where('status', 0)->first();
+
+    //     if ($sub == null) {
+    //         return response()->json([
+    //             "message" => 'TIDAK ADA INVOICE TERSEBUT'
+    //         ], 404);
+    //     }
+
+    //     $paket = Package::find($sub->packet_id);
+    //     $resellerpaket = ResellerPaket::find($sub->reseller_package_id);
+    //     $random = Str::uuid();  // UUID for unique order_id
+    //     $sub->update(['midtras_random' => $random]);
+
+    //     $params = [
+    //         "payment_type" => "gopay",
+    //         'transaction_details' => [
+    //             "order_id" => $random,
+    //             "gross_amount" => $sub->tagihan,
+    //         ],
+    //         'item_details' => [
+    //             [
+    //                 "name" => $sub->customer->type == 'reseller' ? $resellerpaket->name : $paket->name,
+    //                 "price" => $sub->tagihan,
+    //                 "quantity" => 1,
+    //                 "merchant_name" => "IDTV",
+    //             ],
+    //         ],
+    //         'customer_details' => [
+    //             "first_name" => $sub->customer->name,
+    //             "phone" => $sub->customer->phone,
+    //             "billing_address" => [
+    //                 "first_name" => $sub->customer->name,
+    //                 "phone" => $sub->customer->phone,
+    //                 "address" => $sub->customer->address,
+    //                 "country_code" => "IDN",
+    //             ],
+    //         ],
+    //         "qris"=> [
+    // "acquirer"=> "gopay"
+    //         ],
+    //        "gopay"=> [
+    // "enable_callback"=> true,
+    // "callback_url"=> url('/api/midtrans/notification')
+    //        ]
+    //     ];
+
+
+    //     $auth = base64_encode(Midtrans('server_key') . ':');
+    //     $URL = Midtrans('url');
+
+    //     $response = Http::withHeaders([
+    //         'Accept' => 'application/json',
+    //         'Content-Type' => 'application/json',
+    //         'Authorization' => "Basic $auth"
+    //     ])->post("https://api.midtrans.com/v2/charge", $params);
+
+    //     $responseBody = json_decode($response->body());
+    //     dd($responseBody);
+
+    //     if ($response->failed()) {
+    //         Log::error('Midtrans Error: ' . $response->body());
+    //         return response()->json(['message' => 'Terjadi kesalahan pada transaksi'], 500);
+    //     }
+
+    //     //  $sub->update(['midtras_link' => $responseBody->actions[0]->url]);
+
+    //     return ResponseFormatter::success($responseBody, 'Success');
+    // }
+
 
 
     public function handleNotification(Request $request)
@@ -211,40 +284,40 @@ class ApichanelController extends Controller
             switch ($transactionStatus) {
                 case 'capture':
                 case 'settlement':
-                     // Cek apakah payment sudah ada untuk subscription ini
-                $existingPayment = Payment::where('subscription_id', $subs->id)->first();
+                    // Cek apakah payment sudah ada untuk subscription ini
+                    $existingPayment = Payment::where('subscription_id', $subs->id)->first();
 
-                if (!$existingPayment) {
-                    // Update status subscription
-                    $subs->update([
-                        'status' => 1,
-                        'start_date' => now(),
-                        'end_date' => now()->addMonth($paket->duration)->toDateString(),
-                    ]);
+                    if (!$existingPayment) {
+                        // Update status subscription
+                        $subs->update([
+                            'status' => 1,
+                            'start_date' => now(),
+                            'end_date' => now()->addMonth($paket->duration)->toDateString(),
+                        ]);
 
-                    // Update status customer
-                    Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
+                        // Update status customer
+                        Customer::where('id', $subs->customer_id)->update(['is_active' => 1]);
 
-                    // Insert ke payment table
-                    $payment = Payment::create([
-                        'subscription_id' => $subs->id,
-                        'customer_id' => $subs->customer->id,
-                        'amount' => $amount,
-                        'fee' => $subs->customer->type == 'reseller' ? $resellerpaket->price : 0,
-                        'tanggal_bayar' => now(),
-                        'status' => 'paid',
-                        'payment_type' => 'midtrans',
-                    ]);
+                        // Insert ke payment table
+                        $payment = Payment::create([
+                            'subscription_id' => $subs->id,
+                            'customer_id' => $subs->customer->id,
+                            'amount' => $amount,
+                            'fee' => $subs->customer->type == 'reseller' ? $resellerpaket->price : 0,
+                            'tanggal_bayar' => now(),
+                            'status' => 'paid',
+                            'payment_type' => 'midtrans',
+                        ]);
 
-                    // // Kirim notifikasi WhatsApp
-                    // $wa = new SendSuccessPaymentWa(
-                    //     $subs->customer->name,
-                    //     $amount,
-                    //     $payment,
-                    //     $subs->customer->phone
-                    // );
-                    // $this->dispatch($wa);
-                }
+                        // // Kirim notifikasi WhatsApp
+                        // $wa = new SendSuccessPaymentWa(
+                        //     $subs->customer->name,
+                        //     $amount,
+                        //     $payment,
+                        //     $subs->customer->phone
+                        // );
+                        // $this->dispatch($wa);
+                    }
 
                     break;
 
@@ -257,7 +330,7 @@ class ApichanelController extends Controller
             }
         } else {
             return response()->json(['message' => 'Tagihan Sudah dibayar'], 404);
-            
+
         }
 
         return response()->json(['status' => 'success']);

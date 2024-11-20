@@ -40,10 +40,10 @@
                             </div>
                             <div class="card-wrap">
                                 <div class="card-header">
-                                    <h4>PERUSAHAAN</h4>
+                                    <h4>RESELLER</h4>
                                 </div>
                                 <p class="font-weight-bold" style="font-size: 16px; color:black">
-                                    {{ $company->count() }}</p>
+                                    {{ $reseller->count() }}</p>
                             </div>
                         </div>
                     </div>

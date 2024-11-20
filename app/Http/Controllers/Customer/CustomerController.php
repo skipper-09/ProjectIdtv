@@ -303,38 +303,73 @@ class CustomerController extends Controller
             ->addColumn('renew', function ($customer) {
                 $userauth = User::with('roles')->where('id', Auth::id())->first();
                 $button = '';
-
+                
+                // Ambil subscription terbaru dengan kondisi tertentu
                 $latestSubscription = $customer->subcrib()
-                    ->whereNotNull('start_date')
+                    // Tambahkan logika untuk payment kosong
                     ->orderBy('created_at', 'desc')
                     ->first();
-
+                
                 if ($latestSubscription) {
                     $endDate = Carbon::parse($latestSubscription->end_date);
-                    $threeDaysBeforeEnd = $endDate->subDays(3);
+                    $threeDaysBeforeEnd = $endDate->copy()->subDays(3);
                     $today = Carbon::now();
+                
+                    // Periksa jika tidak ada payment terkait subscription
+                    $hasNoPayment = $latestSubscription->payment()->exists();
                     $isPaid = $latestSubscription->status == 0;
-
-                    if ($userauth->can(['renew-customer'])) {
-                        if ($isPaid) {
-                            $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Subscription already paid"><i class="fa-solid fa-bolt"></i></button>';
+                
+                    if ($userauth->can('renew-customer')) {
+                        if ($isPaid && !$hasNoPayment) {
+                            // Jika subscription sudah dibayar dan ada payment
+                            
+                                        $button .= '<a href="' . route('customer.renew', ['id' => $customer->id]) . '" 
+                                        class="btn btn-sm btn-primary action mr-1" 
+                                        data-id="' . $customer->id . '" 
+                                        data-type="edit" 
+                                        data-toggle="tooltip" 
+                                        data-placement="bottom" 
+                                        title="Renew">
+                                        <i class="fa-solid fa-bolt"></i>
+                                    </a>';
                         } else {
-                            if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd)) {
-                                if ($userauth->can('renew-customer')) {
-                                    $button .= ' <a href="' . route('customer.renew', ['id' => $customer->id]) . '" class="btn btn-sm btn-primary action mr-1" data-id=' . $customer->id . ' data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Renew"><i class="fa-solid fa-bolt"></i></a>';
-                                }
+                            if ($today->greaterThanOrEqualTo($threeDaysBeforeEnd) ) {
+                                // Jika hari ini >= 3 hari sebelum tanggal akhir ATAU tidak ada payment
+                                $button .= '<button class="btn btn-sm btn-primary mr-1 action" 
+                                data-id="' . $customer->id . '" 
+                                disabled 
+                                title="Subscription already paid">
+                                <i class="fa-solid fa-bolt"></i>
+                            </button>';
                             } else {
-                                $button .= ' <button class="btn btn-sm btn-primary mr-1 action" data-id=' . $customer->id . ' disabled title="Cannot renew until 3 days before end date"><i class="fa-solid fa-bolt"></i></button>';
+                                // Jika belum mencapai 3 hari sebelum tanggal akhir
+                                $button .= '<button class="btn btn-sm btn-primary mr-1 action" 
+                                                data-id="' . $customer->id . '" 
+                                                disabled 
+                                                title="Cannot renew until 3 days before end date">
+                                                <i class="fa-solid fa-bolt"></i>
+                                            </button>';
                             }
                         }
                     }
                 }
-
+                
+                // Tambahkan tombol cetak jika user memiliki izin 'read-customer'
                 if ($userauth->can('read-customer')) {
-                    $button .= ' <a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" class="btn btn-sm btn-success action mr-1" data-id=' . $customer->id . ' target="_blank" data-type="edit" data-toggle="tooltip" data-placement="bottom" title="Print"><i class="fa-solid fa-print"></i></a>';
+                    $button .= '<a href="' . route('print.standart', ['id' => $customer->id, 'type' => 'customer']) . '" 
+                                    class="btn btn-sm btn-success action mr-1" 
+                                    data-id="' . $customer->id . '" 
+                                    target="_blank" 
+                                    data-type="edit" 
+                                    data-toggle="tooltip" 
+                                    data-placement="bottom" 
+                                    title="Print">
+                                    <i class="fa-solid fa-print"></i>
+                                </a>';
                 }
-
+                
                 return '<div class="d-flex">' . $button . '</div>';
+                
             })
             ->rawColumns(['action', 'renew', 'is_active', 'stb', 'company', 'region', 'created_at', 'start_date', 'end_date', 'is_active', 'reseller'])
             ->make(true);
