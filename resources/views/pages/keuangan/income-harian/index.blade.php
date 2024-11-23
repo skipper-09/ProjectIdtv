@@ -83,8 +83,9 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>No</th>
+                                                    <th>Id Pelanggan</th>
                                                     <th>Invoice</th>
-
                                                     <th>Nama</th>
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
@@ -135,11 +136,22 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('dailyincome.getdata') }}',
-                columns: [{
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '10px',
+                        class: 'text-center'
+                    },    
+                {
+                        name: 'id_pelanggan',
+                        data: 'id_pelanggan',
+                    },
+                    {
                         name: 'invoice',
                         data: 'invoice',
                     },
-
                     {
                         name: 'customer',
                         data: 'customer',

@@ -36,8 +36,8 @@
                                         <table class="table-striped table" id="dataTable">
                                             <thead>
                                                 <tr>
+                                                    <th>Id Pelanggan</th>
                                                     <th>INVOICE</th>
-                                                    <th>Nik</th>
                                                     <th>Nama</th>
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
@@ -84,16 +84,18 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('tagihan.getdata') }}',
-                columns: [{
+                columns: [
+                    {
+                        name: 'id_pelanggan',
+                        data: 'id_pelanggan',
+                    },
+                    {
                         name: 'invoices',
                         data: 'invoices',
                         orderable: false,
                         searchable: false
                     },
-                    {
-                        name: 'nik',
-                        data: 'nik',
-                    },
+                    
                     {
                         name: 'customer',
                         data: 'customer',

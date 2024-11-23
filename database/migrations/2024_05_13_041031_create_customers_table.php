@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('paket_id')->nullable();
             $table->unsignedBigInteger('resellerpaket_id')->nullable();
             $table->unsignedBigInteger('reseller_id')->nullable();
+            $table->string('id_pelanggan')->unique();
             $table->string('mac');
             $table->string('nik');
             $table->string('name', length: 100);

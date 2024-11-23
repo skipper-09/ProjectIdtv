@@ -19,8 +19,8 @@ class ResellerPaketSeeder extends Seeder
             'paket_id'=>2,
             'reseller_id'=>1,
             'name'=>'Paket Reseller 1',
-            'price'=>'20000',
-            'total'=>'30000'
+            'price'=>'10000',
+            'total'=>'20000'
         ]);
     }
 }

@@ -88,6 +88,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
+                                                    <th>Id Pelanggan</th>
                                                     <th>Nama</th>
                                                     <th>Paket</th>
                                                     <th>Perpanjang</th>
@@ -164,6 +165,10 @@
                         searchable: false,
                         width: '10px',
                         class: 'text-center'
+                    },
+                    {
+                        name: 'id_pelanggan',
+                        data: 'id_pelanggan',
                     },
                     {
                         name: 'customer',

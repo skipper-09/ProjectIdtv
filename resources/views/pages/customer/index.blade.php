@@ -113,6 +113,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama</th>
+                                                    <th>Id Pelanggan</th>
                                                     <th>Mac</th>
                                                     <th>Stb</th>
                                                     <th>Area</th>
@@ -197,6 +198,10 @@
                         data: 'name',
                         name: 'name',
                         width: '200px'
+                    },
+                    {
+                        data: 'id_pelanggan',
+                        name: 'id_pelanggan',
                     },
 
                     {

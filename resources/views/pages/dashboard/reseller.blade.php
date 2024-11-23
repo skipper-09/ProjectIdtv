@@ -16,9 +16,9 @@
         <div class="section-header">
             <h1>{{ $page_name }}</h1>
         </div>
-        <div class="w-25 py-3">
-            <button class="btn btn-sm btn-primary" id="salintext">Salin Link Pendaftaran Customer</button>
-        </div>
+        
+            <button class="btn btn-sm btn-primary mb-3" id="salintext">Salin Link Pendaftaran Customer</button>
+        
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                 <a href="{{ route('customer') }}">

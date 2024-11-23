@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Model;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Str;
 
 class Customer extends Model
 {
@@ -31,7 +32,8 @@ class Customer extends Model
         'reseller_id',
         'resellerpaket_id',
         'paket_id',
-        'type'
+        'type',
+        'id_pelanggan',
     ];
     protected $primaryKey = 'id';
 
@@ -39,6 +41,31 @@ class Customer extends Model
         'password',
         'remember_token',
     ];
+
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Generate ID pelanggan otomatis jika belum diisi
+            if (empty($model->id_pelanggan)) {
+                $model->id_pelanggan = self::generateIdPelanggan();
+            }
+        });
+    }
+
+    /**
+     * Generate unique ID pelanggan.
+     */
+    private static function generateIdPelanggan()
+    {
+        $prefix = 'PLG'; 
+        $randomNumber = Str::padLeft(rand(1, 99999), 5, '0'); 
+        $timestamp = now()->format('Ymd'); 
+        return $prefix . $timestamp . $randomNumber; 
+    }
 
     public function stb()
     {

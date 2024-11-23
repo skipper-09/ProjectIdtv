@@ -36,7 +36,7 @@ class DailyincomeController extends Controller
     public function getData()
     {
 
-        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', now())->orderByDesc('created_at')->get();
+        $payment = Payment::with(['customer', 'subscrib',])->whereDate('created_at', now())->orderByDesc('id')->get();
 
         return DataTables::of($payment)->addIndexColumn()->addColumn('action', function ($item) {
 
@@ -60,6 +60,8 @@ class DailyincomeController extends Controller
             return $data->subscrib->invoices;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
+        })->editColumn('id_pelanggan', function ($data) {
+            return $data->customer->id_pelanggan;
         })->editColumn('owner', function ($data) {
             return $data->customer->type == 'perusahaan' ? $data->customer->company->name : $data->customer->reseller->name;
         })->editColumn('paket', function ($data) {
@@ -91,7 +93,7 @@ class DailyincomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'start_date', 'owner', 'pokok', 'fee', 'payment_type', 'invoice'])->make(true);
+        })->rawColumns(['action', 'customer','id_pelanggan', 'status', 'paket', 'start_date', 'owner', 'pokok', 'fee', 'payment_type', 'invoice'])->make(true);
     }
 
 

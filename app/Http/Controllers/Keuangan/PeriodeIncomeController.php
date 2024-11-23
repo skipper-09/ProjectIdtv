@@ -146,6 +146,8 @@ class PeriodeIncomeController extends Controller
             return '<div class="d-flex">' . $button . '</div>';
         })->editColumn('nik', function ($data) {
             return $data->customer->nik;
+        })->editColumn('id_pelanggan', function ($data) {
+            return $data->customer->id_pelanggan;
         })->editColumn('customer', function ($data) {
             return $data->customer->name;
         })->editColumn('payment_type', function ($data) {
@@ -179,7 +181,7 @@ class PeriodeIncomeController extends Controller
                 $span = '<span class="badge badge-warning">Pending</span>';
             }
             return $span;
-        })->rawColumns(['action', 'customer', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee_reseller','payment_type'])->make(true);
+        })->rawColumns(['action', 'customer','id_pelanggan', 'status', 'paket', 'nik', 'start_date', 'owner', 'pokok', 'fee_reseller','payment_type'])->make(true);
     }
 
 
